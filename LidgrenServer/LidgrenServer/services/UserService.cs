@@ -1,8 +1,8 @@
 ﻿using LidgrenServer.Data;
-using LidgrenServer.model;
+using LidgrenServer.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LidgrenServer.services
+namespace LidgrenServer.Services
 {
     public class UserService
     {

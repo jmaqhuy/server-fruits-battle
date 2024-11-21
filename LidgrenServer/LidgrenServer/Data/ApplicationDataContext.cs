@@ -1,4 +1,4 @@
-﻿using LidgrenServer.model;
+﻿using LidgrenServer.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LidgrenServer.Data
@@ -6,6 +6,9 @@ namespace LidgrenServer.Data
     public class ApplicationDataContext : DbContext
     {
         public DbSet<UserModel> Users { get; set; } = null!;
+        public DbSet<LoginHistory> loginHistories { get; set; } = null!;
+        public DbSet<Character> Characters { get; set; }
+        public DbSet<UserCharacter> UserCharacters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -13,9 +16,37 @@ namespace LidgrenServer.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserModel>()
-                .HasIndex(u => u.Username)
-                .IsUnique(); 
+            modelBuilder.Entity<UserModel>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.HasIndex(u => u.Username);
+                entity.HasMany(u => u.LoginHistory)
+                      .WithOne(h => h.UserModel)
+                      .HasForeignKey(h => h.UserId);
+            });
+
+            modelBuilder.Entity<LoginHistory>(entity =>
+            {
+                entity.HasKey(ld => ld.Id);
+                entity.HasIndex(ld => ld.LoginTime);
+                modelBuilder.Entity<LoginHistory>()
+                    .HasOne(lh => lh.UserModel)
+                    .WithMany(u => u.LoginHistory)
+                    .HasForeignKey(lh => lh.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<UserCharacter>()
+                .HasKey(uc => new { uc.UserId, uc.CharacterId });
+
+            modelBuilder.Entity<UserCharacter>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UserCharacters)
+                .HasForeignKey(uc => uc.UserId);
+
+            modelBuilder.Entity<UserCharacter>()
+                .HasOne(uc => uc.Character)
+                .WithMany(c => c.UserCharacters)
+                .HasForeignKey(uc => uc.CharacterId);
         }
 
     }

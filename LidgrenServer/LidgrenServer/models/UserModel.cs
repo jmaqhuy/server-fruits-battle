@@ -3,31 +3,40 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace LidgrenServer.model
+namespace LidgrenServer.Models
 {
-    [Table("Users")]
+    [Table("users")]
     public class UserModel
     {
         [Key]
         [Required]
-        [Column("Id")]
+        [Column("id")]
         public int Id { get; set; }
 
-        [Column("Username")]
+        [Required]
+        [Column("username")]
         [StringLength(50)]
         public string Username { get; set; } = null!;
 
+
         [Column("display_name")]
         [StringLength(100)]
-        public string? display_name { get; set; }
+        public string? Display_name { get; set; }
 
         [Column("coin")]
-        public int? coin { get; set; }
+        public int? Coin { get; set; }
+
+        [Column("is_online")]
+        public bool IsOnline { get; set; }
 
         [Required]
-        [Column("Password")]
+        [Column("password")]
         public string Password { get; set; } = null!;
 
+        public ICollection<LoginHistory> LoginHistory { get; set; } = new List<LoginHistory>();
+
+        // Quan hệ nhiều-nhiều với Character thông qua bảng UserCharacter
+        public ICollection<UserCharacter> UserCharacters { get; set; } = new List<UserCharacter>();
         // Hàm mã hóa mật khẩu khi người dùng nhập vào
         public string HashPassword(string password)
         {

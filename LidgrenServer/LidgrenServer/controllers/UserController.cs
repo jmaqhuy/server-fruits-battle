@@ -1,8 +1,8 @@
-﻿using LidgrenServer.model;
-using LidgrenServer.services;
+﻿using LidgrenServer.Services;
 using System.Text.Json;
+using LidgrenServer.Models;
 
-namespace LidgrenServer.controllers
+namespace LidgrenServer.Controllers
 {
     public class UserController
     {
@@ -24,16 +24,22 @@ namespace LidgrenServer.controllers
             return false;
         }
 
+        public async Task<UserModel> getUserInfoByUserNameAsync(string username)
+        {
+            return await _userService.GetUserByUsernameAsync(username);
+        }
+
         public async Task<bool> CreateSampleUser()
         {
             try
             {
+                
                 var newUser = new UserModel
                 {
                     Username = "testUser",
                     Password = "password123",
-                    display_name = "Test User",
-                    coin = 100
+                    Display_name = "Test User",
+                    Coin = 100
                 };
                 await _userService.CreateNewUserAsync(newUser);
                 return true;
@@ -43,6 +49,12 @@ namespace LidgrenServer.controllers
                 Logging.Error(ex.ToString());
                 return false;
             }
+        }
+        
+        public async Task SetUserOnlineAsync(UserModel user)
+        {
+            user.IsOnline = true;
+            await _userService.UpdateUserAsysn(user);
         }
     }
 }

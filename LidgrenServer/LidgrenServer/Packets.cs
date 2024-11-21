@@ -3,12 +3,23 @@ using Lidgren.Network;
 
 namespace LidgrenServer
 {
-    public enum PacketTypes
+    public class PacketTypes
     {
-        Login,
-        PlayerDisconnectsPacket
-    }
+        public enum General
+        {
+            Login,
+            PlayerDisconnectsPacket,
+            BasicUserInfoPacket
+        }
 
+        public enum Shop
+        {
+            LoadShopPacket,
+            RequestBuyPacket,
+        }
+
+        
+    }
     public interface IPacket
     {
         void PacketToNetOutGoingMessage(NetOutgoingMessage message);
@@ -38,7 +49,7 @@ namespace LidgrenServer
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
-            message.Write((byte)PacketTypes.Login);
+            message.Write((byte)PacketTypes.General.Login);
             message.Write(username);
             message.Write(password);
             message.Write(isSuccess);
@@ -51,13 +62,32 @@ namespace LidgrenServer
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
-            message.Write((byte)PacketTypes.PlayerDisconnectsPacket);
+            message.Write((byte)PacketTypes.General.PlayerDisconnectsPacket);
             message.Write(player);
         }
 
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
             player = message.ReadString();
+        }
+    }
+
+    public class BasicUserInfoPacket : Packet
+    {
+        public string userName { get; set; }
+        public string deviceId { get; set; }
+        public int coin { get; set; }
+        public string displayName { get; set; }
+
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            throw new NotImplementedException();
         }
     }
 }
