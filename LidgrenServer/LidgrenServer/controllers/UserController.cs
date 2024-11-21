@@ -29,6 +29,23 @@ namespace LidgrenServer.Controllers
             return await _userService.GetUserByUsernameAsync(username);
         }
 
+        public async Task<bool> SignUp(string username, string password)
+        {
+            var user = await getUserInfoByUserNameAsync(username);
+            if (user != null) 
+            { 
+                return false;
+            }
+            var newUser = new UserModel
+            {
+                Username = username,
+                Password = password,
+                Coin = 100,
+            };
+            await _userService.CreateNewUserAsync(newUser);
+            return true;
+        }
+
         public async Task<bool> CreateSampleUser()
         {
             try

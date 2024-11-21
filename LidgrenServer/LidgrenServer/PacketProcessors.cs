@@ -10,36 +10,33 @@ using LidgrenServer.Data;
 using LidgrenServer.Models;
 using LidgrenServer.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Org.BouncyCastle.Bcpg;
 using Org.BouncyCastle.Security;
 namespace LidgrenServer
 {
-    public class PlayerPosition
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-    }
+    
     public class PacketProcessors
     {
         private NetServer server;
         private Thread thread;
         private List<string> players;
-        private Dictionary<string, PlayerPosition> playerPositions;
-        private readonly ServiceProvider _serviceProvider;
+        
+        private readonly IServiceProvider _serviceProvider;
 
-        public PacketProcessors()
+        public PacketProcessors(IServiceProvider serviceProvider)
         {
             players = new List<string>();
-            playerPositions = new Dictionary<string, PlayerPosition>();
+            
 
             NetPeerConfiguration config = new NetPeerConfiguration("game");
 
             config.MaximumConnections = 20;
-            config.LocalAddress = IPAddress.Parse("172.19.201.72");
+            config.LocalAddress = IPAddress.Parse("192.168.0.107");
             config.Port = 14242;
             server = new NetServer(config);
             server.Start();
 
-            _serviceProvider = new ServiceCollection().BuildServiceProvider();
+            _serviceProvider = serviceProvider;
 
             thread = new Thread(Listen);
             thread.Start();
@@ -99,6 +96,7 @@ namespace LidgrenServer
                             {
                                 HandleShopPacket((PacketTypes.Shop)type, message);
                             }
+                            else
                             {
                                 Logging.Error("Unhandled packet type");
                             }
@@ -126,10 +124,11 @@ namespace LidgrenServer
 
         private void HandleGeneralPacket(PacketTypes.General type, NetIncomingMessage message)
         {
+            string deviceId = NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier);
             switch (type)
             {
-                case (byte)PacketTypes.General.Login:
-                    string deviceId = NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier);
+                case PacketTypes.General.Login:
+                    
                     Logging.Info("Type: Login, From: " + deviceId);
 
                     var loginPacket = new Login();
@@ -138,11 +137,22 @@ namespace LidgrenServer
                     SendLoginPackage(loginPacket, message.SenderConnection, deviceId);
                     
                     break;
+
+                case PacketTypes.General.SignUp:
+                    
+                    Logging.Info("Type: SignUp, From: " + deviceId);
+                    var signUpPacket = new SignUp();
+                    signUpPacket.NetIncomingMessageToPacket(message);
+                    SendSignUpPackage(signUpPacket, message.SenderConnection);
+                    break;
                 default:
                     Logging.Error("Unhandle Data / Package type");
                     break;
             }
         }
+
+        
+
         private void HandleShopPacket(PacketTypes.Shop type, NetIncomingMessage message)
         {
             throw new NotImplementedException();
@@ -176,6 +186,31 @@ namespace LidgrenServer
                 password = packet.password
             }.PacketToNetOutGoingMessage(outmsg);
             Logging.Info("Send Login Package to User");
+            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
+
+        }
+        private void SendSignUpPackage(SignUp signUpPacket, NetConnection user)
+        {
+            var userController = _serviceProvider.GetRequiredService<UserController>();
+            if (userController.SignUp(signUpPacket.username, signUpPacket.password).Result)
+            {
+                signUpPacket.isSuccess = true;
+                Logging.Info("Sign Up Successful, welcome");
+            }
+            else 
+            {
+                signUpPacket.isSuccess = false;
+                signUpPacket.reason = "User Already Exists!";
+            }
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new SignUp()
+            {
+                isSuccess = signUpPacket.isSuccess,
+                username = signUpPacket.username,
+                password = signUpPacket.password,
+                reason = signUpPacket.reason
+            }.PacketToNetOutGoingMessage(outmsg);
+            Logging.Info("Send Sign Up Package to User");
             server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
 
         }

@@ -25,23 +25,24 @@ namespace LidgrenServer
                 });
         public static async Task Main(string[] args)
         {
-            //var packetProcessor = new PacketProcessors();
+            
             //Server server = new Server();
             //var userService = new UserService(new ApplicationDataContext());
             //var userController = new UserController(userService);
             var host = CreateHostBuilder(args).Build();
             var serviceProvider = host.Services;
+            var packetProcessor = new PacketProcessors(serviceProvider);
             //var userController = serviceProvider.GetRequiredService<UserController>();
 
-            var loginHistoryController = serviceProvider.GetRequiredService<LoginHistoryController>();
+            //var loginHistoryController = serviceProvider.GetRequiredService<LoginHistoryController>();
             //userController.Login("", "");
 
             //await userController.CreateSampleUser();
 
-            await loginHistoryController.NewUserLoginAsync(1, "ABC");
+            //await loginHistoryController.NewUserLoginAsync(1, "ABC");
 
 
-
+            
 
 
 

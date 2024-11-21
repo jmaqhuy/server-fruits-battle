@@ -5,14 +5,15 @@ namespace LidgrenServer
 {
     public class PacketTypes
     {
-        public enum General
+        public enum General : byte
         {
             Login,
+            SignUp,
             PlayerDisconnectsPacket,
             BasicUserInfoPacket
         }
 
-        public enum Shop
+        public enum Shop : byte
         {
             LoadShopPacket,
             RequestBuyPacket,
@@ -54,6 +55,33 @@ namespace LidgrenServer
             message.Write(password);
             message.Write(isSuccess);
             Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}");
+        }
+    }
+
+    public class SignUp : Packet
+    {
+        public string username { get; set; }
+        public string password { get; set; }
+        public bool isSuccess { get; set; }
+        public string reason { get; set; }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+            password = message.ReadString();
+            isSuccess = message.ReadBoolean();
+            reason = message.ReadString();
+            Logging.Debug($"NetIncomingMessageToPacket: username: {username}, password: {password}, isSuccess: {isSuccess}, reason: {reason}");
+        }
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.General.SignUp);
+            message.Write(username);
+            message.Write(password);
+            message.Write(isSuccess);
+            message.Write(reason);
+            Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}, reason: {reason}");
         }
     }
     public class PlayerDisconnectsPacket : Packet
