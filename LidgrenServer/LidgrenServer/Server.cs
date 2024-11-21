@@ -5,6 +5,10 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using Lidgren.Network;
+using LidgrenServer.controllers;
+using LidgrenServer.Data;
+using LidgrenServer.services;
+using Org.BouncyCastle.Security;
 namespace LidgrenServer
 {
     public class PlayerPosition
@@ -27,7 +31,7 @@ namespace LidgrenServer
             NetPeerConfiguration config = new NetPeerConfiguration("game");
 
             config.MaximumConnections = 20;
-            //config.LocalAddress = IPAddress.Parse("192.168.126.50");
+            config.LocalAddress = IPAddress.Parse("192.168.0.107");
             config.Port = 14242;
             server = new NetServer(config);
             server.Start();
@@ -49,26 +53,32 @@ namespace LidgrenServer
                     Logging.Info("Message received");
                     // Get list of users
 
-                    List<NetConnection>all = server.Connections;
+                    List<NetConnection> all = server.Connections;
                     switch (message.MessageType)
                     {
                         case NetIncomingMessageType.StatusChanged:
                             NetConnectionStatus status = (NetConnectionStatus)message.ReadByte();
                             string reason = message.ReadString();
 
-                            if(status == NetConnectionStatus.Connected)
+                            if (status == NetConnectionStatus.Connected)
                             {
                                 var player = NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier);
                                 //Add our player to dictionary
                                 players.Add(player);
 
-                                //Send Player ID
-                                SendLocalPlayerPacket(message.SenderConnection, player);
+                                Logging.Info("Player Online now");
+                                players.ForEach(player => 
+                                {
+                                    Logging.Info(player);
+                                });
+                                
+                                ////Send Player ID
+                                //SendLocalPlayerPacket(message.SenderConnection, player);
 
 
-                                // Send Spawn Info
+                                //// Send Spawn Info
 
-                                SpawnPlayers(all,message.SenderConnection,player);
+                                //SpawnPlayers(all, message.SenderConnection, player);
                             }
                             break;
                         case NetIncomingMessageType.Data:
@@ -81,21 +91,18 @@ namespace LidgrenServer
 
                             switch (type)
                             {
-                                case (byte)PacketTypes.PositionPacket:
-                                    packet = new PositionPacket();
+                                case (byte)PacketTypes.Login:
+                                    Logging.Info("Type: Login, From: " + NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier));
+                                    packet = new Login();
                                     packet.NetIncomingMessageToPacket(message);
-                                    SendPositionPacket(all,(PositionPacket)packet);
-                                    break;
-                                case (byte)PacketTypes.PlayerDisconnectsPacket:
-                                    packet = new PLayerDisconnectsPacket();
-                                    packet.NetIncomingMessageToPacket(message);
-                                    SendPlayerDisconnectPacket(all,(PLayerDisconnectsPacket)packet);
+                                    SendLoginPackage((Login)packet, message.SenderConnection);
+
                                     break;
                                 default:
                                     Logging.Error("Unhandle Data / Package type");
                                     break;
                             }
-                            break ;
+                            break;
                         case NetIncomingMessageType.DebugMessage:
                         case NetIncomingMessageType.ErrorMessage:
                         case NetIncomingMessageType.WarningMessage:
@@ -115,75 +122,31 @@ namespace LidgrenServer
         }
 
 
-        public void SpawnPlayers(List<NetConnection>all,NetConnection local,string player)
+
+        private void SendLoginPackage(Login packet, NetConnection user)
         {
-            //Spawn all client on local player
-            all.ForEach(p => 
+            var userService = new UserService(new ApplicationDataContext());
+            var userController = new UserController(userService);
+
+            if (userController.Login(packet.username, packet.password).Result)
             {
-                string _player = NetUtility.ToHexString(p.RemoteUniqueIdentifier);  
-                if (player != _player)
-                    SendSpawnPacketToLocal(local, _player, playerPositions[_player].X, playerPositions[_player].Y);
-            });
-
-            // Spawn the local player on all client
-
-            Random random = new Random();
-            SendSpawnPacketToAll(all,player,random.Next(-3,3),random.Next(-3,3));
-        }
-
-
-        public void SendLocalPlayerPacket(NetConnection local, string player)
-        {
-            Logging.Info("Sending player their user ID: "+player);
-
-            NetOutgoingMessage message = server.CreateMessage();
-
-            new LocalPlayerPacket() { ID = player}.PacketToNetOutGoingMessage(message);
-            server.SendMessage(message, local, NetDeliveryMethod.ReliableOrdered, 0);
-        }
-        public void SendSpawnPacketToLocal(NetConnection local, string player, float X, float Y) 
-        {
-            Logging.Info("Sending user spawn info for player: " + player);
-
-            playerPositions[player] = new PlayerPosition() { X = X, Y = Y };
-            NetOutgoingMessage message = server.CreateMessage();
-
-            new SpawnPacket() { player = player, X = X, Y = Y }.PacketToNetOutGoingMessage(message);
-            server.SendMessage(message, local, NetDeliveryMethod.ReliableOrdered, 0);
-        }
-
-        public void SendSpawnPacketToAll(List<NetConnection>all, string player, float X, float Y)
-        {
-            Logging.Info("Sending user spawn info for player: " + player);
-
-            playerPositions[player] = new PlayerPosition() { X = X, Y = Y };
-            NetOutgoingMessage message = server.CreateMessage();
-
-            new SpawnPacket() { player = player, X = X, Y = Y }.PacketToNetOutGoingMessage(message);
-            server.SendMessage(message, all, NetDeliveryMethod.ReliableOrdered, 0);
-        }
-        public void SendPositionPacket(List<NetConnection> all, PositionPacket packet) 
-        {
-            Logging.Info("Sending position for " + packet.player);
-
-            playerPositions[packet.player] = new PlayerPosition() { X = packet.X, Y = packet.Y };
-
-            NetOutgoingMessage message = server.CreateMessage();
-            packet.PacketToNetOutGoingMessage(message);
-            server.SendMessage(message,all,NetDeliveryMethod.ReliableOrdered,0);
-        }
-
-
-        public void SendPlayerDisconnectPacket(List<NetConnection> all, PLayerDisconnectsPacket packet) 
-        {
-            Logging.Info("Player disconnect: " + packet.player);
+                packet.isSuccess = true;
+            }
+            else
+            {
+                packet.isSuccess = false;
+            }
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new Login()
+            {
+                isSuccess = packet.isSuccess,
+                username = packet.username,
+                password = packet.password
+            }.PacketToNetOutGoingMessage(outmsg);
+            Logging.Info("Send Login Package to User");
+            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
             
-            playerPositions.Remove(packet.player);
-            players.Remove(packet.player);
-            
-            NetOutgoingMessage message = server.CreateMessage();
-            packet.PacketToNetOutGoingMessage(message);
-            server.SendMessage(message, all, NetDeliveryMethod.ReliableOrdered, 0);
         }
+
     }
 }

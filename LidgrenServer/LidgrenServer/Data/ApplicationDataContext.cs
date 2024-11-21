@@ -11,5 +11,12 @@ namespace LidgrenServer.Data
         {
             optionsBuilder.UseMySQL("Server=localhost;Database=Fruits_Battle_Game;User=root;Password=Huy@123.sc");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserModel>()
+                .HasIndex(u => u.Username)
+                .IsUnique(); 
+        }
+
     }
 }

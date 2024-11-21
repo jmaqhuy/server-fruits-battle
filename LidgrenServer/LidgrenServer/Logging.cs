@@ -39,6 +39,6 @@ namespace LidgrenServer
         {
             return DateTime.Now.ToString();
         }
-
+         
     }
 }

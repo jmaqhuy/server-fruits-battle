@@ -13,23 +13,23 @@ namespace LidgrenServer.model
         [Column("Id")]
         public int Id { get; set; }
 
-
         [Column("Username")]
+        [StringLength(50)]
         public string Username { get; set; } = null!;
 
-        [NotMapped]
-        private string _passwordHash = null!;
+        [Column("display_name")]
+        [StringLength(100)]
+        public string? display_name { get; set; }
 
+        [Column("coin")]
+        public int? coin { get; set; }
 
         [Required]
         [Column("Password")]
-        public string Password 
-        {
-            get { return _passwordHash; }
-            set { _passwordHash = HashPassword(value); }
-        }
+        public string Password { get; set; } = null!;
 
-        private string HashPassword(string password)
+        // Hàm mã hóa mật khẩu khi người dùng nhập vào
+        public string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -41,8 +41,15 @@ namespace LidgrenServer.model
                     builder.Append(b.ToString("x2"));
                 }
 
-                return builder.ToString();
+                return builder.ToString(); // Lưu mật khẩu đã mã hóa vào thuộc tính Password
             }
+        }
+
+        // Kiểm tra mật khẩu có hợp lệ không
+        public bool VerifyPassword(string password)
+        {
+            string hashedPassword = HashPassword(password);
+            return this.Password == hashedPassword;
         }
     }
 }
