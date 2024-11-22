@@ -27,12 +27,11 @@ namespace LidgrenServer
         {
             players = new List<string>();
             
-
-            NetPeerConfiguration config = new NetPeerConfiguration("game");
-
-            config.MaximumConnections = 20;
-            config.LocalAddress = IPAddress.Parse("192.168.0.107");
-            config.Port = 14242;
+            NetPeerConfiguration config = new NetPeerConfiguration("game")
+            {
+                Port = 14242
+            };
+            config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             server = new NetServer(config);
             server.Start();
 
@@ -58,6 +57,14 @@ namespace LidgrenServer
                     List<NetConnection> all = server.Connections;
                     switch (message.MessageType)
                     {
+                        case NetIncomingMessageType.DiscoveryRequest:
+                            Logging.Debug("Received DiscoveryRequest");
+
+                            // Respond to discovery requests
+                            server.SendDiscoveryResponse(null, message.SenderEndPoint);
+                            Logging.Debug("Send Discovery Response");
+                            break;
+
                         case NetIncomingMessageType.StatusChanged:
                             NetConnectionStatus status = (NetConnectionStatus)message.ReadByte();
                             string reason = message.ReadString();
