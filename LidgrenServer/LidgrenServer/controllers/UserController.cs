@@ -68,10 +68,10 @@ namespace LidgrenServer.Controllers
             }
         }
         
-        public async Task SetUserOnlineAsync(UserModel user)
-        {
-            user.IsOnline = true;
-            await _userService.UpdateUserAsysn(user);
-        }
+        //public async Task SetUserOnlineAsync(UserModel user)
+        //{
+        //    user.IsOnline = true;
+        //    await _userService.UpdateUserAsysn(user);
+        //}
     }
 }

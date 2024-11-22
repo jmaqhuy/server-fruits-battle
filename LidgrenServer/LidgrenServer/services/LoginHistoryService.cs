@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LidgrenServer.Data;
 using LidgrenServer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LidgrenServer.Services
 {
@@ -16,12 +17,28 @@ namespace LidgrenServer.Services
             _context = context;
         }
 
+        //Create
         public async Task NewUserLoginAsync(LoginHistory loginHistory)
         {
-            await _context.loginHistories.AddAsync(loginHistory);
+            await _context.LoginHistories.AddAsync(loginHistory);
             await _context.SaveChangesAsync();
         }
 
+        //Update
+        public async Task UserLogoutAsync(LoginHistory loginHistory)
+        {
+            _context.LoginHistories.Update(loginHistory);
+            await _context.SaveChangesAsync();
+        }
+
+        //Read
+        public async Task<LoginHistory?> GetCurrentLoginAsync(int userId)
+        {
+            return await _context.LoginHistories
+                .FirstOrDefaultAsync(lh =>
+                    lh.UserId == userId &&
+                    lh.IsLoginNow);
+        }
 
     }
 }

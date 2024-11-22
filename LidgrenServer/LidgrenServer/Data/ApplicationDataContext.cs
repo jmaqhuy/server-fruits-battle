@@ -6,7 +6,7 @@ namespace LidgrenServer.Data
     public class ApplicationDataContext : DbContext
     {
         public DbSet<UserModel> Users { get; set; } = null!;
-        public DbSet<LoginHistory> loginHistories { get; set; } = null!;
+        public DbSet<LoginHistory> LoginHistories { get; set; } = null!;
         public DbSet<Character> Characters { get; set; }
         public DbSet<UserCharacter> UserCharacters { get; set; }
 
@@ -28,12 +28,14 @@ namespace LidgrenServer.Data
             modelBuilder.Entity<LoginHistory>(entity =>
             {
                 entity.HasKey(ld => ld.Id);
-                entity.HasIndex(ld => ld.LoginTime);
+                modelBuilder.Entity<LoginHistory>()
+                    .HasIndex(lh => new { lh.UserId, lh.IsLoginNow })
+                    .HasDatabaseName("IX_User_Device_IsLoginNow");
+
                 modelBuilder.Entity<LoginHistory>()
                     .HasOne(lh => lh.UserModel)
                     .WithMany(u => u.LoginHistory)
-                    .HasForeignKey(lh => lh.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .HasForeignKey(lh => lh.UserId);
             });
             modelBuilder.Entity<UserCharacter>()
                 .HasKey(uc => new { uc.UserId, uc.CharacterId });

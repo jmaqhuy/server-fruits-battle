@@ -21,13 +21,17 @@ namespace LidgrenServer.Models
         [Column("login_time")]
         public DateTime LoginTime { get; set; }
 
+        [Column("logout_time")]
+        public DateTime? LogoutTime { get; set; }
 
         [Required]
-        [Column("device_id")]
-        [StringLength(255)]
-        public string DeviceId { get; set; } = null!;
+        [Column("is_online_now")]
+        public bool IsLoginNow { get; set; }
 
-        
+        //[Required]
+        //[Column("device_id")]
+        //[StringLength(255)]
+        //public string DeviceId { get; set; } = null!;
 
 
     }

@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
+﻿using System.Net;
 using Lidgren.Network;
 using LidgrenServer.Controllers;
-using LidgrenServer.Data;
-using LidgrenServer.Models;
-using LidgrenServer.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Org.BouncyCastle.Bcpg;
-using Org.BouncyCastle.Security;
 namespace LidgrenServer
 {
-    
+
     public class PacketProcessors
     {
         private NetServer server;
@@ -166,17 +156,28 @@ namespace LidgrenServer
 
             if (userController.Login(packet.username, packet.password).Result)
             {
-                packet.isSuccess = true;
+                
                 var currentUser = userController.getUserInfoByUserNameAsync(packet.username).Result;
                 var loginHistoryController = _serviceProvider.GetRequiredService<LoginHistoryController>();
 
-                await loginHistoryController.NewUserLoginAsync(currentUser.Id, deviceId);
-                await userController.SetUserOnlineAsync(currentUser);
-                Logging.Info("UserLogin Successful, Save User Login History");
+                if (loginHistoryController.UserOnlineNow(currentUser.Id).Result)
+                {
+                    packet.isSuccess = false;
+                    Logging.Error("Account Login in another Device");
+                }
+                else 
+                {
+                    packet.isSuccess = true;
+                    await loginHistoryController.NewUserLoginAsync(currentUser.Id);
+                    //await userController.SetUserOnlineAsync(currentUser);
+                    Logging.Info("UserLogin Successful, Save User Login History");
+                }
+                
             }
             else
             {
                 packet.isSuccess = false;
+                Logging.Error("Incorrect Username or Password");
             }
             NetOutgoingMessage outmsg = server.CreateMessage();
             new Login()

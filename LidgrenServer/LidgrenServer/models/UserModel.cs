@@ -26,8 +26,8 @@ namespace LidgrenServer.Models
         [Column("coin")]
         public int? Coin { get; set; }
 
-        [Column("is_online")]
-        public bool IsOnline { get; set; }
+        //[Column("is_online")]
+        //public bool IsOnline { get; set; }
 
         [Required]
         [Column("password")]
