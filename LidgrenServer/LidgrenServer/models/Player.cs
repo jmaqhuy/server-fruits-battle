@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lidgren.Network;
+﻿using Lidgren.Network;
 using LidgrenServer.Models;
 
 namespace LidgrenServer.models
@@ -17,6 +12,7 @@ namespace LidgrenServer.models
         public bool IsHost { get; set; } = false;
         public Team team { get; set; }
         public int Position { get; set; }
+        public bool isReady { get; set; } = false ;
         
         public UserModel User { get; set; }
         public NetConnection netConnection { get; set; }

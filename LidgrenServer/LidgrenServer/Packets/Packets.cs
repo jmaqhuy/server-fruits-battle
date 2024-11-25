@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Lidgren.Network;
-using LidgrenServer.models;
+﻿using Lidgren.Network;
 
-namespace LidgrenServer
+namespace LidgrenServer.Packets
 {
     public class PacketTypes
     {
@@ -137,7 +135,7 @@ namespace LidgrenServer
     {
         public string username { get; set; }
         public string newDisplayName { get; set; }
-        public string error {  get; set; }
+        public string error { get; set; }
 
         public bool Ok { get; set; }
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
@@ -161,40 +159,16 @@ namespace LidgrenServer
 
     public class JoinRoomPacket : Packet
     {
-        public string username { get; set; }
-        public string displayName { get; set; }
-        public Team team { get; set; }
-        public bool isHost { get; set; }
-        public int position { get; set; }
-        public int roomId { get; set; }
-        public string roomName { get; set; }
-        public RoomMode roomMode { get; set; }
-        public RoomType roomType { get; set; }
+        public RoomPacket room { get; set; }
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
-            username = message.ReadString();
-            displayName = message.ReadString();
-            team = (Team)message.ReadByte();
-            isHost = message.ReadBoolean();
-            position = message.ReadInt32();
-            roomId = message.ReadInt32();
-            roomName = message.ReadString();
-            roomMode = (RoomMode)message.ReadByte();
-            roomType = (RoomType)message.ReadByte();
+            room = RoomPacket.Deserialize(message);
         }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
             message.Write((byte)PacketTypes.Room.JoinRoomPacket);
-            message.Write(username);
-            message.Write(displayName);
-            message.Write((byte)team);
-            message.Write(isHost);
-            message.Write(position);
-            message.Write(roomId);
-            message.Write(roomName);
-            message.Write((byte)roomMode);
-            message.Write((byte)roomType);
+            room.Serialize(message);
         }
     }
     public class ExitRoomPacket : Packet
@@ -218,15 +192,27 @@ namespace LidgrenServer
 
     public class JoinRoomPacketToAll : Packet
     {
-
+        public List<PlayerInRoomPacket> Players { get; set; } = new List<PlayerInRoomPacket>();
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
-            throw new NotImplementedException();
+            int playerCount = message.ReadInt32();
+            Players.Clear();
+            for (int i = 0; i < playerCount; i++)
+            {
+                Players.Add(PlayerInRoomPacket.Deserialize(message));
+            }
+
         }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
-            throw new NotImplementedException();
+            message.Write((byte)PacketTypes.Room.JoinRoomPacketToAll);
+            message.Write(Players.Count);
+            foreach (var p in Players)
+            {
+                p.Serialize(message);
+            }   
+            
         }
     }
 }

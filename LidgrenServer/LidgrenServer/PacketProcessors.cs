@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
-using System.Net;
-using Lidgren.Network;
+﻿using Lidgren.Network;
 using LidgrenServer.Controllers;
 using LidgrenServer.models;
-using LidgrenServer.Models;
+using LidgrenServer.Packets;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 namespace LidgrenServer
 {
 
@@ -154,8 +151,8 @@ namespace LidgrenServer
                     Logging.Info("Received Join Room Packet");
                     packet = new JoinRoomPacket();
                     packet.NetIncomingMessageToPacket(message);
-                    SendJoinRoomPacket((JoinRoomPacket)packet);
-
+                    Room newRoom = SendJoinRoomPacket((JoinRoomPacket)packet, message.SenderConnection);
+                    SendJoinRoomPacketToAll(newRoom);
                     break;
 
                 case PacketTypes.Room.ExitRoomPacket:
@@ -170,6 +167,7 @@ namespace LidgrenServer
                     if (room != null && player != null)
                     {
                         RemovePlayerInRoom(player, room);
+                        SendJoinRoomPacketToAll(room);
                     }
                     break;
 
@@ -179,79 +177,122 @@ namespace LidgrenServer
             }
 
         }
-        private void SendJoinRoomPacket(JoinRoomPacket joinRoomPacket)
+
+        private void SendJoinRoomPacketToAll(Room room)
         {
+            List<NetConnection> connections = room.playersList
+                                         .Where(player => player.netConnection != null)
+                                         .Select(player => player.netConnection)
+                                         .ToList();
             
-            Player current_player = PlayerOnlineList?.FirstOrDefault(player => player.User.Username == joinRoomPacket.username);
-            if (current_player == null)
+            // No One in room now
+            if (connections.Count <= 0) return;
+
+            var host = room.playersList.FirstOrDefault(p => p.IsHost);
+            if (host == null)
             {
-                Logging.Error("Player not found.");
-                return;
+                room.playersList.First().IsHost = true;
             }
 
-            Room thisRoom = RoomList?.FirstOrDefault(room => room.roomMode == joinRoomPacket.roomMode && !room.IsRoomFull);
+            List<PlayerInRoomPacket> playerInRoomPackets = new List<PlayerInRoomPacket>();
+            foreach (var player in room.playersList)
+            {
+                playerInRoomPackets.Add(new PlayerInRoomPacket()
+                {
+                    username = player.User.Username,
+                    displayname = player.User.Display_name,
+                    isHost = player.IsHost,
+                    team = player.team,
+                    Position = player.Position,
+                    isReady = player.isReady,
+                    
+                });
+            }
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new JoinRoomPacketToAll()
+            {
+                Players = playerInRoomPackets,
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+
+        private Room SendJoinRoomPacket(JoinRoomPacket joinRoomPacket, NetConnection netConnection)
+        {
+            
+            Room? thisRoom = RoomList?.FirstOrDefault(room => 
+                    room.roomMode == joinRoomPacket.room.roomMode &&
+                    !room.IsRoomFull &&
+                    room.roomStatus == RoomStatus.InLobby &&
+                    room.RoomType == joinRoomPacket.room.roomType
+            );
+
+            var player = PlayerOnlineList?.FirstOrDefault(u => u.netConnection == netConnection);
 
             if (thisRoom == null)
             {
                 thisRoom = CreateNewRoom(joinRoomPacket);
-                current_player.IsHost = true;
-                current_player.team = Team.Team1;
-                current_player.Position = 1;
+                player.IsHost = true;
+                player.team = Team.Team1;
+                player.Position = 1;
             }
             else
             {
-                current_player.IsHost = false;
+                int maxPlayers = thisRoom.MaxPlayers;
+                var availablePositions1 = Enumerable.Range(1, 4).ToList();
+                var availablePositions2 = Enumerable.Range(5, 4).ToList();
+
                 int numberOfPlayerTeam1 = 0;
                 int numberOfPlayerTeam2 = 0;
-                foreach (var playerTeam1 in thisRoom.playersList)
+
+                foreach (var playerInRoom in thisRoom.playersList)
                 {
-                    if (playerTeam1.team == Team.Team1)
-                    {
+                    if (playerInRoom.team == Team.Team1) 
+                    { 
+                        availablePositions1.Remove(playerInRoom.Position);
                         numberOfPlayerTeam1++;
-                    } 
-                    if (playerTeam1.team == Team.Team2)
+                    } else
                     {
+                        availablePositions2.Remove(playerInRoom.Position);
                         numberOfPlayerTeam2++;
                     }
                 }
 
-                
-
-                
                 if (numberOfPlayerTeam1 > numberOfPlayerTeam2)
                 {
-                    current_player.team = Team.Team2;
-                    current_player.Position = numberOfPlayerTeam2 + 1;
+                    player.team = Team.Team2;
+                    player.Position = availablePositions2[random.Next(availablePositions2.Count)];
                 }
                 else
                 {
-                    current_player.team = Team.Team1;
-                    current_player.Position = numberOfPlayerTeam1 + 1;
+                    player.team = Team.Team1;
+                    player.Position = availablePositions1[random.Next(availablePositions1.Count)];
                 }
+                player.IsHost = false;
 
             }
-            thisRoom.playersList.Add(current_player);
-            Logging.Info($"User {current_player.User.Username} Join Room {thisRoom.Id}");
+            
+            
+            thisRoom.playersList.Add(player);
+            Logging.Info($"User {player.User.Username} Join Room {thisRoom.Id}");
             RoomList.Add(thisRoom);
 
 
             NetOutgoingMessage outmsg = server.CreateMessage();
             new JoinRoomPacket()
             {
-                username = joinRoomPacket.username,
-                displayName = current_player.User.Display_name,
-                team = current_player.team,
-                isHost = true,
-                position = current_player.Position,
-                roomId = thisRoom.Id,
-                roomName = thisRoom.Name,
-                roomMode = thisRoom.roomMode,
-                roomType = thisRoom.RoomType,
+                room = new RoomPacket()
+                {
+                    Id = thisRoom.Id,
+                    Name = thisRoom.Name,
+                    roomMode = thisRoom.roomMode,
+                    roomStatus = thisRoom.roomStatus,
+                    roomType = thisRoom.RoomType,
+                }
             }.PacketToNetOutGoingMessage(outmsg);
 
-            Logging.Debug($"Player {current_player.User.Display_name} Team {current_player.team} Position {current_player.Position}");
-            server.SendMessage(outmsg, current_player.netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
             Logging.Info("Response Join Room Packet: Room ID: " + thisRoom.Id);
+            return thisRoom;
         }
 
 
@@ -267,9 +308,9 @@ namespace LidgrenServer
             {
                 Id = newRoomId,
                 Name = $"Room {newRoomId}",
-                roomMode = joinRoomPacket.roomMode,
+                roomMode = joinRoomPacket.room.roomMode,
                 roomStatus = RoomStatus.InLobby,
-                RoomType = RoomType.OneVsOne, 
+                RoomType = joinRoomPacket.room.roomType, 
                 playersList = new List<Player>()
             };
             Logging.Info($"New Room Created: Id {thisRoom.Id}, PlayerInRoom {thisRoom.playersList.Count}");
@@ -364,10 +405,12 @@ namespace LidgrenServer
                 if (playerInRoom != null)
                 {
                     RemovePlayerInRoom(playerInRoom, room);
+                    SendJoinRoomPacketToAll(room);
                     break;
                 }
             }
         }
+
 
         private async void SendChangeDisplayNamePacket(ChangeDisplayNamePacket changeDisplayNamePacket, NetConnection senderConnection)
         {
