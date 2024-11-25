@@ -1,7 +1,11 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using Lidgren.Network;
 using LidgrenServer.Controllers;
+using LidgrenServer.models;
+using LidgrenServer.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 namespace LidgrenServer
 {
 
@@ -9,14 +13,18 @@ namespace LidgrenServer
     {
         private NetServer server;
         private Thread thread;
-        private List<string> players;
+        
+
+
+        private List<Player> PlayerOnlineList = new List<Player>();
+        private List<Room> RoomList = new List<Room> {};
+        private Random random = new Random();
         
         private readonly IServiceProvider _serviceProvider;
 
         public PacketProcessors(IServiceProvider serviceProvider)
         {
-            players = new List<string>();
-            
+           
             NetPeerConfiguration config = new NetPeerConfiguration("game")
             {
                 Port = 14242
@@ -42,9 +50,7 @@ namespace LidgrenServer
                 while ((message = server.ReadMessage()) != null)
                 {
                     Logging.Info("Message received");
-                    // Get list of users
-
-                    List<NetConnection> all = server.Connections;
+                
                     switch (message.MessageType)
                     {
                         case NetIncomingMessageType.DiscoveryRequest:
@@ -58,27 +64,45 @@ namespace LidgrenServer
                         case NetIncomingMessageType.StatusChanged:
                             NetConnectionStatus status = (NetConnectionStatus)message.ReadByte();
                             string reason = message.ReadString();
+                            Logging.Debug(NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason);
+                            //if (status == NetConnectionStatus.Connected)
+                            //{
 
-                            if (status == NetConnectionStatus.Connected)
-                            {
-                                var player = NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier);
-                                //Add our player to dictionary
-                                players.Add(player);
+                            //} 
+                            //if (status == NetConnectionStatus.Disconnected)
+                            //{
 
-                                Logging.Info("Player Online now");
-                                players.ForEach(player =>
-                                {
-                                    Logging.Info(player);
-                                });
+                            //    bool anonymous = true;
+                            //    NetConnection netConnection = message.SenderConnection;
+                            //    foreach (var playeronline in PlayerOnlineList)
+                            //    {
+                            //        if (playeronline.netConnection == netConnection)
+                            //        {
+                                        
+                            //            PlayerOnlineList.Remove(playeronline);
+                            //            foreach (var room in RoomList)
+                            //            {
+                            //                foreach (var playerinroom in room.playersList)
+                            //                {
+                            //                    if (playerinroom.netConnection == netConnection)
+                            //                    {
+                            //                        anonymous = false;
+                            //                        Logging.Info($"Player {playerinroom.User.Username} quit game");
+                            //                        room.playersList.Remove(playerinroom);
+                            //                    }
+                            //                }
+                            //            }
 
-                                ////Send Player ID
-                                //SendLocalPlayerPacket(message.SenderConnection, player);
+                            //            break;
+                            //        }
+                            //    }
 
+                            //    if (anonymous)
+                            //    {
+                            //        Logging.Warn($"Anonymous user {netConnection} disconnected");
+                            //    }
 
-                                //// Send Spawn Info
-
-                                //SpawnPlayers(all, message.SenderConnection, player);
-                            }
+                            //}
                             break;
                         case NetIncomingMessageType.Data:
                             // Get package type
@@ -92,6 +116,10 @@ namespace LidgrenServer
                             else if (Enum.IsDefined (typeof(PacketTypes.Shop), type))
                             {
                                 HandleShopPacket((PacketTypes.Shop)type, message);
+                            }
+                            else if (Enum.IsDefined (typeof(PacketTypes.Room), type))
+                            {
+                                HandleRoomPacket((PacketTypes.Room)type, message);
                             }
                             else
                             {
@@ -117,7 +145,136 @@ namespace LidgrenServer
             }
         }
 
-        
+        private void HandleRoomPacket(PacketTypes.Room type, NetIncomingMessage message)
+        {
+            Packet packet;
+            switch (type)
+            {
+                case PacketTypes.Room.JoinRoomPacket:
+                    Logging.Info("Received Join Room Packet");
+                    packet = new JoinRoomPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendJoinRoomPacket((JoinRoomPacket)packet);
+
+                    break;
+
+                case PacketTypes.Room.ExitRoomPacket:
+                    Logging.Info("Received Exit Room Packet");
+                    packet = new ExitRoomPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    // send to all
+
+                    Room room = RoomList.FirstOrDefault(r => r.Id == ((ExitRoomPacket)packet).roomId);
+                    Player player = PlayerOnlineList.FirstOrDefault(u => u.User.Username == ((ExitRoomPacket)packet).username);
+
+                    if (room != null && player != null)
+                    {
+                        RemovePlayerInRoom(player, room);
+                    }
+                    break;
+
+                default:
+                    Logging.Error("Unhandle Data / Package type, typeof Room");
+                    break;
+            }
+
+        }
+        private void SendJoinRoomPacket(JoinRoomPacket joinRoomPacket)
+        {
+            
+            Player current_player = PlayerOnlineList?.FirstOrDefault(player => player.User.Username == joinRoomPacket.username);
+            if (current_player == null)
+            {
+                Logging.Error("Player not found.");
+                return;
+            }
+
+            Room thisRoom = RoomList?.FirstOrDefault(room => room.roomMode == joinRoomPacket.roomMode && !room.IsRoomFull);
+
+            if (thisRoom == null)
+            {
+                thisRoom = CreateNewRoom(joinRoomPacket);
+                current_player.IsHost = true;
+                current_player.team = Team.Team1;
+                current_player.Position = 1;
+            }
+            else
+            {
+                current_player.IsHost = false;
+                int numberOfPlayerTeam1 = 0;
+                int numberOfPlayerTeam2 = 0;
+                foreach (var playerTeam1 in thisRoom.playersList)
+                {
+                    if (playerTeam1.team == Team.Team1)
+                    {
+                        numberOfPlayerTeam1++;
+                    } 
+                    if (playerTeam1.team == Team.Team2)
+                    {
+                        numberOfPlayerTeam2++;
+                    }
+                }
+
+                
+
+                
+                if (numberOfPlayerTeam1 > numberOfPlayerTeam2)
+                {
+                    current_player.team = Team.Team2;
+                    current_player.Position = numberOfPlayerTeam2 + 1;
+                }
+                else
+                {
+                    current_player.team = Team.Team1;
+                    current_player.Position = numberOfPlayerTeam1 + 1;
+                }
+
+            }
+            thisRoom.playersList.Add(current_player);
+            Logging.Info($"User {current_player.User.Username} Join Room {thisRoom.Id}");
+            RoomList.Add(thisRoom);
+
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new JoinRoomPacket()
+            {
+                username = joinRoomPacket.username,
+                displayName = current_player.User.Display_name,
+                team = current_player.team,
+                isHost = true,
+                position = current_player.Position,
+                roomId = thisRoom.Id,
+                roomName = thisRoom.Name,
+                roomMode = thisRoom.roomMode,
+                roomType = thisRoom.RoomType,
+            }.PacketToNetOutGoingMessage(outmsg);
+
+            Logging.Debug($"Player {current_player.User.Display_name} Team {current_player.team} Position {current_player.Position}");
+            server.SendMessage(outmsg, current_player.netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+            Logging.Info("Response Join Room Packet: Room ID: " + thisRoom.Id);
+        }
+
+
+        private Room CreateNewRoom(JoinRoomPacket joinRoomPacket)
+        {
+            int newRoomId;
+            do
+            {
+                newRoomId = random.Next(1000, 10000); 
+            } while (RoomList.Any(room => room.Id == newRoomId)); 
+
+            Room thisRoom = new Room()
+            {
+                Id = newRoomId,
+                Name = $"Room {newRoomId}",
+                roomMode = joinRoomPacket.roomMode,
+                roomStatus = RoomStatus.InLobby,
+                RoomType = RoomType.OneVsOne, 
+                playersList = new List<Player>()
+            };
+            Logging.Info($"New Room Created: Id {thisRoom.Id}, PlayerInRoom {thisRoom.playersList.Count}");
+            return thisRoom;
+        }
 
         private void HandleGeneralPacket(PacketTypes.General type, NetIncomingMessage message)
         {
@@ -142,13 +299,115 @@ namespace LidgrenServer
                     signUpPacket.NetIncomingMessageToPacket(message);
                     SendSignUpPackage(signUpPacket, message.SenderConnection);
                     break;
+
+                case PacketTypes.General.BasicUserInfoPacket:
+                    Logging.Info("Type: Request for basic user info");
+                    var basicUserInfoPacket = new BasicUserInfoPacket();
+                    basicUserInfoPacket.NetIncomingMessageToPacket(message);
+                    SendBasicUserInfoPacket(basicUserInfoPacket, message.SenderConnection);
+
+                    break;
+
+                case PacketTypes.General.ChangeDisplayNamePacket:
+                    Logging.Info("Type: Request for Change DisplayName");
+                    var changeDisplayNamePacket = new ChangeDisplayNamePacket();
+                    changeDisplayNamePacket.NetIncomingMessageToPacket(message);
+                    SendChangeDisplayNamePacket(changeDisplayNamePacket, message.SenderConnection);
+                    break;
+
+                case PacketTypes.General.PlayerDisconnectsPacket:
+                    var playerDisconnectPacket = new PlayerDisconnectsPacket();
+                    playerDisconnectPacket.NetIncomingMessageToPacket(message);
+
+
+                    var username = playerDisconnectPacket.username;
+                    // Check if user is logged in, if so remove from PlayerOnlineList
+                    if (!string.IsNullOrEmpty(username))
+                    {
+                        RemovePlayerInPlayerOnlineListAndRoom(username);
+                    }
+
+                    break;
+
                 default:
                     Logging.Error("Unhandle Data / Package type");
                     break;
             }
         }
+        private void RemovePlayerInPlayerOnlineListAndRoom(string username)
+        {
+            var player = PlayerOnlineList.FirstOrDefault(p => p.User.Username == username);
+            if (player != null)
+            {
+                Logging.Debug($"Player {player.User.Username} offline");
+                PlayerOnlineList.Remove(player);
+                RemovePlayerInRoom(player);
+            }
+        }
+        private void RemovePlayerInRoom(Player player, Room room)
+        {
+            room.playersList.Remove(player);
+            Logging.Warn($"Player {player.User.Display_name} Exit Room {room.Id}");
+            if (room.playersList.Count == 0)
+            {
+                Logging.Warn($"Room {room.Id} remove because no player in room!");
+                Room selectroom = RoomList.FirstOrDefault(r => r == room);
+                RoomList.Remove(selectroom);
+            }
+        }
 
-        
+        private void RemovePlayerInRoom(Player player)
+        {
+            foreach (var room in RoomList.ToList())
+            { 
+                var playerInRoom = room.playersList.FirstOrDefault(p => p == player);
+                if (playerInRoom != null)
+                {
+                    RemovePlayerInRoom(playerInRoom, room);
+                    break;
+                }
+            }
+        }
+
+        private async void SendChangeDisplayNamePacket(ChangeDisplayNamePacket changeDisplayNamePacket, NetConnection senderConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            await userController.ChangeDisplayName(changeDisplayNamePacket.username, changeDisplayNamePacket.newDisplayName);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new ChangeDisplayNamePacket()
+            {
+                username = changeDisplayNamePacket.username,
+                newDisplayName = changeDisplayNamePacket.newDisplayName,
+                error = "",
+                Ok = true,
+            }.PacketToNetOutGoingMessage(outmsg);
+
+            Logging.Info("Send ChangeDisplayNamePacket to User");
+            server.SendMessage(outmsg, senderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+
+        private void SendBasicUserInfoPacket(BasicUserInfoPacket basicUserInfoPacket, NetConnection senderConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            var user = userController.getUserInfoByUserNameAsync(basicUserInfoPacket.userName).Result;
+            if ( user != null) 
+            {
+                Logging.Debug($"All User Info: name {user.Username}, coin: {user.Coin}, Id: {user.Id}, Display_name: {user.Display_name}");
+                NetOutgoingMessage outmsg = server.CreateMessage();
+                new BasicUserInfoPacket()
+                {
+                    userName = basicUserInfoPacket.userName,
+                    coin = user.Coin,
+                    displayName = user.Display_name
+                }.PacketToNetOutGoingMessage(outmsg);
+
+                Logging.Info("Send Sign Up Package to User");
+
+                server.SendMessage(outmsg, senderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+
+            }
+        }
 
         private void HandleShopPacket(PacketTypes.Shop type, NetIncomingMessage message)
         {
@@ -156,30 +415,43 @@ namespace LidgrenServer
         }
 
 
-        private async void SendLoginPackage(Login packet, NetConnection user, string deviceId)
+        private async void SendLoginPackage(Login packet, NetConnection userNetConnection, string deviceId)
         {
             var userController = _serviceProvider.GetRequiredService<UserController>();
-            
-
-            if (userController.Login(packet.username, packet.password).Result)
+            // Login return a UserModel if username and password are correct
+            var currentUser = userController.Login(packet.username, packet.password).Result;
+            if ( currentUser != null)
             {
-                
-                var currentUser = userController.getUserInfoByUserNameAsync(packet.username).Result;
-                var loginHistoryController = _serviceProvider.GetRequiredService<LoginHistoryController>();
+                bool isUserOnline = false;
+                //var loginHistoryController = _serviceProvider.GetRequiredService<LoginHistoryController>();
 
-                if (loginHistoryController.UserOnlineNow(currentUser.Id).Result)
+
+                //check in PlayerOnlineList, if exists , reject, else accept
+                foreach (var u in PlayerOnlineList)
                 {
-                    packet.isSuccess = false;
-                    Logging.Error("Account Login in another Device");
+                    if (u.User == currentUser)
+                    {
+                        isUserOnline = true;
+                        packet.isSuccess = false;
+                        Logging.Error("Account Login in another Device");
+                        break;
+                    }
                 }
-                else 
+                if (!isUserOnline)
                 {
+                    var player = new Player()
+                    {
+                        User = currentUser,
+                        netConnection = userNetConnection
+                    };
+                    PlayerOnlineList.Add(player);
                     packet.isSuccess = true;
-                    await loginHistoryController.NewUserLoginAsync(currentUser.Id);
-                    //await userController.SetUserOnlineAsync(currentUser);
+
+                    // Save in LoginHistory
+                    //await loginHistoryController.NewUserLoginAsync(currentUser.Id);
                     Logging.Info("UserLogin Successful, Save User Login History");
                 }
-                
+
             }
             else
             {
@@ -194,7 +466,7 @@ namespace LidgrenServer
                 password = packet.password
             }.PacketToNetOutGoingMessage(outmsg);
             Logging.Info("Send Login Package to User");
-            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
+            server.SendMessage(outmsg, userNetConnection, NetDeliveryMethod.ReliableOrdered, 0);
 
         }
         private void SendSignUpPackage(SignUp signUpPacket, NetConnection user)

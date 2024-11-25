@@ -24,7 +24,7 @@ namespace LidgrenServer.Models
         public string? Display_name { get; set; }
 
         [Column("coin")]
-        public int? Coin { get; set; }
+        public int Coin { get; set; } = 100;
 
         //[Column("is_online")]
         //public bool IsOnline { get; set; }

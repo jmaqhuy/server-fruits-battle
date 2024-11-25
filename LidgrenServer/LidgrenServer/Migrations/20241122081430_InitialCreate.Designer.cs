@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LidgrenServer.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20241121142215_UserCharacter")]
-    partial class UserCharacter
+    [Migration("20241122081430_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,15 +58,17 @@ namespace LidgrenServer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<string>("DeviceId")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("device_id");
+                    b.Property<bool>("IsLoginNow")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_online_now");
 
                     b.Property<DateTime>("LoginTime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("login_time");
+
+                    b.Property<DateTime?>("LogoutTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("logout_time");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -74,9 +76,8 @@ namespace LidgrenServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LoginTime");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "IsLoginNow")
+                        .HasDatabaseName("IX_User_Device_IsLoginNow");
 
                     b.ToTable("login_history");
                 });
@@ -117,10 +118,6 @@ namespace LidgrenServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("display_name");
-
-                    b.Property<bool>("IsOnline")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_online");
 
                     b.Property<string>("Password")
                         .IsRequired()

@@ -12,16 +12,23 @@ namespace LidgrenServer.Controllers
             _userService = userService;
         }
 
-        public async Task<bool> Login(string username, string password)
+        public async Task<UserModel> Login(string username, string password)
         {
             var user = await _userService.GetUserByUsernameAsync(username);
             
             if (user != null && user.VerifyPassword(password))
             {
                 Logging.Info(user.Username);
-                return true;
+                return user;
             }
-            return false;
+            return null;
+        }
+
+        public async Task ChangeDisplayName(string username, string newDisplayName)
+        {
+            var user = await getUserInfoByUserNameAsync(username);
+            user.Display_name = newDisplayName;
+            await _userService.UpdateUserAsysn(user);
         }
 
         public async Task<UserModel> getUserInfoByUserNameAsync(string username)

@@ -45,8 +45,8 @@ namespace LidgrenServer.Controllers
         public async Task<bool> UserOnlineNow(int user)
         {
             var lh = await _historyService.GetCurrentLoginAsync(user);
-            if (lh != null) { return false; }
-            return true;
+            if (lh != null) { return true; }
+            return false;
         }
 
     }
