@@ -1,4 +1,5 @@
-﻿using Lidgren.Network;
+﻿using System.Net;
+using Lidgren.Network;
 using LidgrenServer.Controllers;
 using LidgrenServer.models;
 using LidgrenServer.Packets;
@@ -19,12 +20,13 @@ namespace LidgrenServer
         
         private readonly IServiceProvider _serviceProvider;
 
-        public PacketProcessors(IServiceProvider serviceProvider)
+        public PacketProcessors(IServiceProvider serviceProvider, string IpSelected)
         {
            
             NetPeerConfiguration config = new NetPeerConfiguration("game")
             {
-                Port = 14242
+                Port = 14242,
+                LocalAddress = IPAddress.Parse(IpSelected),
             };
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             server = new NetServer(config);

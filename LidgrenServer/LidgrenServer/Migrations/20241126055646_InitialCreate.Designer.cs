@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LidgrenServer.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20241122081430_InitialCreate")]
+    [Migration("20241126055646_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,7 +110,7 @@ namespace LidgrenServer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("Coin")
+                    b.Property<int>("Coin")
                         .HasColumnType("int")
                         .HasColumnName("coin");
 
