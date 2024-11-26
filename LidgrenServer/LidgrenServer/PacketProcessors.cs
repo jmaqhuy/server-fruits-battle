@@ -20,13 +20,12 @@ namespace LidgrenServer
         
         private readonly IServiceProvider _serviceProvider;
 
-        public PacketProcessors(IServiceProvider serviceProvider, string IpSelected)
+        public PacketProcessors(IServiceProvider serviceProvider)
         {
            
             NetPeerConfiguration config = new NetPeerConfiguration("FruitsBattle2DGame")
             {
-                Port = 14242,
-                LocalAddress = IPAddress.Parse(IpSelected),
+                Port = 14242
             };
             config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
             server = new NetServer(config);
