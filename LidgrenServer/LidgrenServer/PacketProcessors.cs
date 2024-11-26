@@ -23,7 +23,7 @@ namespace LidgrenServer
         public PacketProcessors(IServiceProvider serviceProvider, string IpSelected)
         {
            
-            NetPeerConfiguration config = new NetPeerConfiguration("game")
+            NetPeerConfiguration config = new NetPeerConfiguration("FruitsBattle2DGame")
             {
                 Port = 14242,
                 LocalAddress = IPAddress.Parse(IpSelected),
