@@ -108,7 +108,7 @@ namespace LidgrenServer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("Coin")
+                    b.Property<int>("Coin")
                         .HasColumnType("int")
                         .HasColumnName("coin");
 

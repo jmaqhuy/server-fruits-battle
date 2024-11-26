@@ -22,7 +22,7 @@ namespace LidgrenServer
         public PacketProcessors(IServiceProvider serviceProvider)
         {
            
-            NetPeerConfiguration config = new NetPeerConfiguration("game")
+            NetPeerConfiguration config = new NetPeerConfiguration("FruitsBattle2DGame")
             {
                 Port = 14242
             };
