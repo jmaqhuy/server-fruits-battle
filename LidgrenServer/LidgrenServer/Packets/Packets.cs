@@ -26,6 +26,11 @@ namespace LidgrenServer.Packets
             ExitRoomPacket
         }
 
+        public enum Friend : byte
+        {
+            FriendOnlinePacket = 30
+        }
+
     }
     public interface IPacket
     {
@@ -39,6 +44,24 @@ namespace LidgrenServer.Packets
         public abstract void PacketToNetOutGoingMessage(NetOutgoingMessage message);
 
         public abstract void NetIncomingMessageToPacket(NetIncomingMessage message);
+    }
+
+    public class FriendOnlinePacket : Packet
+    {
+        public string username;
+        public string displayName;
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.FriendOnlinePacket);
+            message.Write(username);
+            message.Write(displayName);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+            displayName = message.ReadString();
+        }
     }
 
     public class Login : Packet

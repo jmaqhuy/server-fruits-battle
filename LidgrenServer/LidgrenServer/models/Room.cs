@@ -1,6 +1,4 @@
-﻿using Lidgren.Network;
-
-namespace LidgrenServer.models
+﻿namespace LidgrenServer.models
 {
     public enum RoomMode
     {

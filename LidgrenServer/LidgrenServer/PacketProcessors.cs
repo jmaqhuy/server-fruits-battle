@@ -489,7 +489,7 @@ namespace LidgrenServer
                     };
                     PlayerOnlineList.Add(player);
                     packet.isSuccess = true;
-
+                    
                     // Save in LoginHistory
                     //await loginHistoryController.NewUserLoginAsync(currentUser.Id);
                     Logging.Info("UserLogin Successful, Save User Login History");

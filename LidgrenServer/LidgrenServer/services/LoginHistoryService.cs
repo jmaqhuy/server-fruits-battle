@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LidgrenServer.Data;
+﻿using LidgrenServer.Data;
 using LidgrenServer.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,21 +13,21 @@ namespace LidgrenServer.Services
         }
 
         //Create
-        public async Task NewUserLoginAsync(LoginHistory loginHistory)
+        public async Task NewUserLoginAsync(LoginHistoryModel loginHistory)
         {
             await _context.LoginHistories.AddAsync(loginHistory);
             await _context.SaveChangesAsync();
         }
 
         //Update
-        public async Task UserLogoutAsync(LoginHistory loginHistory)
+        public async Task UserLogoutAsync(LoginHistoryModel loginHistory)
         {
             _context.LoginHistories.Update(loginHistory);
             await _context.SaveChangesAsync();
         }
 
         //Read
-        public async Task<LoginHistory?> GetCurrentLoginAsync(int userId)
+        public async Task<LoginHistoryModel?> GetCurrentLoginAsync(int userId)
         {
             return await _context.LoginHistories
                 .FirstOrDefaultAsync(lh =>

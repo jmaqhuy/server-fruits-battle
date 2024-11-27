@@ -6,9 +6,11 @@ namespace LidgrenServer.Data
     public class ApplicationDataContext : DbContext
     {
         public DbSet<UserModel> Users { get; set; } = null!;
-        public DbSet<LoginHistory> LoginHistories { get; set; } = null!;
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<UserCharacter> UserCharacters { get; set; }
+        public DbSet<LoginHistoryModel> LoginHistories { get; set; } = null!;
+        public DbSet<CharacterModel> Characters { get; set; }
+        public DbSet<UserCharacterModel> UserCharacters { get; set; }
+
+        public DbSet<UserRelationship> UserRelationships { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,33 +21,47 @@ namespace LidgrenServer.Data
             modelBuilder.Entity<UserModel>(entity =>
             {
                 entity.HasKey(u => u.Id);
-                entity.HasIndex(u => u.Username);
+                entity.HasIndex(u => u.Username).IsUnique();
                 entity.HasMany(u => u.LoginHistory)
                       .WithOne(h => h.UserModel)
                       .HasForeignKey(h => h.UserId);
+
+                entity.HasMany(u => u.Relationships)
+                      .WithOne(r => r.UserFirst)
+                      .HasForeignKey(r => r.UserFirstId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<LoginHistory>(entity =>
+            modelBuilder.Entity<UserRelationship>(entity =>
+            {
+                entity.HasKey(ur => new { ur.UserFirstId, ur.UserSecondId });
+                entity.Property(ur => ur.Type)
+                      .HasConversion<string>()
+                      .HasMaxLength(50)
+                      .IsRequired();
+            });
+
+            modelBuilder.Entity<LoginHistoryModel>(entity =>
             {
                 entity.HasKey(ld => ld.Id);
-                modelBuilder.Entity<LoginHistory>()
+                modelBuilder.Entity<LoginHistoryModel>()
                     .HasIndex(lh => new { lh.UserId, lh.IsLoginNow })
                     .HasDatabaseName("IX_User_Device_IsLoginNow");
 
-                modelBuilder.Entity<LoginHistory>()
+                modelBuilder.Entity<LoginHistoryModel>()
                     .HasOne(lh => lh.UserModel)
                     .WithMany(u => u.LoginHistory)
                     .HasForeignKey(lh => lh.UserId);
             });
-            modelBuilder.Entity<UserCharacter>()
+            modelBuilder.Entity<UserCharacterModel>()
                 .HasKey(uc => new { uc.UserId, uc.CharacterId });
 
-            modelBuilder.Entity<UserCharacter>()
+            modelBuilder.Entity<UserCharacterModel>()
                 .HasOne(uc => uc.User)
                 .WithMany(u => u.UserCharacters)
                 .HasForeignKey(uc => uc.UserId);
 
-            modelBuilder.Entity<UserCharacter>()
+            modelBuilder.Entity<UserCharacterModel>()
                 .HasOne(uc => uc.Character)
                 .WithMany(c => c.UserCharacters)
                 .HasForeignKey(uc => uc.CharacterId);

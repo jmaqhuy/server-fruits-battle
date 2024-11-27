@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LidgrenServer.Models
 {
     [Table("login_history")]
-    public class LoginHistory
+    public class LoginHistoryModel
     {
         [Key]
         [Column("id")]

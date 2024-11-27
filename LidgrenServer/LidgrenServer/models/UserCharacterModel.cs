@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LidgrenServer.Models
 {
     [Table("user_characters")]
-    public class UserCharacter
+    public class UserCharacterModel
     {
         [Key]
         [Column("id")]
@@ -25,6 +20,6 @@ namespace LidgrenServer.Models
 
         // Điều hướng tới các bảng User và Character
         public UserModel User { get; set; }
-        public Character Character { get; set; }
+        public CharacterModel Character { get; set; }
     }
 }

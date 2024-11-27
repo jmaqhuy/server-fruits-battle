@@ -33,11 +33,11 @@ namespace LidgrenServer.Models
         [Column("password")]
         public string Password { get; set; } = null!;
 
-        public ICollection<LoginHistory> LoginHistory { get; set; } = new List<LoginHistory>();
+        public ICollection<LoginHistoryModel> LoginHistory { get; set; } = new List<LoginHistoryModel>();
 
-        // Quan hệ nhiều-nhiều với Character thông qua bảng UserCharacter
-        public ICollection<UserCharacter> UserCharacters { get; set; } = new List<UserCharacter>();
-        // Hàm mã hóa mật khẩu khi người dùng nhập vào
+        public ICollection<UserCharacterModel> UserCharacters { get; set; } = new List<UserCharacterModel>();
+        public ICollection<UserRelationship> Relationships { get; set; } = new List<UserRelationship>();
+
         public string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())

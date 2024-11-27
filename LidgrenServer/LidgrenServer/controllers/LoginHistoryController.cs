@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LidgrenServer.Models;
+﻿using LidgrenServer.Models;
 using LidgrenServer.Services;
 
 namespace LidgrenServer.Controllers
@@ -19,7 +14,7 @@ namespace LidgrenServer.Controllers
 
         public async Task NewUserLoginAsync(int userId)
         {
-            var loginHistory = new LoginHistory
+            var loginHistory = new LoginHistoryModel
             {
                 UserId = userId,
                 LoginTime = DateTime.Now,

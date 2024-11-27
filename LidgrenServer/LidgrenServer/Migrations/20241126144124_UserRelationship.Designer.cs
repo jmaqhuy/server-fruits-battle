@@ -3,6 +3,7 @@ using System;
 using LidgrenServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LidgrenServer.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    partial class ApplicationDataContextModelSnapshot : ModelSnapshot
+    [Migration("20241126144124_UserRelationship")]
+    partial class UserRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,8 +132,7 @@ namespace LidgrenServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
+                    b.HasIndex("Username");
 
                     b.ToTable("users");
                 });
@@ -198,9 +199,9 @@ namespace LidgrenServer.Migrations
                         .IsRequired();
 
                     b.HasOne("LidgrenServer.Models.UserModel", "UserSecond")
-                        .WithMany()
+                        .WithMany("RelatedTo")
                         .HasForeignKey("UserSecondId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("UserFirst");
@@ -216,6 +217,8 @@ namespace LidgrenServer.Migrations
             modelBuilder.Entity("LidgrenServer.Models.UserModel", b =>
                 {
                     b.Navigation("LoginHistory");
+
+                    b.Navigation("RelatedTo");
 
                     b.Navigation("Relationships");
 
