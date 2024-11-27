@@ -1,3 +1,5 @@
+using System.Net.Sockets;
+using System.Net;
 using LidgrenServer.Controllers;
 using LidgrenServer.Data;
 using LidgrenServer.Services;
@@ -13,7 +15,6 @@ namespace LidgrenServer
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    // Đăng ký ApplicationDataContext, UserService, và UserController
                     services.AddDbContext<ApplicationDataContext>();
                     services.AddScoped<UserService>();
                     services.AddScoped<UserController>();

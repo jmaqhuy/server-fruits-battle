@@ -1,4 +1,5 @@
 ﻿using Lidgren.Network;
+using LidgrenServer.models;
 
 namespace LidgrenServer.Packets
 {
@@ -23,7 +24,8 @@ namespace LidgrenServer.Packets
         {
             JoinRoomPacket = 20,
             JoinRoomPacketToAll,
-            ExitRoomPacket
+            ExitRoomPacket,
+            ChangeTeamPacket,
         }
 
         public enum Friend : byte
@@ -236,6 +238,26 @@ namespace LidgrenServer.Packets
                 p.Serialize(message);
             }   
             
+        }
+    }
+
+    public class ChangeTeamPacket : Packet
+    {
+        public string username {  get; set; }
+        public int roomId { get; set; }
+        public Team team { get; set; }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+            roomId = message.ReadInt16();
+            team = (Team)message.ReadByte();
+        }
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write(username);
+            message.Write(roomId);
+            message.Write((byte)team);
         }
     }
 }
