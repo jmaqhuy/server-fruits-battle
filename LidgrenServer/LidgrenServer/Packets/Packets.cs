@@ -11,7 +11,8 @@ namespace LidgrenServer.Packets
             SignUp,
             PlayerDisconnectsPacket,
             BasicUserInfoPacket,
-            ChangeDisplayNamePacket
+            ChangeDisplayNamePacket,
+            Logout
         }
 
         public enum Shop : byte
@@ -86,6 +87,21 @@ namespace LidgrenServer.Packets
             message.Write(password);
             message.Write(isSuccess);
             Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}");
+        }
+    }
+
+    public class Logout : Packet
+    {
+        public string username;
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.General.Logout);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
         }
     }
 

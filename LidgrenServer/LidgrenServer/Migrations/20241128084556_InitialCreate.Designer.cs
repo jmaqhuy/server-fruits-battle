@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LidgrenServer.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20241126144124_UserRelationship")]
-    partial class UserRelationship
+    [Migration("20241128084556_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -132,7 +132,8 @@ namespace LidgrenServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username");
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("users");
                 });
@@ -199,9 +200,9 @@ namespace LidgrenServer.Migrations
                         .IsRequired();
 
                     b.HasOne("LidgrenServer.Models.UserModel", "UserSecond")
-                        .WithMany("RelatedTo")
+                        .WithMany()
                         .HasForeignKey("UserSecondId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("UserFirst");
@@ -217,8 +218,6 @@ namespace LidgrenServer.Migrations
             modelBuilder.Entity("LidgrenServer.Models.UserModel", b =>
                 {
                     b.Navigation("LoginHistory");
-
-                    b.Navigation("RelatedTo");
 
                     b.Navigation("Relationships");
 

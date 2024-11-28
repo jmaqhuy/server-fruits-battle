@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using MySql.EntityFrameworkCore.Metadata;
 
@@ -6,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace LidgrenServer.Migrations
 {
-    public partial class RecreateDatabase : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -96,6 +97,32 @@ namespace LidgrenServer.Migrations
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "user_relationship",
+                columns: table => new
+                {
+                    user_first_id = table.Column<int>(type: "int", nullable: false),
+                    user_second_id = table.Column<int>(type: "int", nullable: false),
+                    type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_relationship", x => new { x.user_first_id, x.user_second_id });
+                    table.ForeignKey(
+                        name: "FK_user_relationship_users_user_first_id",
+                        column: x => x.user_first_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_user_relationship_users_user_second_id",
+                        column: x => x.user_second_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_User_Device_IsLoginNow",
                 table: "login_history",
@@ -107,9 +134,15 @@ namespace LidgrenServer.Migrations
                 column: "character_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_user_relationship_user_second_id",
+                table: "user_relationship",
+                column: "user_second_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_users_username",
                 table: "users",
-                column: "username");
+                column: "username",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -119,6 +152,9 @@ namespace LidgrenServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "user_characters");
+
+            migrationBuilder.DropTable(
+                name: "user_relationship");
 
             migrationBuilder.DropTable(
                 name: "character");

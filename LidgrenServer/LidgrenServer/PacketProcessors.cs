@@ -371,6 +371,16 @@ namespace LidgrenServer
 
                     break;
 
+                case PacketTypes.General.Logout:
+                    var logout = new Logout();
+                    logout.NetIncomingMessageToPacket(message);
+                    if (!string.IsNullOrEmpty(logout.username))
+                    {
+                        RemovePlayerInPlayerOnlineListAndRoom(logout.username);
+                        Logging.Info($"{logout.username} logout");
+                    }
+                    break;
+
                 default:
                     Logging.Error("Unhandle Data / Package type");
                     break;
