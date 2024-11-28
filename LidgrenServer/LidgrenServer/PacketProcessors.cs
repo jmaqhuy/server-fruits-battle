@@ -1,9 +1,12 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using Lidgren.Network;
 using LidgrenServer.Controllers;
 using LidgrenServer.models;
 using LidgrenServer.Packets;
 using Microsoft.Extensions.DependencyInjection;
+using static LidgrenServer.Packets.PacketTypes;
+
 namespace LidgrenServer
 {
 
@@ -15,7 +18,7 @@ namespace LidgrenServer
 
 
         private List<Player> PlayerOnlineList = new List<Player>();
-        private List<Room> RoomList = new List<Room> {};
+        private List<RoomInfo> RoomList = new List<RoomInfo> {};
         private Random random = new Random();
         
         private readonly IServiceProvider _serviceProvider;
@@ -152,7 +155,7 @@ namespace LidgrenServer
                     Logging.Info("Received Join Room Packet");
                     packet = new JoinRoomPacket();
                     packet.NetIncomingMessageToPacket(message);
-                    Room newRoom = SendJoinRoomPacket((JoinRoomPacket)packet, message.SenderConnection);
+                    RoomInfo newRoom = SendJoinRoomPacket((JoinRoomPacket)packet, message.SenderConnection);
                     SendJoinRoomPacketToAll(newRoom);
                     break;
 
@@ -162,7 +165,7 @@ namespace LidgrenServer
                     packet.NetIncomingMessageToPacket(message);
                     // send to all
 
-                    Room room = RoomList.FirstOrDefault(r => r.Id == ((ExitRoomPacket)packet).roomId);
+                    RoomInfo room = RoomList.FirstOrDefault(r => r.Id == ((ExitRoomPacket)packet).roomId);
                     Player player = PlayerOnlineList.FirstOrDefault(u => u.User.Username == ((ExitRoomPacket)packet).username);
 
                     if (room != null && player != null)
@@ -172,6 +175,13 @@ namespace LidgrenServer
                     }
                     break;
 
+                case PacketTypes.Room.SendChatMessagePacket:
+                    Logging.Info("Receive Chat Message");
+                    packet = new SendChatMessagePacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendChatMessagePacketToAll((SendChatMessagePacket)packet);
+                    break;
+
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
                     break;
@@ -179,7 +189,34 @@ namespace LidgrenServer
 
         }
 
-        private void SendJoinRoomPacketToAll(Room room)
+        private void SendChatMessagePacketToAll(SendChatMessagePacket packet)
+        {
+            RoomInfo? thisroom = RoomList.FirstOrDefault( room => room.Id == packet.RoomID);
+            Logging.Info($"Receive Chat Message from Username: {packet.Username}, RoomID: {packet.RoomID}");
+            if (thisroom != null)
+            {
+                foreach (var player in thisroom.playersList)
+                {
+                    Logging.Info($"Player In this Room: PlayerName {player.User.Display_name}");
+                }
+                var thisPlayer = thisroom.playersList.FirstOrDefault( player => player.User.Username == packet.Username);
+
+                List<NetConnection> connections = thisroom.playersList
+                                         .Where(player => player.netConnection != null)
+                                         .Select(player => player.netConnection)
+                                         .ToList();
+                
+                // No One in room now
+                if (connections.Count <= 0) return;
+                NetOutgoingMessage outmsg = server.CreateMessage();
+                packet.DisplayName = thisPlayer.User.Display_name;
+                packet.PacketToNetOutGoingMessage(outmsg);
+                server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+            
+        }
+
+        private void SendJoinRoomPacketToAll(RoomInfo room)
         {
             List<NetConnection> connections = room.playersList
                                          .Where(player => player.netConnection != null)
@@ -217,10 +254,10 @@ namespace LidgrenServer
             server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
         }
 
-        private Room SendJoinRoomPacket(JoinRoomPacket joinRoomPacket, NetConnection netConnection)
+        private RoomInfo SendJoinRoomPacket(JoinRoomPacket joinRoomPacket, NetConnection netConnection)
         {
-            
-            Room? thisRoom = RoomList?.FirstOrDefault(room => 
+
+            RoomInfo? thisRoom = RoomList?.FirstOrDefault(room => 
                     room.roomMode == joinRoomPacket.room.roomMode &&
                     !room.IsRoomFull &&
                     room.roomStatus == RoomStatus.InLobby &&
@@ -297,15 +334,15 @@ namespace LidgrenServer
         }
 
 
-        private Room CreateNewRoom(JoinRoomPacket joinRoomPacket)
+        private RoomInfo CreateNewRoom(JoinRoomPacket joinRoomPacket)
         {
             int newRoomId;
             do
             {
                 newRoomId = random.Next(1000, 10000); 
-            } while (RoomList.Any(room => room.Id == newRoomId)); 
+            } while (RoomList.Any(room => room.Id == newRoomId));
 
-            Room thisRoom = new Room()
+            RoomInfo thisRoom = new RoomInfo()
             {
                 Id = newRoomId,
                 Name = $"Room {newRoomId}",
@@ -396,14 +433,14 @@ namespace LidgrenServer
                 RemovePlayerInRoom(player);
             }
         }
-        private void RemovePlayerInRoom(Player player, Room room)
+        private void RemovePlayerInRoom(Player player, RoomInfo room)
         {
             room.playersList.Remove(player);
             Logging.Warn($"Player {player.User.Display_name} Exit Room {room.Id}");
             if (room.playersList.Count == 0)
             {
                 Logging.Warn($"Room {room.Id} remove because no player in room!");
-                Room selectroom = RoomList.FirstOrDefault(r => r == room);
+                RoomInfo selectroom = RoomList.FirstOrDefault(r => r == room);
                 RoomList.Remove(selectroom);
             }
         }

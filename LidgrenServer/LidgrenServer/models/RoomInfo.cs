@@ -21,7 +21,7 @@
         None
     }
 
-    public class Room
+    public class RoomInfo
     {
         public int Id { get; set; }
         public string Name { get; set; }
