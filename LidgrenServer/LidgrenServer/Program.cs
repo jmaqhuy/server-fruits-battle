@@ -1,10 +1,10 @@
-using System.Net.Sockets;
-using System.Net;
 using LidgrenServer.Controllers;
 using LidgrenServer.Data;
 using LidgrenServer.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using LidgrenServer.services;
+using LidgrenServer.controllers;
 
 namespace LidgrenServer
 {
@@ -20,6 +20,8 @@ namespace LidgrenServer
                     services.AddScoped<UserController>();
                     services.AddScoped<LoginHistoryService>();
                     services.AddScoped<LoginHistoryController>();
+                    services.AddScoped<UserRelationshipService>();
+                    services.AddScoped<UserRelationshipController>();
                 });
        
         public static void Main(string[] args)

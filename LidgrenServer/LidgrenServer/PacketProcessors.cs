@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using System.Net;
-using Lidgren.Network;
+﻿using Lidgren.Network;
+using LidgrenServer.controllers;
 using LidgrenServer.Controllers;
 using LidgrenServer.models;
+using LidgrenServer.Models;
 using LidgrenServer.Packets;
 using Microsoft.Extensions.DependencyInjection;
-using static LidgrenServer.Packets.PacketTypes;
 
 namespace LidgrenServer
 {
@@ -121,6 +120,10 @@ namespace LidgrenServer
                             else if (Enum.IsDefined (typeof(PacketTypes.Room), type))
                             {
                                 HandleRoomPacket((PacketTypes.Room)type, message);
+                            } 
+                            else if (Enum.IsDefined (typeof(PacketTypes.Friend), type))
+                            {
+                                HandleFriendPacket((PacketTypes.Friend)type, message);
                             }
                             else
                             {
@@ -144,6 +147,52 @@ namespace LidgrenServer
 
                 }
             }
+        }
+
+        private void HandleFriendPacket(PacketTypes.Friend type, NetIncomingMessage message)
+        {
+            Packet packet;
+            switch (type) 
+            {
+                case PacketTypes.Friend.SuggestFriendPacket:
+                    Logging.Info("Received Request SuggestFriendPacket");
+                    packet = new SuggestFriendPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendSuggestFriendPacket(((SuggestFriendPacket)packet).username, message.SenderConnection);
+                    break;
+
+                default:
+                    Logging.Error("Unhandle Data / Package type, typeof Room");
+                    break;
+            }
+
+        }
+        private async void SendSuggestFriendPacket(string username, NetConnection netConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            int userId = await userController.GetUserIdByUsernameAsync(username);
+
+            var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
+            List<UserModel> getSuggestFriend = await userRelationshipController.GetSuggestFriendListAsync(userId);
+
+            List<FriendTabPacket> suggestContent = new List<FriendTabPacket>();
+
+            foreach (var item in getSuggestFriend) 
+            {
+                suggestContent.Add(new FriendTabPacket()
+                {
+                    FriendUsername = item.Username,
+                    FriendDisplayName = item.Display_name
+                });
+            }
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new SuggestFriendPacket() 
+            {
+                Friends = suggestContent 
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+
         }
 
         private void HandleRoomPacket(PacketTypes.Room type, NetIncomingMessage message)

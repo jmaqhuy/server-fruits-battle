@@ -32,7 +32,12 @@ namespace LidgrenServer.Packets
 
         public enum Friend : byte
         {
-            FriendOnlinePacket = 30
+            AllFriendPacket = 40,
+            FriendRequestPacket,
+            SentRequestPacket,
+            SuggestFriendPacket,
+            SearchFriendPacket,
+            BlockFriendPacket,
         }
 
     }
@@ -74,7 +79,7 @@ namespace LidgrenServer.Packets
         }
     }
 
-    public class FriendOnlinePacket : Packet
+    /*public class FriendOnlinePacket : Packet
     {
         public string username;
         public string displayName;
@@ -90,7 +95,7 @@ namespace LidgrenServer.Packets
             username = message.ReadString();
             displayName = message.ReadString();
         }
-    }
+    }*/
 
     public class Login : Packet
     {
@@ -301,4 +306,24 @@ namespace LidgrenServer.Packets
             message.Write((byte)team);
         }
     }
+    public class SuggestFriendPacket : Packet
+    {
+        public string username { get; set; }
+        public List<FriendTabPacket> Friends { get; set; } = new List<FriendTabPacket>();
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.SuggestFriendPacket);
+            message.Write(Friends.Count);
+            foreach (var f in Friends)
+            {
+                f.Serialize(message);
+            }
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+        }
+    }
 }
+
