@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using MySql.EntityFrameworkCore.Metadata;
 
@@ -7,7 +6,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace LidgrenServer.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,13 +20,31 @@ namespace LidgrenServer.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    level = table.Column<int>(type: "int", nullable: false),
-                    exp = table.Column<int>(type: "int", nullable: false),
-                    is_selected_character = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    hp = table.Column<int>(type: "int", nullable: false),
+                    damage = table.Column<int>(type: "int", nullable: false),
+                    armor = table.Column<int>(type: "int", nullable: false),
+                    stamina = table.Column<int>(type: "int", nullable: false),
+                    luck = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_character", x => x.id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "items",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
+                    image_name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_items", x => x.id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -38,13 +55,36 @@ namespace LidgrenServer.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     username = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    registered_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     display_name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
                     coin = table.Column<int>(type: "int", nullable: false),
+                    isVerifyEmail = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     password = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_users", x => x.id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "inventories",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    user_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_inventories", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_inventories_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -75,13 +115,21 @@ namespace LidgrenServer.Migrations
                 name: "user_characters",
                 columns: table => new
                 {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     user_id = table.Column<int>(type: "int", nullable: false),
                     character_id = table.Column<int>(type: "int", nullable: false),
-                    id = table.Column<int>(type: "int", nullable: false)
+                    level = table.Column<int>(type: "int", nullable: false),
+                    experience = table.Column<int>(type: "int", nullable: false),
+                    is_selected = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    hp_point = table.Column<int>(type: "int", nullable: false),
+                    damage_point = table.Column<int>(type: "int", nullable: false),
+                    armor_point = table.Column<int>(type: "int", nullable: false),
+                    luck_point = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_characters", x => new { x.user_id, x.character_id });
+                    table.PrimaryKey("PK_user_characters", x => x.id);
                     table.ForeignKey(
                         name: "FK_user_characters_character_character_id",
                         column: x => x.character_id,
@@ -123,6 +171,50 @@ namespace LidgrenServer.Migrations
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "inventory_items",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    inventory_id = table.Column<int>(type: "int", nullable: false),
+                    item_id = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_inventory_items", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_inventory_items_inventories_inventory_id",
+                        column: x => x.inventory_id,
+                        principalTable: "inventories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_inventory_items_items_item_id",
+                        column: x => x.item_id,
+                        principalTable: "items",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inventories_user_id",
+                table: "inventories",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inventory_items_inventory_id",
+                table: "inventory_items",
+                column: "inventory_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inventory_items_item_id",
+                table: "inventory_items",
+                column: "item_id");
+
             migrationBuilder.CreateIndex(
                 name: "IX_User_Device_IsLoginNow",
                 table: "login_history",
@@ -132,6 +224,16 @@ namespace LidgrenServer.Migrations
                 name: "IX_user_characters_character_id",
                 table: "user_characters",
                 column: "character_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCharacter_UserId_CharacterId",
+                table: "user_characters",
+                columns: new[] { "user_id", "character_id" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCharacter_UserId_IsSelected",
+                table: "user_characters",
+                columns: new[] { "user_id", "is_selected" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_relationship_user_second_id",
@@ -148,6 +250,9 @@ namespace LidgrenServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "inventory_items");
+
+            migrationBuilder.DropTable(
                 name: "login_history");
 
             migrationBuilder.DropTable(
@@ -155,6 +260,12 @@ namespace LidgrenServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "user_relationship");
+
+            migrationBuilder.DropTable(
+                name: "inventories");
+
+            migrationBuilder.DropTable(
+                name: "items");
 
             migrationBuilder.DropTable(
                 name: "character");

@@ -29,7 +29,7 @@ namespace LidgrenServer.services
 
             // Lấy tất cả người dùng không nằm trong danh sách liên quan, sắp xếp ngẫu nhiên và giới hạn số lượng
             var unrelatedUsers = await _dbContext.Users
-                .Where(u => u.Id != userId && !relatedUserIds.Contains(u.Id))
+                .Where(u => u.Id != userId && !relatedUserIds.Contains(u.Id) && !string.IsNullOrEmpty(u.Display_name))
                 .OrderBy(u => Guid.NewGuid()) // Randomize
                 .Take(10) // Limit results
                 .ToListAsync();

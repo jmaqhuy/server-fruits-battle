@@ -12,7 +12,10 @@ namespace LidgrenServer.Packets
             PlayerDisconnectsPacket,
             BasicUserInfoPacket,
             ChangeDisplayNamePacket,
-            Logout
+            Logout,
+            ResetPassword,
+            VerifyRegistrationPacket,
+            RequireVerifyPacket
         }
 
         public enum Shop : byte
@@ -27,7 +30,21 @@ namespace LidgrenServer.Packets
             JoinRoomPacketToAll,
             ExitRoomPacket,
             ChangeTeamPacket,
-            SendChatMessagePacket
+            SendChatMessagePacket,
+            PlayerReadyPacket
+        }
+        public enum GameBattle : byte
+        {
+            StartGamePacket = 30,
+            PlayerOutGamePacket,
+            StartTurnPacket,
+            EndTurnPacket,
+            EndGamePacket,
+            PositionPacket,
+            HealthPointPacket,
+            PlayerDiePacket,
+            SpawnPlayerPacket,
+            Shoot
         }
 
         public enum Friend : byte
@@ -38,6 +55,11 @@ namespace LidgrenServer.Packets
             SuggestFriendPacket,
             SearchFriendPacket,
             BlockFriendPacket,
+        }
+
+        public enum Character : byte
+        {
+            GetCurrentCharacterPacket = 50,
         }
 
     }
@@ -119,6 +141,27 @@ namespace LidgrenServer.Packets
             Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}");
         }
     }
+    public class ResetPassword : Packet
+    {
+        public string username { get; set; }
+        public string email { get; set; }
+        public bool isSuccess { get; set; }
+        public string reason { get; set; }
+
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.General.ResetPassword);
+            message.Write(isSuccess);
+            message.Write(reason);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+            email = message.ReadString();
+        }
+    }
 
     public class Logout : Packet
     {
@@ -135,9 +178,31 @@ namespace LidgrenServer.Packets
         }
     }
 
+    public class VerifyRegistrationPacket : Packet
+    {
+        public string username { get; set; }
+        public string otp { get; set; }
+        public bool isSuccess { get; set; }
+
+        public string reason { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.General.VerifyRegistrationPacket);
+            message.Write(isSuccess);
+            message.Write(reason);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString() ;
+            otp = message.ReadString() ;
+        }
+    }
+
     public class SignUp : Packet
     {
         public string username { get; set; }
+        public string email { get; set; }
         public string password { get; set; }
         public bool isSuccess { get; set; }
         public string reason { get; set; }
@@ -145,20 +210,18 @@ namespace LidgrenServer.Packets
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
             username = message.ReadString();
+            email = message.ReadString();
             password = message.ReadString();
-            isSuccess = message.ReadBoolean();
-            reason = message.ReadString();
-            Logging.Debug($"NetIncomingMessageToPacket: username: {username}, password: {password}, isSuccess: {isSuccess}, reason: {reason}");
+            Logging.Debug($"NetIncomingMessageToPacket: username: {username}, email: {email}, password: {password}");
         }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
             message.Write((byte)PacketTypes.General.SignUp);
             message.Write(username);
-            message.Write(password);
             message.Write(isSuccess);
             message.Write(reason);
-            Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}, reason: {reason}");
+            Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, isSuccess: {isSuccess}, reason: {reason}");
         }
     }
     public class PlayerDisconnectsPacket : Packet
@@ -323,6 +386,56 @@ namespace LidgrenServer.Packets
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
             username = message.ReadString();
+        }
+    }
+    public class GetCurrentCharacterPacket : Packet
+    {
+        public string Username { get; set; }
+        public CharacterPacket Character { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Character.GetCurrentCharacterPacket);
+            Character.Serialize(message);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            Username = message.ReadString();
+        }
+    }
+    public class PlayerReadyPacket : Packet
+    {
+        public string Username { get; set; }
+        public bool IsReady { get; set; }
+        public int RoomId { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Room.PlayerReadyPacket);
+            message.Write(Username);
+            message.Write(IsReady);
+            message.Write(RoomId);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            Username = message.ReadString();
+            IsReady = message.ReadBoolean();
+            RoomId = message.ReadInt32();
+        }
+    }
+    public class StartGamePacket : Packet
+    {
+        public int roomId { get; set; }
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.StartGamePacket);
+            message.Write(roomId);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            roomId = message.ReadInt32();
         }
     }
 }

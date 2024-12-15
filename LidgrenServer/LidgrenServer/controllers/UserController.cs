@@ -1,5 +1,7 @@
 ﻿using LidgrenServer.Services;
 using LidgrenServer.Models;
+using System.Text;
+using LidgrenServer.controllers;
 
 namespace LidgrenServer.Controllers
 {
@@ -41,41 +43,60 @@ namespace LidgrenServer.Controllers
             return await _userService.GetUserByUsernameAsync(username);
         }
 
-        public async Task<bool> SignUp(string username, string password)
+        public async Task<UserModel> SignUp(string username, string password, string email)
         {
             var user = await getUserInfoByUserNameAsync(username);
             if (user != null) 
             { 
-                return false;
+                return null;
             }
             var newUser = new UserModel
             {
                 Username = username,
+                Email = email,
                 Password = password,
                 Coin = 100,
             };
             await _userService.CreateNewUserAsync(newUser);
-            return true;
+            
+            return newUser;
         }
 
-        public async Task<bool> CreateSampleUser()
+        public async Task VerifyUserEmail(string username)
         {
-            try
+            var user = await getUserInfoByUserNameAsync(username);
+            user.isVerify = true;
+            await _userService.UpdateUserAsysn(user);
+        }
+
+        public async Task<bool> isVerifyUserEmail(string username)
+        {
+            var user = await getUserInfoByUserNameAsync(username);
+            return user.isVerify;
+        }
+
+
+        public async Task<bool> ResetPasswordAsync(string username, string email, Random random)
+        {
+            var user = await _userService.GetUserByUsernameEmailAsync(username,email);
+            if (user != null)
             {
-                
-                var newUser = new UserModel
-                {
-                    Username = "testUser",
-                    Password = "password123",
-                    Display_name = "Test User",
-                    Coin = 100
-                };
-                await _userService.CreateNewUserAsync(newUser);
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                StringBuilder result = new StringBuilder(8);
+                for (int i = 0; i < 8; i++) 
+                { 
+                    result.Append(chars[random.Next(chars.Length)]);
+                }
+
+                user.Password = user.HashPassword(result.ToString());
+                Logging.Debug("New Password: " + result.ToString());
+                await _userService.UpdateUserAsysn(user);
+                var sendmail = new EmailService();
+                await sendmail.SendMailResetPassword(user.Username, user.Email, result.ToString());
                 return true;
-            }
-            catch (Exception ex)
+                
+            } else
             {
-                Logging.Error(ex.ToString());
                 return false;
             }
         }

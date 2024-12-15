@@ -125,6 +125,14 @@ namespace LidgrenServer
                             {
                                 HandleFriendPacket((PacketTypes.Friend)type, message);
                             }
+                            else if (Enum.IsDefined(typeof(PacketTypes.Character), type))
+                            {
+                                HandleCharacterPacket((PacketTypes.Character)type, message);
+                            }
+                            else if (Enum.IsDefined(typeof(PacketTypes.GameBattle), type))
+                            {
+                                HandleGameBattlePacket((PacketTypes.GameBattle)type, message);
+                            }
                             else
                             {
                                 Logging.Error("Unhandled packet type");
@@ -146,6 +154,76 @@ namespace LidgrenServer
                     server.Recycle(message);
 
                 }
+            }
+        }
+
+        private void HandleGameBattlePacket(PacketTypes.GameBattle type, NetIncomingMessage message)
+        {
+            Packet packet;
+            RoomInfo room;
+            List<NetConnection> playerConnections;
+            switch (type) 
+            {
+                case PacketTypes.GameBattle.StartGamePacket:
+                    packet = new StartGamePacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    room = RoomList.Where(r => r.Id == ((StartGamePacket)packet).roomId).FirstOrDefault();
+                    if (room != null)
+                    {
+                        playerConnections = room.playersList
+                            .Select(pl => pl.netConnection)
+                            .ToList();
+                        NetOutgoingMessage outmsg = server.CreateMessage();
+                        new StartGamePacket() { }.PacketToNetOutGoingMessage(outmsg);
+                        server.SendMessage(outmsg, playerConnections, NetDeliveryMethod.ReliableOrdered, 0);
+                    }
+                    break;
+
+                default :
+                    Logging.Info("Unhandle Game Battle Packet Type");
+                    break;
+            }
+
+        }
+
+        private void HandleCharacterPacket(PacketTypes.Character type, NetIncomingMessage message)
+        {
+            Packet packet;
+            switch (type) 
+            {
+                case PacketTypes.Character.GetCurrentCharacterPacket:
+                    packet = new GetCurrentCharacterPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    var ucc = _serviceProvider.GetService<UserCharacterController>();
+                    Logging.Info($"{((GetCurrentCharacterPacket)packet).Username} get current character");
+                    var userCharacter = ucc.GetCurrentCharacterAsync(((GetCurrentCharacterPacket)packet).Username).Result;
+
+                    NetOutgoingMessage outmsg = server.CreateMessage();
+                    new GetCurrentCharacterPacket()
+                    {
+                        Character = new CharacterPacket()
+                        {
+                            CharacterName = userCharacter.Character.Name,
+                            CharacterLevel = userCharacter.Level,
+                            CharacterXp = userCharacter.Experience,
+                            CharacterHp = userCharacter.Character.Hp,
+                            CharacterDamage = userCharacter.Character.Damage,
+                            CharacterArmor = userCharacter.Character.Armor,
+                            CharacterLuck = userCharacter.Character.Luck,
+                            IsSelected = userCharacter.IsSelected,
+                            HpPoint = userCharacter.HpPoint,
+                            DamagePoint = userCharacter.DamagePoint,
+                            ArmorPoint = userCharacter.ArmorPoint,
+                            LuckPoint = userCharacter.LuckPoint,
+                        }
+                    }.PacketToNetOutGoingMessage(outmsg);
+                    server.SendMessage(outmsg,message.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                    break;
+
+                default:
+                    Logging.Error("Unhandle Data / Package type, typeof Room");
+                    break;
+
             }
         }
 
@@ -198,6 +276,8 @@ namespace LidgrenServer
         private void HandleRoomPacket(PacketTypes.Room type, NetIncomingMessage message)
         {
             Packet packet;
+            RoomInfo room;
+            Player player;
             switch (type)
             {
                 case PacketTypes.Room.JoinRoomPacket:
@@ -214,8 +294,8 @@ namespace LidgrenServer
                     packet.NetIncomingMessageToPacket(message);
                     // send to all
 
-                    RoomInfo room = RoomList.FirstOrDefault(r => r.Id == ((ExitRoomPacket)packet).roomId);
-                    Player player = PlayerOnlineList.FirstOrDefault(u => u.User.Username == ((ExitRoomPacket)packet).username);
+                    room = RoomList.FirstOrDefault(r => r.Id == ((ExitRoomPacket)packet).roomId);
+                    player = PlayerOnlineList.FirstOrDefault(u => u.User.Username == ((ExitRoomPacket)packet).username);
 
                     if (room != null && player != null)
                     {
@@ -229,6 +309,22 @@ namespace LidgrenServer
                     packet = new SendChatMessagePacket();
                     packet.NetIncomingMessageToPacket(message);
                     SendChatMessagePacketToAll((SendChatMessagePacket)packet);
+                    break;
+
+                case PacketTypes.Room.PlayerReadyPacket:
+                    Logging.Info("Receive PlayerReadyPacket");
+                    packet = new PlayerReadyPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    room = RoomList.FirstOrDefault(r => r.Id == ((PlayerReadyPacket)packet).RoomId);
+                    player = PlayerOnlineList.FirstOrDefault(u => u.User.Username == ((PlayerReadyPacket)packet).Username);
+
+                    if (room != null && player != null)
+                    {
+                        player.isReady = ((PlayerReadyPacket)packet).IsReady;
+                        Logging.Info($"Player {player.User.Username} in Room {room.Id} Ready: {player.isReady}");
+                        
+                        SendJoinRoomPacketToAll(room);
+                    }
                     break;
 
                 default:
@@ -467,11 +563,73 @@ namespace LidgrenServer
                     }
                     break;
 
+                case PacketTypes.General.ResetPassword:
+                    var resetpass = new ResetPassword();
+                    resetpass.NetIncomingMessageToPacket(message);
+                    SendResetPasswordPacket(resetpass, message.SenderConnection);
+
+                    break;
+
+                case PacketTypes.General.VerifyRegistrationPacket:
+                    var verifyRegistrationPacket = new VerifyRegistrationPacket();
+                    verifyRegistrationPacket.NetIncomingMessageToPacket(message);
+                    SendVerifyRegistrationPacket(verifyRegistrationPacket, message.SenderConnection);
+                    break;
+
                 default:
                     Logging.Error("Unhandle Data / Package type");
                     break;
             }
         }
+
+        private void SendVerifyRegistrationPacket(VerifyRegistrationPacket packet, NetConnection senderConnection)
+        {
+            var username = packet.username;
+            var otp = packet.otp;
+            var otpService = _serviceProvider.GetService<OtpService>();
+            var verify = false;
+            var rs = "";
+            
+            if (otpService.VerifyOtp(username, otp))
+            {
+                var userController = _serviceProvider.GetService<UserController>();
+                userController.VerifyUserEmail(username);
+                verify = true;
+            } else
+            {
+                rs = "Wrong OTP";
+            }
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new VerifyRegistrationPacket()
+            {
+                isSuccess = verify,
+                reason = rs,
+            }.PacketToNetOutGoingMessage(outmsg);
+            Logging.Info("Verification " + (verify ? "successful" : "failed"));
+            server.SendMessage(outmsg, senderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+
+        private void SendResetPasswordPacket(ResetPassword resetpass, NetConnection connection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            var result = userController.ResetPasswordAsync(resetpass.username, resetpass.email, random);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            ResetPassword pack = new ResetPassword();
+
+            if (result.Result)
+            {
+                pack.isSuccess = true;
+            } else
+            {
+                pack.isSuccess = false;
+                pack.reason = "User Not found";
+            }
+            pack.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, connection, NetDeliveryMethod.ReliableOrdered, 0);
+            
+        }
+
         private void RemovePlayerInPlayerOnlineListAndRoom(string username)
         {
             var player = PlayerOnlineList.FirstOrDefault(p => p.User.Username == username);
@@ -560,8 +718,18 @@ namespace LidgrenServer
             var userController = _serviceProvider.GetRequiredService<UserController>();
             // Login return a UserModel if username and password are correct
             var currentUser = userController.Login(packet.username, packet.password).Result;
+            NetOutgoingMessage outmsg = server.CreateMessage();
             if ( currentUser != null)
             {
+                if (!currentUser.isVerify)
+                {
+                    var otpcode =  _serviceProvider.GetService<OtpService>()
+                    .GenerateOtp(currentUser.Username);
+
+                    await _serviceProvider.GetService<EmailService>().
+                        SendMailVerifyRegistration(currentUser.Username, currentUser.Email, currentUser.RegisteredAt, otpcode);
+                    outmsg.Write((byte)PacketTypes.General.RequireVerifyPacket);
+                }
                 bool isUserOnline = false;
                 //var loginHistoryController = _serviceProvider.GetRequiredService<LoginHistoryController>();
 
@@ -598,7 +766,7 @@ namespace LidgrenServer
                 packet.isSuccess = false;
                 Logging.Error("Incorrect Username or Password");
             }
-            NetOutgoingMessage outmsg = server.CreateMessage();
+            
             new Login()
             {
                 isSuccess = packet.isSuccess,
@@ -612,9 +780,17 @@ namespace LidgrenServer
         private void SendSignUpPackage(SignUp signUpPacket, NetConnection user)
         {
             var userController = _serviceProvider.GetRequiredService<UserController>();
-            if (userController.SignUp(signUpPacket.username, signUpPacket.password).Result)
+            var newUser = userController.SignUp(signUpPacket.username, signUpPacket.password, signUpPacket.email).Result;
+            if (newUser != null)
             {
                 signUpPacket.isSuccess = true;
+                
+                var otpcode = _serviceProvider.GetService<OtpService>()
+                    .GenerateOtp(newUser.Username);
+
+                _serviceProvider.GetService<EmailService>().
+                    SendMailVerifyRegistration(newUser.Username, newUser.Email, newUser.RegisteredAt, otpcode);
+                _serviceProvider.GetService<UserCharacterController>().AddCharacterToNewUser(newUser.Id, 1);
                 Logging.Info("Sign Up Successful, welcome");
             }
             else 
@@ -627,7 +803,6 @@ namespace LidgrenServer
             {
                 isSuccess = signUpPacket.isSuccess,
                 username = signUpPacket.username,
-                password = signUpPacket.password,
                 reason = signUpPacket.reason
             }.PacketToNetOutGoingMessage(outmsg);
             Logging.Info("Send Sign Up Package to User");

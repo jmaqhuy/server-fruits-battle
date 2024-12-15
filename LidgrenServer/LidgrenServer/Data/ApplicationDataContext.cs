@@ -11,6 +11,10 @@ namespace LidgrenServer.Data
         public DbSet<UserCharacterModel> UserCharacters { get; set; }
 
         public DbSet<UserRelationship> UserRelationships { get; set; }
+        public DbSet<InventoryModel> Inventories { get; set; } = null!;
+        public DbSet<InventoryItemModel> InventoryItems { get; set; } = null!;
+        public DbSet<ItemConsumableModel> ItemConsumable { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,6 +34,9 @@ namespace LidgrenServer.Data
                       .WithOne(r => r.UserFirst)
                       .HasForeignKey(r => r.UserFirstId)
                       .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(u => u.Inventory)
+                      .WithOne(i => i.User)
+                      .HasForeignKey<InventoryModel>(i => i.UserId);
             });
 
             modelBuilder.Entity<UserRelationship>(entity =>
@@ -44,27 +51,58 @@ namespace LidgrenServer.Data
             modelBuilder.Entity<LoginHistoryModel>(entity =>
             {
                 entity.HasKey(ld => ld.Id);
-                modelBuilder.Entity<LoginHistoryModel>()
-                    .HasIndex(lh => new { lh.UserId, lh.IsLoginNow })
-                    .HasDatabaseName("IX_User_Device_IsLoginNow");
-
-                modelBuilder.Entity<LoginHistoryModel>()
-                    .HasOne(lh => lh.UserModel)
-                    .WithMany(u => u.LoginHistory)
-                    .HasForeignKey(lh => lh.UserId);
+                entity.HasIndex(lh => new { lh.UserId, lh.IsLoginNow })
+                      .HasDatabaseName("IX_User_Device_IsLoginNow");
+                entity.HasOne(lh => lh.UserModel)
+                      .WithMany(u => u.LoginHistory)
+                      .HasForeignKey(lh => lh.UserId);   
             });
-            modelBuilder.Entity<UserCharacterModel>()
-                .HasKey(uc => new { uc.UserId, uc.CharacterId });
 
-            modelBuilder.Entity<UserCharacterModel>()
-                .HasOne(uc => uc.User)
-                .WithMany(u => u.UserCharacters)
-                .HasForeignKey(uc => uc.UserId);
+            modelBuilder.Entity<UserCharacterModel>(entity =>
+            {
+                entity.HasKey(uc => uc.Id);
+                entity.HasIndex(uc => new { uc.UserId, uc.CharacterId })
+                      .HasDatabaseName("IX_UserCharacter_UserId_CharacterId");
+                entity.HasIndex(uc => new { uc.UserId, uc.IsSelected })
+                      .HasDatabaseName("IX_UserCharacter_UserId_IsSelected");
 
-            modelBuilder.Entity<UserCharacterModel>()
-                .HasOne(uc => uc.Character)
-                .WithMany(c => c.UserCharacters)
-                .HasForeignKey(uc => uc.CharacterId);
+                entity.HasOne(uc => uc.User)
+                      .WithMany(u => u.UserCharacters)
+                      .HasForeignKey(uc => uc.UserId);
+                entity.HasOne(uc => uc.Character)
+                      .WithMany(c => c.UserCharacters)
+                      .HasForeignKey(uc => uc.CharacterId);
+            }); 
+
+            modelBuilder.Entity<InventoryModel>(entity =>
+            {
+                entity.HasKey(inv => inv.Id);
+
+                entity.HasOne(inv => inv.User)
+                      .WithOne(u => u.Inventory)
+                      .HasForeignKey<InventoryModel>(inv => inv.UserId);
+            });
+
+            modelBuilder.Entity<InventoryItemModel>(entity =>
+            {
+                entity.HasKey(ii => ii.Id);
+
+                entity.HasOne(ii => ii.Inventory)
+                      .WithMany(inv => inv.Items)
+                      .HasForeignKey(ii => ii.InventoryId);
+
+                entity.HasOne(ii => ii.Item)
+                      .WithMany()
+                      .HasForeignKey(ii => ii.ItemId);
+            });
+
+            modelBuilder.Entity<ItemConsumableModel>(entity =>
+            {
+                entity.HasKey(i => i.Id);
+                entity.Property(i => i.Name).IsRequired().HasMaxLength(100);
+                entity.Property(i => i.Description).HasMaxLength(500);
+                entity.Property(i => i.ImageName).HasMaxLength(200);
+            });
         }
 
     }

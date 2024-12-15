@@ -9,7 +9,20 @@ namespace LidgrenServer.models
     }
     public class Player
     {
-        public bool IsHost { get; set; } = false;
+        // Auto Set isReady = false when Player is Host
+        private bool _isHost;
+        public bool IsHost
+        {
+            get => _isHost;
+            set
+            {
+                _isHost = value;
+                if (_isHost)
+                {
+                    isReady = false;
+                }
+            }
+        }
         public Team team { get; set; }
         public int Position { get; set; }
         public bool isReady { get; set; } = false ;

@@ -26,9 +26,21 @@ namespace LidgrenServer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<bool>("IsSelectedCharacter")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_selected_character");
+                    b.Property<int>("Armor")
+                        .HasColumnType("int")
+                        .HasColumnName("armor");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int")
+                        .HasColumnName("damage");
+
+                    b.Property<int>("Hp")
+                        .HasColumnType("int")
+                        .HasColumnName("hp");
+
+                    b.Property<int>("Luck")
+                        .HasColumnType("int")
+                        .HasColumnName("luck");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -36,17 +48,89 @@ namespace LidgrenServer.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("name");
 
-                    b.Property<int>("exp")
+                    b.Property<int>("Stamina")
                         .HasColumnType("int")
-                        .HasColumnName("exp");
-
-                    b.Property<int>("level")
-                        .HasColumnType("int")
-                        .HasColumnName("level");
+                        .HasColumnName("stamina");
 
                     b.HasKey("Id");
 
                     b.ToTable("character");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.InventoryItemModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("InventoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("inventory_id");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int")
+                        .HasColumnName("item_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("inventory_items");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.InventoryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("inventories");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.ItemConsumableModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("image_name");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("items");
                 });
 
             modelBuilder.Entity("LidgrenServer.Models.LoginHistoryModel", b =>
@@ -82,21 +166,56 @@ namespace LidgrenServer.Migrations
 
             modelBuilder.Entity("LidgrenServer.Models.UserCharacterModel", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("user_id");
+                        .HasColumnName("id");
+
+                    b.Property<int>("ArmorPoint")
+                        .HasColumnType("int")
+                        .HasColumnName("armor_point");
 
                     b.Property<int>("CharacterId")
                         .HasColumnType("int")
                         .HasColumnName("character_id");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("DamagePoint")
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("damage_point");
 
-                    b.HasKey("UserId", "CharacterId");
+                    b.Property<int>("Experience")
+                        .HasColumnType("int")
+                        .HasColumnName("experience");
+
+                    b.Property<int>("HpPoint")
+                        .HasColumnType("int")
+                        .HasColumnName("hp_point");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_selected");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int")
+                        .HasColumnName("level");
+
+                    b.Property<int>("LuckPoint")
+                        .HasColumnType("int")
+                        .HasColumnName("luck_point");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("UserId", "CharacterId")
+                        .HasDatabaseName("IX_UserCharacter_UserId_CharacterId");
+
+                    b.HasIndex("UserId", "IsSelected")
+                        .HasDatabaseName("IX_UserCharacter_UserId_IsSelected");
 
                     b.ToTable("user_characters");
                 });
@@ -117,16 +236,30 @@ namespace LidgrenServer.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("display_name");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("email");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("password");
+
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("registered_at");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("username");
+
+                    b.Property<bool>("isVerify")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("isVerifyEmail");
 
                     b.HasKey("Id");
 
@@ -157,6 +290,36 @@ namespace LidgrenServer.Migrations
                     b.HasIndex("UserSecondId");
 
                     b.ToTable("user_relationship");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.InventoryItemModel", b =>
+                {
+                    b.HasOne("LidgrenServer.Models.InventoryModel", "Inventory")
+                        .WithMany("Items")
+                        .HasForeignKey("InventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LidgrenServer.Models.ItemConsumableModel", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.InventoryModel", b =>
+                {
+                    b.HasOne("LidgrenServer.Models.UserModel", "User")
+                        .WithOne("Inventory")
+                        .HasForeignKey("LidgrenServer.Models.InventoryModel", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LidgrenServer.Models.LoginHistoryModel", b =>
@@ -213,8 +376,16 @@ namespace LidgrenServer.Migrations
                     b.Navigation("UserCharacters");
                 });
 
+            modelBuilder.Entity("LidgrenServer.Models.InventoryModel", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("LidgrenServer.Models.UserModel", b =>
                 {
+                    b.Navigation("Inventory")
+                        .IsRequired();
+
                     b.Navigation("LoginHistory");
 
                     b.Navigation("Relationships");

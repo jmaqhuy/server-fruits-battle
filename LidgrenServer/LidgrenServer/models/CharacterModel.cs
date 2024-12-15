@@ -14,19 +14,27 @@ namespace LidgrenServer.Models
         [Required]
         [StringLength(50)]
         [Column("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Required]
-        [Column("level")]
-        public int level { get; set; } = 1;
+        [Column("hp")]
+        public int Hp { get; set; }
 
         [Required]
-        [Column("exp")]
-        public int exp {  get; set; }
+        [Column("damage")]
+        public int Damage { get; set; }
 
         [Required]
-        [Column("is_selected_character")]
-        public bool IsSelectedCharacter { get; set; }
+        [Column("armor")]
+        public int Armor { get; set; }
+
+        [Required]
+        [Column("stamina")]
+        public int Stamina { get; set; }
+
+        [Required]
+        [Column("luck")]
+        public int Luck { get; set; }
 
         public ICollection<UserCharacterModel> UserCharacters { get; set; } = new List<UserCharacterModel>();
     }
