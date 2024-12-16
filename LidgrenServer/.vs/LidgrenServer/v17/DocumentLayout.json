@@ -164,7 +164,7 @@
               "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
               "ToolTip": "C:\\Users\\Admin\\Documents\\Group Project Fruits Battle Game\\server\\Server\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
               "RelativeToolTip": "LidgrenServer\\PacketProcessors.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAwwCEAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAcwJsAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-21T16:41:21.106Z",
               "EditorCaption": ""
@@ -191,8 +191,7 @@
               "RelativeToolTip": "LidgrenServer\\Program.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAowDMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-26T11:04:15.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-26T11:04:15.67Z"
             },
             {
               "$type": "Document",
@@ -216,8 +215,7 @@
               "RelativeToolTip": "LidgrenServer\\Data\\ApplicationDataContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T17:27:23.259Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T17:27:23.259Z"
             },
             {
               "$type": "Document",
@@ -385,8 +383,7 @@
               "RelativeToolTip": "LidgrenServer\\models\\UserRelationshipModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-29T08:54:24.746Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T08:54:24.746Z"
             },
             {
               "$type": "Document",
@@ -494,8 +491,7 @@
               "RelativeToolTip": "LidgrenServer\\Logging.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T12:36:35.774Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-20T12:36:35.774Z"
             }
           ]
         },
@@ -513,8 +509,7 @@
               "RelativeToolTip": "LidgrenServer\\Packets\\Packets.cs",
               "ViewState": "AgIAAHcBAAAAAAAAAAAUwLcBAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-28T15:19:24.926Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-28T15:19:24.926Z"
             },
             {
               "$type": "Document",

@@ -43,114 +43,117 @@ namespace LidgrenServer
         {
             Logging.Info("Listening for client ...");
 
-            NetIncomingMessage message;
-
-            while ((message = server.ReadMessage()) != null)
+            while (true) 
             {
-                Logging.Info("Message received");
+                NetIncomingMessage message;
 
-                switch (message.MessageType)
+                while ((message = server.ReadMessage()) != null)
                 {
-                    case NetIncomingMessageType.DiscoveryRequest:
-                        Logging.Debug("Received DiscoveryRequest");
+                    Logging.Info("Message received");
 
-                        // Respond to discovery requests
-                        server.SendDiscoveryResponse(null, message.SenderEndPoint);
-                        Logging.Debug("Send Discovery Response");
-                        break;
+                    switch (message.MessageType)
+                    {
+                        case NetIncomingMessageType.DiscoveryRequest:
+                            Logging.Debug("Received DiscoveryRequest");
 
-                    case NetIncomingMessageType.StatusChanged:
-                        NetConnectionStatus status = (NetConnectionStatus)message.ReadByte();
-                        string reason = message.ReadString();
-                        Logging.Debug(NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason);
-                        //if (status == NetConnectionStatus.Connected)
-                        //{
+                            // Respond to discovery requests
+                            server.SendDiscoveryResponse(null, message.SenderEndPoint);
+                            Logging.Debug("Send Discovery Response");
+                            break;
 
-                        //} 
-                        //if (status == NetConnectionStatus.Disconnected)
-                        //{
+                        case NetIncomingMessageType.StatusChanged:
+                            NetConnectionStatus status = (NetConnectionStatus)message.ReadByte();
+                            string reason = message.ReadString();
+                            Logging.Debug(NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason);
+                            //if (status == NetConnectionStatus.Connected)
+                            //{
 
-                        //    bool anonymous = true;
-                        //    NetConnection netConnection = message.SenderConnection;
-                        //    foreach (var playeronline in PlayerOnlineList)
-                        //    {
-                        //        if (playeronline.netConnection == netConnection)
-                        //        {
+                            //} 
+                            //if (status == NetConnectionStatus.Disconnected)
+                            //{
 
-                        //            PlayerOnlineList.Remove(playeronline);
-                        //            foreach (var room in RoomList)
-                        //            {
-                        //                foreach (var playerinroom in room.playersList)
-                        //                {
-                        //                    if (playerinroom.netConnection == netConnection)
-                        //                    {
-                        //                        anonymous = false;
-                        //                        Logging.Info($"Player {playerinroom.User.Username} quit game");
-                        //                        room.playersList.Remove(playerinroom);
-                        //                    }
-                        //                }
-                        //            }
+                            //    bool anonymous = true;
+                            //    NetConnection netConnection = message.SenderConnection;
+                            //    foreach (var playeronline in PlayerOnlineList)
+                            //    {
+                            //        if (playeronline.netConnection == netConnection)
+                            //        {
 
-                        //            break;
-                        //        }
-                        //    }
+                            //            PlayerOnlineList.Remove(playeronline);
+                            //            foreach (var room in RoomList)
+                            //            {
+                            //                foreach (var playerinroom in room.playersList)
+                            //                {
+                            //                    if (playerinroom.netConnection == netConnection)
+                            //                    {
+                            //                        anonymous = false;
+                            //                        Logging.Info($"Player {playerinroom.User.Username} quit game");
+                            //                        room.playersList.Remove(playerinroom);
+                            //                    }
+                            //                }
+                            //            }
 
-                        //    if (anonymous)
-                        //    {
-                        //        Logging.Warn($"Anonymous user {netConnection} disconnected");
-                        //    }
+                            //            break;
+                            //        }
+                            //    }
 
-                        //}
-                        break;
-                    case NetIncomingMessageType.Data:
-                        // Get package type
-                        byte type = message.ReadByte();
+                            //    if (anonymous)
+                            //    {
+                            //        Logging.Warn($"Anonymous user {netConnection} disconnected");
+                            //    }
 
-                        // Create package
-                        if (Enum.IsDefined(typeof(PacketTypes.General), type))
-                        {
-                            HandleGeneralPacket((PacketTypes.General)type, message);
-                        }
-                        else if (Enum.IsDefined(typeof(PacketTypes.Shop), type))
-                        {
-                            HandleShopPacket((PacketTypes.Shop)type, message);
-                        }
-                        else if (Enum.IsDefined(typeof(PacketTypes.Room), type))
-                        {
-                            HandleRoomPacket((PacketTypes.Room)type, message);
-                        }
-                        else if (Enum.IsDefined(typeof(PacketTypes.Friend), type))
-                        {
-                            HandleFriendPacket((PacketTypes.Friend)type, message);
-                        }
-                        else if (Enum.IsDefined(typeof(PacketTypes.Character), type))
-                        {
-                            HandleCharacterPacket((PacketTypes.Character)type, message);
-                        }
-                        else if (Enum.IsDefined(typeof(PacketTypes.GameBattle), type))
-                        {
-                            HandleGameBattlePacket((PacketTypes.GameBattle)type, message);
-                        }
-                        else
-                        {
-                            Logging.Error("Unhandled packet type");
-                        }
-                        break;
+                            //}
+                            break;
+                        case NetIncomingMessageType.Data:
+                            // Get package type
+                            byte type = message.ReadByte();
 
-                    case NetIncomingMessageType.DebugMessage:
-                    case NetIncomingMessageType.ErrorMessage:
-                    case NetIncomingMessageType.WarningMessage:
-                    case NetIncomingMessageType.VerboseDebugMessage:
-                        string text = message.ReadString();
-                        Logging.Debug(text);
-                        break;
-                    default:
-                        Logging.Error("Unhandle type: " + message.MessageType + " " + message.LengthBytes + " bytes" + message.DeliveryMethod);
-                        break;
+                            // Create package
+                            if (Enum.IsDefined(typeof(PacketTypes.General), type))
+                            {
+                                HandleGeneralPacket((PacketTypes.General)type, message);
+                            }
+                            else if (Enum.IsDefined(typeof(PacketTypes.Shop), type))
+                            {
+                                HandleShopPacket((PacketTypes.Shop)type, message);
+                            }
+                            else if (Enum.IsDefined(typeof(PacketTypes.Room), type))
+                            {
+                                HandleRoomPacket((PacketTypes.Room)type, message);
+                            }
+                            else if (Enum.IsDefined(typeof(PacketTypes.Friend), type))
+                            {
+                                HandleFriendPacket((PacketTypes.Friend)type, message);
+                            }
+                            else if (Enum.IsDefined(typeof(PacketTypes.Character), type))
+                            {
+                                HandleCharacterPacket((PacketTypes.Character)type, message);
+                            }
+                            else if (Enum.IsDefined(typeof(PacketTypes.GameBattle), type))
+                            {
+                                HandleGameBattlePacket((PacketTypes.GameBattle)type, message);
+                            }
+                            else
+                            {
+                                Logging.Error("Unhandled packet type");
+                            }
+                            break;
+
+                        case NetIncomingMessageType.DebugMessage:
+                        case NetIncomingMessageType.ErrorMessage:
+                        case NetIncomingMessageType.WarningMessage:
+                        case NetIncomingMessageType.VerboseDebugMessage:
+                            string text = message.ReadString();
+                            Logging.Debug(text);
+                            break;
+                        default:
+                            Logging.Error("Unhandle type: " + message.MessageType + " " + message.LengthBytes + " bytes" + message.DeliveryMethod);
+                            break;
+                    }
+
+                    server.Recycle(message);
+
                 }
-
-                server.Recycle(message);
-
             }
         }
 
