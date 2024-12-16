@@ -1,0 +1,5 @@
+D:\GameServer\Server\LidgrenServer\LidgrenServer\obj\Debug\net4.6.2\LidgrenServer.csproj.AssemblyReference.cache
+D:\GameServer\Server\LidgrenServer\LidgrenServer\obj\Debug\net4.6.2\LidgrenServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\GameServer\Server\LidgrenServer\LidgrenServer\obj\Debug\net4.6.2\LidgrenServer.AssemblyInfoInputs.cache
+D:\GameServer\Server\LidgrenServer\LidgrenServer\obj\Debug\net4.6.2\LidgrenServer.AssemblyInfo.cs
+D:\GameServer\Server\LidgrenServer\LidgrenServer\obj\Debug\net4.6.2\LidgrenServer.csproj.CoreCompileInputs.cache
