@@ -31,7 +31,8 @@ namespace LidgrenServer.Packets
             ExitRoomPacket,
             ChangeTeamPacket,
             SendChatMessagePacket,
-            PlayerReadyPacket
+            PlayerReadyPacket,
+            GameStartPacket
         }
         public enum GameBattle : byte
         {
@@ -423,20 +424,202 @@ namespace LidgrenServer.Packets
             RoomId = message.ReadInt32();
         }
     }
+    
     public class StartGamePacket : Packet
     {
-        public int roomId { get; set; }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        { }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
+
             message.Write((byte)PacketTypes.GameBattle.StartGamePacket);
-            message.Write(roomId);
+
+        }
+    }
+    public class PlayerOutGamePacket : Packet
+    {
+        public string player { get; set; }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            player = message.ReadString();
+        }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.PlayerOutGamePacket);
+            message.Write(player);
+        }
+    }
+    public class EndTurnPacket : Packet
+    {
+        public string playerName { get; set; }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            playerName = message.ReadString();
+        }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.EndTurnPacket);
+            message.Write(playerName);
+        }
+    }
+    public class EndGamePacket : Packet
+    {
+        public string TeamWin {  get; set; }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+
+        }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.EndGamePacket);
+            message.Write(TeamWin);
+        }
+    }
+    public class PositionPacket : Packet
+    {
+        public string playerName { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            playerName = message.ReadString();
+            X = message.ReadFloat();
+            Y = message.ReadFloat();
+
+        }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.PositionPacket);
+            message.Write(playerName);
+            message.Write(X);
+            message.Write(Y);
+
+        }
+    }
+    public class HealthPointPacket : Packet
+    {
+        public int HP { get; set; }
+        public string PlayerName { get; set; }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            HP = message.ReadInt32();
+            PlayerName = message.ReadString();
+        }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.HealthPointPacket);
+            message.Write(HP);
+            message.Write(PlayerName);
+        }
+    }
+    public class PlayerDiePacket : Packet
+    {
+        public string player { get; set; }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            player = message.ReadString();
+
+        }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.PlayerDiePacket);
+            message.Write(player);
+        }
+    }
+    public class SpawnPlayerPacket : Packet
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public string playerSpawn { get; set; }
+        public int HP { get; set; }
+        public int Attack { get; set; }
+        public int Amor { get; set; }
+        public int Lucky { get; set; }
+        public string Team { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.SpawnPlayerPacket);
+            message.Write(X);
+            message.Write(Y);
+            message.Write(playerSpawn);
+            message.Write(HP);
+            message.Write(Attack);
+            message.Write(Amor);
+            message.Write(Lucky);
+            message.Write(Team);
         }
 
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
-            roomId = message.ReadInt32();
+            X = message.ReadFloat();
+            Y = message.ReadFloat();
+            playerSpawn = message.ReadString();
+            HP = message.ReadInt32();
+            Attack = message.ReadInt32();
+            Amor = message.ReadInt32();
+            Lucky = message.ReadInt32();
+            Team = message.ReadString();
         }
+    }
+    public class GameStartPacket : Packet
+    {
+
+        public bool isHost { get; set; }
+        public string username { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Room.GameStartPacket);
+
+            message.Write(isHost);
+            message.Write(username);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+
+        }
+    }
+    public class StartTurnPacket : Packet
+    {
+        public string playerName { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.StartTurnPacket);
+            message.Write(playerName);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+
+        }
+    }
+    public class Shoot : Packet
+    {
+        public string playerName { get; set; }
+        public float force { get; set; }
+        public float angle { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.Shoot);
+            message.Write(force);
+            message.Write(angle);
+            message.Write(X);
+            message.Write(Y);
+            message.Write(playerName);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+
+            force = message.ReadFloat();
+            angle = message.ReadFloat();
+            X = message.ReadFloat();
+            Y = message.ReadFloat();
+            playerName = message.ReadString();
+        }
+
     }
 }
 

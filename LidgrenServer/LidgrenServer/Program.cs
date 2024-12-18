@@ -11,7 +11,7 @@ namespace LidgrenServer
 {
     class Program
     {
-
+        public static PacketProcessors server;
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
@@ -46,7 +46,7 @@ namespace LidgrenServer
             {
                 characterController.CreateSampleCharacterAsync();
             };
-            new PacketProcessors(serviceProvider);
+            server = new PacketProcessors(serviceProvider);
         }
     }
 }

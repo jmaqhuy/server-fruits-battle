@@ -1,10 +1,13 @@
-﻿using Lidgren.Network;
+﻿using System.Numerics;
+using Lidgren.Network;
 using LidgrenServer.controllers;
 using LidgrenServer.Controllers;
 using LidgrenServer.models;
 using LidgrenServer.Models;
 using LidgrenServer.Packets;
+using LidgrenServer.TurnManager;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace LidgrenServer
 {
@@ -18,6 +21,7 @@ namespace LidgrenServer
 
         private List<Player> PlayerOnlineList = new List<Player>();
         private List<RoomInfo> RoomList = new List<RoomInfo> {};
+        GameRoomManager roomManager = new GameRoomManager();
         private Random random = new Random();
         
         private readonly IServiceProvider _serviceProvider;
@@ -159,31 +163,369 @@ namespace LidgrenServer
 
         private void HandleGameBattlePacket(PacketTypes.GameBattle type, NetIncomingMessage message)
         {
+            string deviceId = NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier);
+            List<NetConnection> players = new List<NetConnection>();
             Packet packet;
-            RoomInfo room;
-            List<NetConnection> playerConnections;
-            switch (type) 
+            switch (type)
             {
                 case PacketTypes.GameBattle.StartGamePacket:
+                    Logging.Info("get start game signal from " + NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier));
                     packet = new StartGamePacket();
                     packet.NetIncomingMessageToPacket(message);
-                    room = RoomList.Where(r => r.Id == ((StartGamePacket)packet).roomId).FirstOrDefault();
-                    if (room != null)
-                    {
-                        playerConnections = room.playersList
-                            .Select(pl => pl.netConnection)
-                            .ToList();
-                        NetOutgoingMessage outmsg = server.CreateMessage();
-                        new StartGamePacket() { }.PacketToNetOutGoingMessage(outmsg);
-                        server.SendMessage(outmsg, playerConnections, NetDeliveryMethod.ReliableOrdered, 0);
-                    }
+
+                    StartGame((StartGamePacket)packet, message, players);
+                    break;
+                case PacketTypes.GameBattle.PlayerOutGamePacket:
+                    break;
+                case PacketTypes.GameBattle.EndTurnPacket:
+
+                    Logging.Debug("get end turn signal");
+                    packet = new EndTurnPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    ResetTurn((EndTurnPacket)packet, message);
+                    break;
+                case PacketTypes.GameBattle.EndGamePacket:
+                    break;
+                case PacketTypes.GameBattle.PositionPacket:
+                    packet = new PositionPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendPositionPacket(players, (PositionPacket)packet, message);
+                    break;
+                case PacketTypes.GameBattle.HealthPointPacket:
+                    packet = new HealthPointPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendHPPacket((HealthPointPacket)packet, message, players);
+                    Logging.Debug("Send HP packet");
+                    break;
+                case PacketTypes.GameBattle.PlayerDiePacket:
+                    packet = new PlayerDiePacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendPlayerDie((PlayerDiePacket)packet, message, players);
+                    Logging.Debug("Send Player die");
+                    break;
+                case PacketTypes.GameBattle.Shoot:
+                    packet = new Shoot();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendShootPacket((Shoot)packet, message, players);
+                    Logging.Debug("Send shoot packet");
                     break;
 
-                default :
-                    Logging.Info("Unhandle Game Battle Packet Type");
-                    break;
             }
 
+        }
+        public void CheckWinGame(List<NetConnection> playersAlive,int roomID)
+        {
+            int NumberPlayerTeam1 = 0;
+            int NumberPlayerTeam2 = 0;
+            var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+
+            if (targetRoom != null) 
+            {
+                foreach (var player in targetRoom.playersList)
+                {
+                    if (playersAlive.Contains(player.netConnection))
+                    {
+                        
+                        if (player.team == Team.Team1)
+                        {
+                            NumberPlayerTeam1++;
+                        }
+                        else
+                        {
+                            NumberPlayerTeam2++;
+                        }
+                    }
+                }
+
+            }
+            if(NumberPlayerTeam1 == 0)
+            {
+                SendEndGame(roomID,"Team2");
+            }
+            if (NumberPlayerTeam2 == 0) 
+            {
+                SendEndGame(roomID, "Team1");
+            }
+
+        }
+
+        private void SendEndGame(int roomID, string TeamWin)
+        {
+            Logging.Debug("Send End Game for room " + roomID);
+            List<NetConnection> players = new List<NetConnection>();
+            var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+            if (targetRoom != null)
+            {
+                // Add all players from the target room to the players list
+                players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+            }
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new EndGamePacket() {TeamWin = TeamWin}.PacketToNetOutGoingMessage(outgoingMessage);
+            if (players.Count != 0)
+            {
+                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+            else
+            {
+                Logging.Error("No player in list players");
+            }
+            roomManager.StopTurnManagerForRoom(roomID);
+        }
+
+        public void SendPlayerDie(PlayerDiePacket packet, NetIncomingMessage message, List<NetConnection> players)
+        {
+            NetConnection mess = message.SenderConnection;
+            // First, find the room ID that corresponds to the sender's connection
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == mess))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+
+            // If roomID is found (not 0), proceed to the second part
+            if (roomID != 0)
+            {
+                // Find the target room using the room ID
+                var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if (targetRoom != null)
+                {
+                    // Add all players from the target room to the players list
+                    players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                }
+
+            }
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new PlayerDiePacket() { player = packet.player }.PacketToNetOutGoingMessage(outgoingMessage);
+            if (players.Count != 0)
+            {
+                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+            else
+            {
+                Logging.Error("No player in list players");
+            }
+            Logging.Debug("Send player die for" + packet.player);
+            roomManager.RemovePlayerDead(roomID, mess);
+        }
+        private void SendHPPacket(HealthPointPacket packet, NetIncomingMessage message, List<NetConnection> players)
+        {
+            NetConnection mess = message.SenderConnection;
+            // First, find the room ID that corresponds to the sender's connection
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == mess))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+
+            // If roomID is found (not 0), proceed to the second part
+            if (roomID != 0)
+            {
+                // Find the target room using the room ID
+                var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if (targetRoom != null)
+                {
+                    // Add all players from the target room to the players list
+                    players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                }
+
+            }
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new HealthPointPacket() { PlayerName = packet.PlayerName, HP = packet.HP }.PacketToNetOutGoingMessage(outgoingMessage);
+            if (players.Count != 0)
+            {
+                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+            else
+            {
+                Logging.Error("No player in list players");
+            }
+            Logging.Debug("Send HP for" + packet.PlayerName + " " + packet.HP);
+            if (packet.HP > 0)
+            {
+                roomManager.StartTurn(roomID);
+            }
+
+        }
+        private void SendShootPacket(Shoot packet, NetIncomingMessage message, List<NetConnection> players)
+        {
+            NetConnection mess = message.SenderConnection;
+            // First, find the room ID that corresponds to the sender's connection
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == mess))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+
+            // If roomID is found (not 0), proceed to the second part
+            if (roomID != 0)
+            {
+                // Find the target room using the room ID
+                var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if (targetRoom != null)
+                {
+                    // Add all players from the target room to the players list
+                    players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                }
+                roomManager.StopTurn(roomID);
+            }
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new Shoot() { playerName = packet.playerName, angle = packet.angle, force = packet.force, X = packet.X, Y = packet.Y }.PacketToNetOutGoingMessage(outgoingMessage);
+            if (players.Count != 0)
+            {
+                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+            else
+            {
+                Logging.Error("No player in list players");
+            }
+
+        }
+
+        public void StartGame(StartGamePacket packet, NetIncomingMessage message, List<NetConnection> players)
+        {
+
+            NetConnection mess = message.SenderConnection;
+            Dictionary<NetConnection, string> PlayerTeam = new Dictionary<NetConnection, string>();
+            // First, find the room ID that corresponds to the sender's connection
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == mess))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+
+            // If roomID is found (not 0), proceed to the second part
+            if (roomID != 0)
+            {
+                // Find the target room using the room ID
+                var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if (targetRoom != null)
+                {
+                    // Add all players from the target room to the players list
+                    players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                    foreach (var Player in targetRoom.playersList)
+                    {
+                        string team;
+                        if (Player.team == Team.Team1)
+                        {
+                            team = "team1";
+                        }
+                        else
+                        {
+                            team = "team2";
+                        }
+                        PlayerTeam.Add(Player.netConnection, team);
+                    }
+
+                }
+
+
+
+            }
+
+
+            var player = NetUtility.ToHexString(mess.RemoteUniqueIdentifier);
+
+
+            SpawnPlayers(players, roomID, PlayerTeam);
+            roomManager.StartTurnManagerForRoom(roomID, players);
+
+
+
+        }
+        public void SpawnPlayers(List<NetConnection> players, int roomId, Dictionary<NetConnection, string> PlayerTeam)
+        {
+            Logging.Debug("Spawn PLayer for room " + roomId);
+            List<Vector2> spawnPositions = new List<Vector2>
+            {
+                new Vector2(430, 242),
+                new Vector2(424,242),
+                new Vector2(420,242)
+            };
+            int positionIndex = 0;
+            if (positionIndex >= spawnPositions.Count)
+            {
+                Logging.Debug("Not enough spawn position to all players");
+                return;
+            }
+            foreach (var player in players)
+            {
+
+                Vector2 spawnPosition = spawnPositions[positionIndex];
+                positionIndex++;
+                NetOutgoingMessage outgoingMessage = server.CreateMessage();
+                new SpawnPlayerPacket() { playerSpawn = getPlayerName(player), X = spawnPosition.X, Y = spawnPosition.Y, HP = 1000, Attack = 500, Amor = 0, Lucky = 0, Team = PlayerTeam[player] }.PacketToNetOutGoingMessage(outgoingMessage);
+                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+        }
+
+        public void SendPositionPacket(List<NetConnection> players, PositionPacket packet, NetIncomingMessage message)
+        {
+            Logging.Info("Sending position for " + packet.playerName);
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+
+            // If roomID is found (not 0), proceed to the second part
+            if (roomID != 0)
+            {
+                // Find the target room using the room ID
+                var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if (targetRoom != null)
+                {
+                    // Add all players from the target room to the players list
+                    players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                }
+            }
+            players.Remove(message.SenderConnection);
+
+
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            packet.PacketToNetOutGoingMessage(outgoingMessage);
+            if (players.Count != 0)
+            {
+                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+        }
+        public string getPlayerName(NetConnection netConnection)
+        {
+            string username = "";
+            foreach (var room in RoomList)
+            {
+                foreach (var player in room.playersList)
+                {
+                    if (netConnection == player.netConnection)
+                    {
+
+                        username = player.User.Username;
+                        break;
+                    }
+                }
+
+                if (username != "")
+                {
+                    break;
+                }
+            }
+            return username;
+        }
+
+        public void SendStartTurn(string playerName, List<NetConnection> all)
+        {
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new StartTurnPacket() { playerName = playerName }.PacketToNetOutGoingMessage(outgoingMessage);
+            server.SendMessage(outgoingMessage, all, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        public void SendEndTurn(string playerName, List<NetConnection> all)
+        {
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new EndTurnPacket() { playerName = playerName }.PacketToNetOutGoingMessage(outgoingMessage);
+            server.SendMessage(outgoingMessage, all, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        public void ResetTurn(EndTurnPacket packet, NetIncomingMessage message)
+        {
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+            Logging.Debug("End Turn for player: " + packet.playerName);
+            roomManager.StartTurn(roomID);
         }
 
         private void HandleCharacterPacket(PacketTypes.Character type, NetIncomingMessage message)
@@ -326,14 +668,59 @@ namespace LidgrenServer
                         SendJoinRoomPacketToAll(room);
                     }
                     break;
-
+                case PacketTypes.Room.GameStartPacket:
+                    Logging.Info("Received Game Start Packet");
+                    packet = new GameStartPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendGameStartPacketToAll((GameStartPacket)packet, message.SenderConnection);
+                    break;
+                    
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
                     break;
             }
 
         }
+        private void SendGameStartPacketToAll(GameStartPacket packet, NetConnection sender)
+        {
+            int roomID = 0;
+            bool isHost = false;
+            string username = "";
+            foreach (var room in RoomList)
+            {
+                foreach (var player in room.playersList)
+                {
+                    if (sender == player.netConnection)
+                    {
+                        roomID = room.Id;
+                        isHost = player.IsHost;
+                        username = player.User.Username;
+                        room.roomStatus = RoomStatus.InMatch;
+                        break;
+                    }
+                }
 
+                if (roomID != 0)
+                {
+                    break;
+                }
+            }
+            
+
+
+
+            List<NetConnection> connections = RoomList
+                                                .Where(room => room.Id == roomID)
+                                                .SelectMany(room => room.playersList)
+                                                .Select(playerinroom => playerinroom.netConnection)
+                                                .ToList();
+
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            new GameStartPacket() { isHost = isHost, username = username }.PacketToNetOutGoingMessage(outgoingMessage);
+            server.SendMessage(outgoingMessage, connections, NetDeliveryMethod.ReliableOrdered, 0);
+
+
+        }
         private void SendChatMessagePacketToAll(SendChatMessagePacket packet)
         {
             RoomInfo? thisroom = RoomList.FirstOrDefault( room => room.Id == packet.RoomID);
@@ -417,6 +804,7 @@ namespace LidgrenServer
                 player.IsHost = true;
                 player.team = Team.Team1;
                 player.Position = 1;
+                RoomList.Add(thisRoom);
             }
             else
             {
@@ -457,7 +845,7 @@ namespace LidgrenServer
             
             thisRoom.playersList.Add(player);
             Logging.Info($"User {player.User.Username} Join Room {thisRoom.Id}");
-            RoomList.Add(thisRoom);
+            
 
 
             NetOutgoingMessage outmsg = server.CreateMessage();
