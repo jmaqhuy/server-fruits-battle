@@ -1,0 +1,83 @@
+﻿using System.Collections.Generic;
+using Lidgren.Network;
+
+using Org.BouncyCastle.Asn1.X509;
+namespace LidgrenServer.TurnManager
+{
+
+    public class GameRoomManager
+    {
+        private readonly Dictionary<int, TurnManager> roomManagers;
+        
+        public GameRoomManager()
+        {
+            roomManagers = new Dictionary<int, TurnManager>();
+        }
+
+        public void StartTurnManagerForRoom(int roomId, List<NetConnection> players)
+        {
+            if (!roomManagers.ContainsKey(roomId))
+            {
+                var turnManager = new TurnManager(roomId, players);
+                roomManagers[roomId] = turnManager;
+
+                turnManager.StartTurnManager();
+                Logging.Info($"Turn manager started for room {roomId}");
+            }
+            else
+            {
+                Logging.Info($"Turn manager for room {roomId} is already running.");
+            }
+        }
+
+        public void StopTurnManagerForRoom(int roomId)
+        {
+            if (roomManagers.ContainsKey(roomId))
+            {
+                roomManagers[roomId].StopTurnManager();
+                roomManagers.Remove(roomId);
+                Logging.Info($"Turn manager stopped for room {roomId}");
+            }
+            else
+            {
+                Logging.Info($"No turn manager running for room {roomId}");
+            }
+        }
+
+        public void ResetTurnManagerForRoom(int roomId)
+        {
+            if (roomManagers.ContainsKey(roomId))
+            {
+                roomManagers[roomId].ResetTurnManager();
+            }
+            else
+            {
+                Logging.Info($"No turn manager running for room {roomId} to reset.");
+            }
+        }
+        public void RemovePlayerDead(int roomId, NetConnection player)
+        {
+            if (roomManagers.ContainsKey(roomId))
+            {
+                roomManagers[roomId].RemovePlayer(player);
+            }
+            else
+            {
+                Logging.Error("Error to remove player" + player);
+            }
+        }
+        
+       
+        
+        public void StopTurn(int roomId)
+        {
+            roomManagers[roomId].StopTurnManager();
+            Logging.Debug("stop turn manage for room " + roomId);
+        }
+        public void StartTurn(int roomId) 
+        {  
+            roomManagers[roomId].StartTurnManager();
+            Logging.Debug("stop turn manage for room " + roomId);
+        }
+    }
+}
