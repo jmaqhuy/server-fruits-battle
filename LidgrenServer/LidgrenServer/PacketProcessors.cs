@@ -46,6 +46,42 @@ namespace LidgrenServer
         public void Listen()
         {
             Logging.Info("Listening for client ...");
+            RoomList.Add(new RoomInfo
+            {
+                Id = 1,
+                Name = "mode normal 1vs1",
+                roomMode = RoomMode.Normal,
+                RoomType = RoomType.OneVsOne,
+                roomStatus = RoomStatus.InLobby,
+                playersList = new List<Player>()
+            });
+            RoomList.Add(new RoomInfo
+            {
+                Id = 2,
+                Name = "mode normal 2vs2",
+                roomMode = RoomMode.Normal,
+                RoomType = RoomType.TwoVsTwo,
+                roomStatus = RoomStatus.InLobby,
+                playersList = new List<Player>()
+            });
+            RoomList.Add(new RoomInfo
+            {
+                Id = 3,
+                Name = "mode normal 4vs4",
+                roomMode = RoomMode.Normal,
+                RoomType = RoomType.FourVsFour,
+                roomStatus = RoomStatus.InLobby,
+                playersList = new List<Player>()
+            });
+            RoomList.Add(new RoomInfo
+            {
+                Id = 4,
+                Name = "mode rank 2vs2",
+                roomMode = RoomMode.Rank,
+                RoomType = RoomType.TwoVsTwo,
+                roomStatus = RoomStatus.InLobby,
+                playersList = new List<Player>()
+            });
 
             while (true) 
             {
@@ -69,44 +105,7 @@ namespace LidgrenServer
                             NetConnectionStatus status = (NetConnectionStatus)message.ReadByte();
                             string reason = message.ReadString();
                             Logging.Debug(NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason);
-                            //if (status == NetConnectionStatus.Connected)
-                            //{
-
-                            //} 
-                            //if (status == NetConnectionStatus.Disconnected)
-                            //{
-
-                            //    bool anonymous = true;
-                            //    NetConnection netConnection = message.SenderConnection;
-                            //    foreach (var playeronline in PlayerOnlineList)
-                            //    {
-                            //        if (playeronline.netConnection == netConnection)
-                            //        {
-
-                            //            PlayerOnlineList.Remove(playeronline);
-                            //            foreach (var room in RoomList)
-                            //            {
-                            //                foreach (var playerinroom in room.playersList)
-                            //                {
-                            //                    if (playerinroom.netConnection == netConnection)
-                            //                    {
-                            //                        anonymous = false;
-                            //                        Logging.Info($"Player {playerinroom.User.Username} quit game");
-                            //                        room.playersList.Remove(playerinroom);
-                            //                    }
-                            //                }
-                            //            }
-
-                            //            break;
-                            //        }
-                            //    }
-
-                            //    if (anonymous)
-                            //    {
-                            //        Logging.Warn($"Anonymous user {netConnection} disconnected");
-                            //    }
-
-                            //}
+                            
                             break;
                         case NetIncomingMessageType.Data:
                             // Get package type
@@ -172,8 +171,7 @@ namespace LidgrenServer
                     Logging.Info("get start game signal from " + NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier));
                     packet = new StartGamePacket();
                     packet.NetIncomingMessageToPacket(message);
-
-                    StartGame((StartGamePacket)packet, message, players);
+                    StartGame((StartGamePacket)packet, players);
                     break;
                 case PacketTypes.GameBattle.PlayerOutGamePacket:
                     break;
@@ -209,6 +207,7 @@ namespace LidgrenServer
                     SendShootPacket((Shoot)packet, message, players);
                     Logging.Debug("Send shoot packet");
                     break;
+
 
             }
 
@@ -378,16 +377,13 @@ namespace LidgrenServer
 
         }
 
-        public void StartGame(StartGamePacket packet, NetIncomingMessage message, List<NetConnection> players)
+        public async void StartGame(StartGamePacket packet, List<NetConnection> players)
         {
 
-            NetConnection mess = message.SenderConnection;
-            Dictionary<NetConnection, string> PlayerTeam = new Dictionary<NetConnection, string>();
-            // First, find the room ID that corresponds to the sender's connection
-            int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == mess))
-                .Select(room => room.Id)
-                .FirstOrDefault();
+            /*NetConnection mess = message.SenderConnection;*/
+            Dictionary<NetConnection, Team> PlayerTeam = new Dictionary<NetConnection, Team>();
+            
+            int roomID = packet.roomId;
 
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
@@ -400,59 +396,80 @@ namespace LidgrenServer
                     players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
                     foreach (var Player in targetRoom.playersList)
                     {
-                        string team;
-                        if (Player.team == Team.Team1)
-                        {
-                            team = "team1";
-                        }
-                        else
-                        {
-                            team = "team2";
-                        }
-                        PlayerTeam.Add(Player.netConnection, team);
+                      
+                        PlayerTeam.Add(Player.netConnection, Player.team);
                     }
 
                 }
-
-
-
             }
-
-
-            var player = NetUtility.ToHexString(mess.RemoteUniqueIdentifier);
-
-
             SpawnPlayers(players, roomID, PlayerTeam);
+            await Task.Delay(1000);
             roomManager.StartTurnManagerForRoom(roomID, players);
-
-
-
         }
-        public void SpawnPlayers(List<NetConnection> players, int roomId, Dictionary<NetConnection, string> PlayerTeam)
+
+        public void SpawnPlayers(List<NetConnection> players, int roomId, Dictionary<NetConnection, Team> PlayerTeam)
         {
             Logging.Debug("Spawn PLayer for room " + roomId);
-            List<Vector2> spawnPositions = new List<Vector2>
-            {
-                new Vector2(430, 242),
-                new Vector2(424,242),
-                new Vector2(420,242)
-            };
-            int positionIndex = 0;
-            if (positionIndex >= spawnPositions.Count)
-            {
-                Logging.Debug("Not enough spawn position to all players");
-                return;
-            }
+            
+            
+            List<SpawnPlayerPacket> packets = new List<SpawnPlayerPacket>();
             foreach (var player in players)
             {
-
-                Vector2 spawnPosition = spawnPositions[positionIndex];
-                positionIndex++;
-                NetOutgoingMessage outgoingMessage = server.CreateMessage();
-                new SpawnPlayerPacket() { playerSpawn = getPlayerName(player), X = spawnPosition.X, Y = spawnPosition.Y, HP = 1000, Attack = 500, Amor = 0, Lucky = 0, Team = PlayerTeam[player] }.PacketToNetOutGoingMessage(outgoingMessage);
-                server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+                Vector2 spawnPosition = GetRandomVector2();
+               
+                packets.Add(
+                    new SpawnPlayerPacket()
+                    {
+                        playerSpawn = getPlayerName(player),
+                        X = spawnPosition.X,
+                        Y = spawnPosition.Y,
+                        HP = 1000,
+                        Attack = 500,
+                        Amor = 0,
+                        Lucky = 0,
+                        Team = PlayerTeam[player]
+                    }
+                 );
             }
+            NetOutgoingMessage outgoingMessage = server.CreateMessage();
+            Logging.Info($"There is {packets.Count} Position generated");
+            new SpawnPlayerPacketToAll()
+            {
+                SPPacket = packets
+            }.PacketToNetOutGoingMessage( outgoingMessage );
+            server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
         }
+
+        private Vector2 GetRandomVector2()
+        {
+            List<int> possibleYValues = new List<int> { 241, 237 };
+
+           
+            int randomYIndex = random.Next(0, possibleYValues.Count);
+            int y = possibleYValues[randomYIndex];
+            int x = 0;
+
+            
+            if (y == 241)
+            {
+                x = random.Next(420, 430);
+            }
+            else if (y == 237)
+            {
+               
+                if (random.NextDouble() < 0.5)
+                {
+                    x = random.Next(417, 420);
+                }
+                else
+                {
+                    x = random.Next(430, 432);
+                }
+            }
+
+            return new Vector2(x, y);
+        }
+
 
         public void SendPositionPacket(List<NetConnection> players, PositionPacket packet, NetIncomingMessage message)
         {
@@ -668,59 +685,38 @@ namespace LidgrenServer
                         SendJoinRoomPacketToAll(room);
                     }
                     break;
-                case PacketTypes.Room.GameStartPacket:
-                    Logging.Info("Received Game Start Packet");
-                    packet = new GameStartPacket();
-                    packet.NetIncomingMessageToPacket(message);
-                    SendGameStartPacketToAll((GameStartPacket)packet, message.SenderConnection);
+                
+
+                case PacketTypes.Room.RoomListPacket:
+                    List<RoomPacket> roomList = new List<RoomPacket>();
+                    foreach (var r in RoomList)
+                    {
+                        roomList.Add(new RoomPacket
+                        {
+                            Id = r.Id,
+                            Name = r.Name,
+                            roomMode = r.roomMode,
+                            roomStatus = r.roomStatus,
+                            roomType = r.RoomType,
+                            PlayerNumber = r.playersList.Count,
+                        });
+                    }
+                    NetOutgoingMessage outmsg = server.CreateMessage();
+                    new RoomListPacket()
+                    {
+                        rooms = roomList,
+                    }.PacketToNetOutGoingMessage(outmsg);
+                    server.SendMessage(outmsg, message.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+
                     break;
-                    
+
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
                     break;
             }
 
         }
-        private void SendGameStartPacketToAll(GameStartPacket packet, NetConnection sender)
-        {
-            int roomID = 0;
-            bool isHost = false;
-            string username = "";
-            foreach (var room in RoomList)
-            {
-                foreach (var player in room.playersList)
-                {
-                    if (sender == player.netConnection)
-                    {
-                        roomID = room.Id;
-                        isHost = player.IsHost;
-                        username = player.User.Username;
-                        room.roomStatus = RoomStatus.InMatch;
-                        break;
-                    }
-                }
-
-                if (roomID != 0)
-                {
-                    break;
-                }
-            }
-            
-
-
-
-            List<NetConnection> connections = RoomList
-                                                .Where(room => room.Id == roomID)
-                                                .SelectMany(room => room.playersList)
-                                                .Select(playerinroom => playerinroom.netConnection)
-                                                .ToList();
-
-            NetOutgoingMessage outgoingMessage = server.CreateMessage();
-            new GameStartPacket() { isHost = isHost, username = username }.PacketToNetOutGoingMessage(outgoingMessage);
-            server.SendMessage(outgoingMessage, connections, NetDeliveryMethod.ReliableOrdered, 0);
-
-
-        }
+   
         private void SendChatMessagePacketToAll(SendChatMessagePacket packet)
         {
             RoomInfo? thisroom = RoomList.FirstOrDefault( room => room.Id == packet.RoomID);
@@ -789,12 +785,20 @@ namespace LidgrenServer
         private RoomInfo SendJoinRoomPacket(JoinRoomPacket joinRoomPacket, NetConnection netConnection)
         {
 
-            RoomInfo? thisRoom = RoomList?.FirstOrDefault(room => 
+            RoomInfo? thisRoom;
+            if (joinRoomPacket.room.Id == 0)
+            {
+                thisRoom = RoomList?.FirstOrDefault(room =>
                     room.roomMode == joinRoomPacket.room.roomMode &&
                     !room.IsRoomFull &&
                     room.roomStatus == RoomStatus.InLobby &&
                     room.RoomType == joinRoomPacket.room.roomType
-            );
+                );
+            }
+            else
+            {
+                thisRoom = RoomList?.FirstOrDefault(room => room.Id == joinRoomPacket.room.Id);
+            }
 
             var player = PlayerOnlineList?.FirstOrDefault(u => u.netConnection == netConnection);
 

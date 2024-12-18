@@ -32,7 +32,7 @@ namespace LidgrenServer.Packets
             ChangeTeamPacket,
             SendChatMessagePacket,
             PlayerReadyPacket,
-            GameStartPacket
+            RoomListPacket
         }
         public enum GameBattle : byte
         {
@@ -44,13 +44,14 @@ namespace LidgrenServer.Packets
             PositionPacket,
             HealthPointPacket,
             PlayerDiePacket,
-            SpawnPlayerPacket,
-            Shoot
+            Shoot,
+            SpawnPlayerPacketToAll,
+            AlreadyInMatchPacket,
         }
 
         public enum Friend : byte
         {
-            AllFriendPacket = 40,
+            AllFriendPacket = 50,
             FriendRequestPacket,
             SentRequestPacket,
             SuggestFriendPacket,
@@ -60,7 +61,7 @@ namespace LidgrenServer.Packets
 
         public enum Character : byte
         {
-            GetCurrentCharacterPacket = 50,
+            GetCurrentCharacterPacket = 60,
         }
 
     }
@@ -424,18 +425,20 @@ namespace LidgrenServer.Packets
             RoomId = message.ReadInt32();
         }
     }
-    
+
     public class StartGamePacket : Packet
     {
-
-        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
-        { }
+        public int roomId { get; set; }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
-
             message.Write((byte)PacketTypes.GameBattle.StartGamePacket);
+            message.Write(roomId);
+        }
 
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            roomId = message.ReadInt32();
         }
     }
     public class PlayerOutGamePacket : Packet
@@ -529,58 +532,30 @@ namespace LidgrenServer.Packets
             message.Write(player);
         }
     }
-    public class SpawnPlayerPacket : Packet
+    public class SpawnPlayerPacketToAll : Packet
     {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public string playerSpawn { get; set; }
-        public int HP { get; set; }
-        public int Attack { get; set; }
-        public int Amor { get; set; }
-        public int Lucky { get; set; }
-        public string Team { get; set; }
+        public List<SpawnPlayerPacket> SPPacket = new List<SpawnPlayerPacket>();
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
-            message.Write((byte)PacketTypes.GameBattle.SpawnPlayerPacket);
-            message.Write(X);
-            message.Write(Y);
-            message.Write(playerSpawn);
-            message.Write(HP);
-            message.Write(Attack);
-            message.Write(Amor);
-            message.Write(Lucky);
-            message.Write(Team);
+            message.Write((byte)PacketTypes.GameBattle.SpawnPlayerPacketToAll); 
+            message.Write(SPPacket.Count);
+            foreach (SpawnPlayerPacket sp in SPPacket)
+            {
+                sp.Serialize(message);
+            }
         }
 
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
-            X = message.ReadFloat();
-            Y = message.ReadFloat();
-            playerSpawn = message.ReadString();
-            HP = message.ReadInt32();
-            Attack = message.ReadInt32();
-            Amor = message.ReadInt32();
-            Lucky = message.ReadInt32();
-            Team = message.ReadString();
+            var cnt = message.ReadInt32();
+            SPPacket.Clear();
+            for (int i = 0; i < cnt; i++)
+            {
+                SPPacket.Add(SpawnPlayerPacket.Deserialize(message));
+            }
         }
     }
-    public class GameStartPacket : Packet
-    {
-
-        public bool isHost { get; set; }
-        public string username { get; set; }
-        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
-        {
-            message.Write((byte)PacketTypes.Room.GameStartPacket);
-
-            message.Write(isHost);
-            message.Write(username);
-        }
-        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
-        {
-
-        }
-    }
+   
     public class StartTurnPacket : Packet
     {
         public string playerName { get; set; }
@@ -620,6 +595,49 @@ namespace LidgrenServer.Packets
             playerName = message.ReadString();
         }
 
+    }
+
+    public class RoomListPacket : Packet
+    {
+        public List<RoomPacket> rooms { get; set; } = new List<RoomPacket>();
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Room.RoomListPacket);
+            message.Write(rooms.Count);
+            foreach (var r in rooms)
+            {
+                r.Serialize(message);
+            }
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            var roomCount = message.ReadInt32();
+            rooms.Clear();
+            for (int i = 0; i < roomCount; i++)
+            {
+                rooms.Add(RoomPacket.Deserialize(message));
+            }
+        }
+    }
+    public class AlreadyInMatchPacket : Packet
+    {
+        public int roomId { get; set; }
+        public string username { get; set; }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            roomId = message.ReadInt32();
+            username = message.ReadString();
+        }
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.GameBattle.AlreadyInMatchPacket);
+            message.Write(roomId);
+            message.Write(username);
+        }
     }
 }
 

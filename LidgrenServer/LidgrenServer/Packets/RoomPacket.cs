@@ -10,6 +10,7 @@ namespace LidgrenServer.Packets
         public RoomMode roomMode { get; set; }
         public RoomStatus roomStatus { get; set; }
         public RoomType roomType { get; set; }
+        public int PlayerNumber { get; set; }
 
         public void Serialize(NetOutgoingMessage message)
         {
@@ -18,6 +19,7 @@ namespace LidgrenServer.Packets
             message.Write((byte)roomMode);
             message.Write((byte)roomStatus);
             message.Write((byte)roomType);
+            message.Write(PlayerNumber);
         }
 
         public static RoomPacket Deserialize(NetIncomingMessage message)
@@ -29,6 +31,7 @@ namespace LidgrenServer.Packets
                 roomMode = (RoomMode)message.ReadByte(),
                 roomStatus = (RoomStatus)message.ReadByte(),
                 roomType = (RoomType)message.ReadByte(),
+                PlayerNumber = message.ReadInt32(),
             };
         }
     }
