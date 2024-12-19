@@ -239,16 +239,16 @@ namespace LidgrenServer
             }
             if(NumberPlayerTeam1 == 0)
             {
-                SendEndGame(roomID,"Team2");
+                SendEndGame(roomID,Team.Team2);
             }
             if (NumberPlayerTeam2 == 0) 
             {
-                SendEndGame(roomID, "Team1");
+                SendEndGame(roomID, Team.Team1);
             }
 
         }
 
-        private void SendEndGame(int roomID, string TeamWin)
+        private void SendEndGame(int roomID, Team TeamWin)
         {
             Logging.Debug("Send End Game for room " + roomID);
             List<NetConnection> players = new List<NetConnection>();

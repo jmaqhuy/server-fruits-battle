@@ -469,7 +469,7 @@ namespace LidgrenServer.Packets
     }
     public class EndGamePacket : Packet
     {
-        public string TeamWin {  get; set; }
+        public Team TeamWin {  get; set; }
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
 
@@ -477,7 +477,7 @@ namespace LidgrenServer.Packets
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
             message.Write((byte)PacketTypes.GameBattle.EndGamePacket);
-            message.Write(TeamWin);
+            message.Write((byte)TeamWin);
         }
     }
     public class PositionPacket : Packet
