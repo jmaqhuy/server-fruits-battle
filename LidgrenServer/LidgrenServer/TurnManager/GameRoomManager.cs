@@ -33,6 +33,7 @@ namespace LidgrenServer.TurnManager
             {
                 roomManagers[roomId].StopTurnManager();
                 roomManagers.Remove(roomId);
+                Logging.Info(roomManagers.Count+"");
                 Logging.Info($"Turn manager stopped for room {roomId}");
             }
             else
@@ -72,9 +73,10 @@ namespace LidgrenServer.TurnManager
             Logging.Debug("stop turn manage for room " + roomId);
         }
         public void StartTurn(int roomId) 
-        {  
-            roomManagers[roomId].StartTurnManager();
+        {
             Logging.Debug("stop turn manage for room " + roomId);
+            roomManagers[roomId].StartTurnManager();
+            
         }
     }
 }

@@ -69,7 +69,7 @@ namespace LidgrenServer.TurnManager
         public void StopTurnManager()
         {
             Logging.Debug("current player is "+Program.server.getPlayerName(playersAlive[currentPlayerIndex]));
-           
+            
             turnTimer?.Dispose();
         }
         public void RemovePlayer(NetConnection player) 
@@ -88,8 +88,9 @@ namespace LidgrenServer.TurnManager
                     currentPlayerIndex = currentPlayerIndex % playersAlive.Count;
                 }
             }
-            Program.server.CheckWinGame(playersAlive,roomId);
             StartTurnManager();
+            Program.server.CheckWinGame(playersAlive,roomId);
+           
             
         }
        
