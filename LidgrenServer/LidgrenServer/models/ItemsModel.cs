@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LidgrenServer.Models
 {
     [Table("items")]
-    public class ItemConsumableModel
+    public class ItemModel
     {
         [Key]
         [Required]
@@ -13,29 +13,30 @@ namespace LidgrenServer.Models
 
         [Required]
         [Column("name")]
-        [StringLength(50)] // Updated to match schema constraints
+        [StringLength(50)]
         public string Name { get; set; } = null!;
 
+        [Required]
         [Column("image_name")]
-        [StringLength(50)] // Updated to match schema constraints
+        [StringLength(50)]
         public string ImageName { get; set; } = null!;
 
         [Required]
         [Column("effect_type")]
-        [StringLength(50)] // Added based on schema
+        [StringLength(50)]
         public string EffectType { get; set; } = null!;
 
         [Required]
         [Column("value")]
-        public int Value { get; set; } // Added based on schema
+        public int Value { get; set; }
 
         [Required]
         [Column("duration")]
-        public int Duration { get; set; } // Added based on schema
+        public int Duration { get; set; }
 
         [Required]
         [Column("target")]
-        [StringLength(50)] // Added based on schema
+        [StringLength(50)]
         public string Target { get; set; } = null!;
     }
 }

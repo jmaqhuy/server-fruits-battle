@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
+    "C:\\Users\\Admin\\OneDrive\\Máy tính\\SVP\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
+    "C:\\Users\\Admin\\OneDrive\\Máy tính\\SVP\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Máy tính\\SVP\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
         "projectName": "LidgrenServer",
-        "projectPath": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
-        "packagesPath": "C:\\Users\\truon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\OneDrive\\Máy tính\\SVP\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\OneDrive\\Máy tính\\SVP\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\truon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -42,7 +42,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -98,30 +98,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.36, 6.0.36]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

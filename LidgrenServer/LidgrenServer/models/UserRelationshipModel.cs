@@ -14,7 +14,7 @@ namespace LidgrenServer.Models
 
         [Required]
         [Column("type")]
-        public RelationshipType Type { get; set; }  // Sử dụng enum thay vì string
+        public RelationshipType Type { get; set; }  
 
         // Navigation properties
         [ForeignKey(nameof(UserFirstId))]
