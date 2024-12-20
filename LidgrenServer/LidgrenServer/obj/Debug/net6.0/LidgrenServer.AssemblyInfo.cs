@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("6d9b8976-8ef0-4a3d-a96d-ff2cae358ed7")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("LidgrenServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2eb014e8175d1e98faae644e8b96634b5c2c102")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cec1d4e390bc4a4b5b21799c50f58683bd126d7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("LidgrenServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LidgrenServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -340,7 +340,7 @@
           }
         }
       },
-      "Microsoft.Extensions.Configuration.UserSecrets/6.0.0": {
+      "Microsoft.Extensions.Configuration.UserSecrets/6.0.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
@@ -359,7 +359,8 @@
           }
         },
         "build": {
-          "build/netstandard2.0/_._": {}
+          "buildTransitive/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.props": {},
+          "buildTransitive/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.targets": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/6.0.2": {
@@ -1550,23 +1551,23 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Configuration.UserSecrets/6.0.0": {
-      "sha512": "lB0Hb2V4+RUHy+LjEcqEr4EcV4RWc9EnjAV2GdtWQEdljQX+R4hGREftI7sInU9okP93pDrJiaj6QUJ6ZsslOA==",
+    "Microsoft.Extensions.Configuration.UserSecrets/6.0.1": {
+      "sha512": "Fy8yr4V6obi7ZxvKYI1i85jqtwMq8tqyxQVZpRSkgeA8enqy/KvBIMdcuNdznlxQMZa72mvbHqb7vbg4Pyx95w==",
       "type": "package",
-      "path": "microsoft.extensions.configuration.usersecrets/6.0.0",
+      "path": "microsoft.extensions.configuration.usersecrets/6.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "build/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.props",
-        "build/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.targets",
+        "buildTransitive/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.props",
+        "buildTransitive/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.targets",
         "lib/net461/Microsoft.Extensions.Configuration.UserSecrets.dll",
         "lib/net461/Microsoft.Extensions.Configuration.UserSecrets.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.UserSecrets.xml",
-        "microsoft.extensions.configuration.usersecrets.6.0.0.nupkg.sha512",
+        "microsoft.extensions.configuration.usersecrets.6.0.1.nupkg.sha512",
         "microsoft.extensions.configuration.usersecrets.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -3040,6 +3041,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 6.0.36",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.36",
       "Microsoft.Extensions.Caching.Memory >= 6.0.3",
+      "Microsoft.Extensions.Configuration.UserSecrets >= 6.0.1",
       "Microsoft.Extensions.Hosting >= 6.0.0",
       "MySql.Data >= 9.1.0",
       "MySql.EntityFrameworkCore >= 8.0.8",
@@ -3047,23 +3049,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\truon\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\admin\\.nuget\\packages\\": {},
+    "D:\\App\\VS\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+      "projectUniqueName": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
       "projectName": "LidgrenServer",
-      "projectPath": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
-      "packagesPath": "C:\\Users\\truon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
+      "projectPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+      "outputPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "D:\\App\\VS\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\truon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3088,7 +3090,7 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
       "SdkAnalysisLevel": "9.0.100"
     },
@@ -3115,6 +3117,10 @@
           "Microsoft.Extensions.Caching.Memory": {
             "target": "Package",
             "version": "[6.0.3, )"
+          },
+          "Microsoft.Extensions.Configuration.UserSecrets": {
+            "target": "Package",
+            "version": "[6.0.1, )"
           },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",
@@ -3167,7 +3173,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

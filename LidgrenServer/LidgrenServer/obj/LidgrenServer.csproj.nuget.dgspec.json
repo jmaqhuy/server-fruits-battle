@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
+    "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
+    "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "projectUniqueName": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
         "projectName": "LidgrenServer",
-        "projectPath": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
-        "packagesPath": "C:\\Users\\truon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\truon\\Desktop\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
+        "projectPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\App\\VS\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\truon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -42,7 +42,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -69,6 +69,10 @@
             "Microsoft.Extensions.Caching.Memory": {
               "target": "Package",
               "version": "[6.0.3, )"
+            },
+            "Microsoft.Extensions.Configuration.UserSecrets": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             },
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
@@ -121,7 +125,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

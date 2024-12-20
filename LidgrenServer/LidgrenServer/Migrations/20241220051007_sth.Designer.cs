@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LidgrenServer.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20241215113003_initDB")]
-    partial class initDB
+    [Migration("20241220051007_sth")]
+    partial class sth
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
