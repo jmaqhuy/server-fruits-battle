@@ -1,15 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LidgrenServer.Models
 {
-    [Table("shop")]
-    public class ShopModel
+    [Table("user_inventories")]
+    public class UserInventoryModel
     {
         [Key]
         [Required]
         [Column("id")]
         public int Id { get; set; }
+
+        [Required]
+        [Column("user_id")]
+        public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public UserModel User { get; set; } = null!;
 
         [Required]
         [Column("product_id")]
@@ -19,11 +26,7 @@ namespace LidgrenServer.Models
         public ProductModel Product { get; set; } = null!;
 
         [Required]
-        [Column("price")]
-        public int Price { get; set; }
-
-        [Required]
-        [Column("stock")]
-        public int Stock { get; set; }
+        [Column("quantity")]
+        public int Quantity { get; set; } = 1;
     }
 }

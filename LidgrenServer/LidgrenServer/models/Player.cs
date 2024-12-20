@@ -26,8 +26,6 @@ namespace LidgrenServer.models
         public Team team { get; set; }
         public int Position { get; set; }
         public bool isReady { get; set; } = false ;
-
-        public bool inMatch { get; set; }
         
         public UserModel User { get; set; }
         public NetConnection netConnection { get; set; }

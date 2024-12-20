@@ -47,7 +47,7 @@ namespace LidgrenServer.Models
         public int LuckPoint { get; set; } = 0;
 
 
-        // Điều hướng tới các bảng User và Character
+        // Send to User table and Character table
         public UserModel User { get; set; }
         public CharacterModel Character { get; set; }
     }

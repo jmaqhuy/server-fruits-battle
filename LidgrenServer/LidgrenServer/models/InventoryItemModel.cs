@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LidgrenServer.Models
 {
-    [Table("inventory_items")]
+    [Table("user_inventories")]
     public class InventoryItemModel
     {
         [Key]
@@ -11,18 +11,18 @@ namespace LidgrenServer.Models
         public int Id { get; set; }
 
         [Required]
-        [Column("inventory_id")]
-        public int InventoryId { get; set; }
+        [Column("user_id")]
+        public int UserId { get; set; }
 
-        [ForeignKey("InventoryId")]
-        public InventoryModel Inventory { get; set; } = null!;
+        [ForeignKey("UserId")]
+        public UserModel User { get; set; } = null!;
 
         [Required]
-        [Column("item_id")]
-        public int ItemId { get; set; }
+        [Column("product_id")]
+        public int ProductId { get; set; }
 
-        [ForeignKey("ItemId")]
-        public ItemConsumableModel Item { get; set; } = null!;
+        [ForeignKey("ProductId")]
+        public ProductModel Product { get; set; } = null!;
 
         [Column("quantity")]
         public int Quantity { get; set; } = 1;
