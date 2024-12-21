@@ -73,14 +73,6 @@ namespace LidgrenServer.Models
             return this.Password == hashedPassword;
         }
 
-        public static implicit operator UserModel(List<UserModel> v)
-        {
-            throw new NotImplementedException();
-        }
 
-        public static implicit operator UserModel(bool v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

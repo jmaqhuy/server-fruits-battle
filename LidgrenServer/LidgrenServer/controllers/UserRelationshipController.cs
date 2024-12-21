@@ -28,9 +28,9 @@ namespace LidgrenServer.controllers
         {
             return await _relationshipService.GetUnrelatedUsers(userId);
         }
-        public async Task<List<UserModel>> GetSearchedPlayerListAsync(int userId)
+        public async Task<List<UserModel>> GetSearchedPlayerAsync(string username1, string username2)
         {
-            return await _relationshipService.GetSearchedUsers(userId);
+            return await _relationshipService.GetSearchedUsers(username1, username2);
         }
         public async Task<List<UserModel>> GetBlockFriendsListAsync(int userId)
         {
@@ -40,6 +40,25 @@ namespace LidgrenServer.controllers
         {
             return await _relationshipService.AddFriend(userIdA, userIdB);
         }
-
+        public async Task<bool> DeleteFriend(int userIdA, int userIdB)
+        {
+            return await _relationshipService.DeleteFriend(userIdA, userIdB);
+        }
+        public async Task<bool> AcceptFriendInvite(int userIdA, int userIdB)
+        {
+            return await _relationshipService.AcceptFriendInvite(userIdA, userIdB);
+        }
+        public async Task<bool> CancelFriendRequest(int userIdA, int userIdB)
+        {
+            return await _relationshipService.CancelFriendRequest(userIdA, userIdB);
+        }
+        public async Task<bool> BlockFriend(int userIdA, int userIdB)
+        {
+            return await _relationshipService.BlockFriend(userIdA, userIdB);
+        }
+        public async Task<bool> UnBlockFriend(int userIdA, int userIdB)
+        {
+            return await _relationshipService.UnBlockFriend(userIdA, userIdB);
+        }
     }
 }

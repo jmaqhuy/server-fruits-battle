@@ -619,7 +619,7 @@ namespace LidgrenServer
                     Logging.Info("Received Request SearchedFriendPacket");
                     packet = new SearchFriendPacket();
                     packet.NetIncomingMessageToPacket(message);
-                    SendSearchFriendPacket(((SearchFriendPacket)packet).username, message.SenderConnection);
+                    SendSearchFriendPacket(((SearchFriendPacket)packet).username1, ((SearchFriendPacket)packet).username2, message.SenderConnection);
                     break;
                 case PacketTypes.Friend.BlockFriendPacket:
                     Logging.Info("Received Request BlockFriendPacket");
@@ -629,9 +629,39 @@ namespace LidgrenServer
                     break;
                 case PacketTypes.Friend.AddFriendPacket:
                     Logging.Info("Received Request AddFriendPacket");
-                    packet = new AllFriendPacket();
+                    packet = new AddFriendPacket();
                     packet.NetIncomingMessageToPacket(message);
                     SendAddFriendPacket(((AddFriendPacket)packet).username1,((AddFriendPacket)packet).username2, message.SenderConnection);
+                    break;
+                case PacketTypes.Friend.DeleteFriend:
+                    Logging.Info("Received Request DeleteFriend");
+                    packet = new DeleteFriend();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendDeleteFriend(((DeleteFriend)packet).username1, ((DeleteFriend)packet).username2, message.SenderConnection);
+                    break;
+                case PacketTypes.Friend.AcceptFriendInvite:
+                    Logging.Info("Received Request AcceptFriendInvite");
+                    packet = new AcceptFriendInvite();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendAcceptFriendRequest(((AcceptFriendInvite)packet).username1, ((AcceptFriendInvite)packet).username2, message.SenderConnection);
+                    break;
+                case PacketTypes.Friend.CancelFriendRequest:
+                    Logging.Info("Received Request CancelFriendRequest");
+                    packet = new CancelFriendRequest();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendCancelFriendRequest(((CancelFriendRequest)packet).username1, ((CancelFriendRequest)packet).username2, message.SenderConnection);
+                    break;
+                case PacketTypes.Friend.BlockFriend:
+                    Logging.Info("Received Request BlockFriend");
+                    packet = new BlockFriend();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendBlockFriend(((BlockFriend)packet).username1, ((BlockFriend)packet).username2, message.SenderConnection);
+                    break;
+                case PacketTypes.Friend.UnBlockFriend:
+                    Logging.Info("Received Request UnBlockFriend");
+                    packet = new UnBlockFriend();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendUnBlockFriendRequest(((UnBlockFriend)packet).username1, ((UnBlockFriend)packet).username2, message.SenderConnection);
                     break;
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
@@ -650,6 +680,86 @@ namespace LidgrenServer
 
             NetOutgoingMessage outmsg = server.CreateMessage();
             new AddFriendPacket()
+            {
+                IsSuccess = getSuggestFriend
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        private async void SendDeleteFriend(string username1, string username2, NetConnection netConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            int userId1 = await userController.GetUserIdByUsernameAsync(username1);
+            int userId2 = await userController.GetUserIdByUsernameAsync(username2);
+
+            var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
+            bool getSuggestFriend = await userRelationshipController.DeleteFriend(userId1, userId2);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new DeleteFriend()
+            {
+                IsSuccess = getSuggestFriend
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        private async void SendAcceptFriendRequest(string username1, string username2, NetConnection netConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            int userId1 = await userController.GetUserIdByUsernameAsync(username1);
+            int userId2 = await userController.GetUserIdByUsernameAsync(username2);
+
+            var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
+            bool getSuggestFriend = await userRelationshipController.AcceptFriendInvite(userId1, userId2);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new AcceptFriendInvite()
+            {
+                IsSuccess = getSuggestFriend
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        private async void SendCancelFriendRequest(string username1, string username2, NetConnection netConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            int userId1 = await userController.GetUserIdByUsernameAsync(username1);
+            int userId2 = await userController.GetUserIdByUsernameAsync(username2);
+
+            var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
+            bool getSuggestFriend = await userRelationshipController.CancelFriendRequest(userId1, userId2);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new CancelFriendRequest()
+            {
+                IsSuccess = getSuggestFriend
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        private async void SendBlockFriend(string username1, string username2, NetConnection netConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            int userId1 = await userController.GetUserIdByUsernameAsync(username1);
+            int userId2 = await userController.GetUserIdByUsernameAsync(username2);
+
+            var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
+            bool getSuggestFriend = await userRelationshipController.BlockFriend(userId1, userId2);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new BlockFriend()
+            {
+                IsSuccess = getSuggestFriend
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
+        private async void SendUnBlockFriendRequest(string username1, string username2, NetConnection netConnection)
+        {
+            var userController = _serviceProvider.GetService<UserController>();
+            int userId1 = await userController.GetUserIdByUsernameAsync(username1);
+            int userId2 = await userController.GetUserIdByUsernameAsync(username2);
+
+            var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
+            bool getSuggestFriend = await userRelationshipController.UnBlockFriend(userId1, userId2);
+
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new UnBlockFriend()
             {
                 IsSuccess = getSuggestFriend
             }.PacketToNetOutGoingMessage(outmsg);
@@ -681,23 +791,26 @@ namespace LidgrenServer
             }.PacketToNetOutGoingMessage(outmsg);
             server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
         }
-        private async void SendSearchFriendPacket(string username, NetConnection netConnection)
+        private async void SendSearchFriendPacket(string username1, string username2, NetConnection netConnection)
         {
-            var userController = _serviceProvider.GetService<UserController>();
-            int userId = await userController.GetUserIdByUsernameAsync(username);
-
             var userRelationshipController = _serviceProvider.GetService<UserRelationshipController>();
-            UserModel getSuggestFriend = await userRelationshipController.GetSearchedPlayerListAsync(userId);
+            List<UserModel> getSuggestFriend = await userRelationshipController.GetSearchedPlayerAsync(username1, username2);
 
-            FriendTabPacket suggestContent = new FriendTabPacket();
+            List<FriendTabPacket> suggestContent = new List<FriendTabPacket>();
 
-            suggestContent.FriendUsername = getSuggestFriend.Username;
-            suggestContent.FriendDisplayName = getSuggestFriend.Display_name;
+            foreach (var item in getSuggestFriend)
+            {
+                suggestContent.Add(new FriendTabPacket()
+                {
+                    FriendUsername = item.Username,
+                    FriendDisplayName = item.Display_name
+                });
+            }
 
             NetOutgoingMessage outmsg = server.CreateMessage();
             new SearchFriendPacket()
             {
-                Friend = suggestContent
+                Friends = suggestContent
             }.PacketToNetOutGoingMessage(outmsg);
             server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
         }

@@ -30,7 +30,6 @@ namespace LidgrenServer.Controllers
             var user = await _userService.GetUserByUsernameAsync(username);
             return user.Id;
         }
-
         public async Task ChangeDisplayName(string username, string newDisplayName)
         {
             var user = await getUserInfoByUserNameAsync(username);
