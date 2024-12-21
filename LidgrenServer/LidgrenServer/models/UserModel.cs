@@ -49,7 +49,8 @@ namespace LidgrenServer.Models
         public ICollection<LoginHistoryModel> LoginHistory { get; set; } = new List<LoginHistoryModel>();
         public ICollection<UserCharacterModel> UserCharacters { get; set; } = new List<UserCharacterModel>();
         public ICollection<UserRelationship> Relationships { get; set; } = new List<UserRelationship>();
-        public InventoryModel Inventory { get; set; } = null!;
+        public UserInventoryModel Inventory { get; set; } = null!;
+        public List<UserRankModel> Ranks { get; set; }
 
         public string HashPassword(string password)
         {
