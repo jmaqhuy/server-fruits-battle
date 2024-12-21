@@ -16,7 +16,7 @@ namespace LidgrenServer.Models
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
-        public ProductModel Product { get; set; } = null!;
+        public ProductModel Products { get; set; } = null!;
 
         [Required]
         [Column("price")]
