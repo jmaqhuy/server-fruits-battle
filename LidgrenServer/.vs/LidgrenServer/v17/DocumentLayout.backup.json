@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Migrations\\20241221032742_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:LidgrenServer\\Migrations\\20241221032742_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\userinventoriesmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\userinventoriesmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\shopmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\shopmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Migrations\\20241221032152_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,18 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\userrankmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\userrankmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\shopmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\shopmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\userinventoriesmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\userinventoriesmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\usercharactermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -121,6 +117,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packets\\roompacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\roompacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\onedrive\\m\u00E1y t\u00EDnh\\reset commit\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\migrations\\20241221032742_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\migrations\\20241221032742_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -130,11 +130,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 248,
-          "SelectedChildIndex": 24,
+          "SelectedChildIndex": 17,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 29,
               "Title": "20241221032742_init.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Migrations\\20241221032742_init.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Migrations\\20241221032742_init.cs",
@@ -142,12 +142,11 @@
               "RelativeToolTip": "LidgrenServer\\Migrations\\20241221032742_init.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:27:42.355Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:27:42.355Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "20241221032152_init.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Migrations\\20241221032152_init.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Migrations\\20241221032152_init.cs",
@@ -155,12 +154,11 @@
               "RelativeToolTip": "LidgrenServer\\Migrations\\20241221032152_init.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:21:52.736Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:21:52.736Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "LoginHistoryService.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\services\\LoginHistoryService.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\services\\LoginHistoryService.cs",
@@ -168,12 +166,11 @@
               "RelativeToolTip": "LidgrenServer\\services\\LoginHistoryService.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAAABEAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:20:12.598Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:20:12.598Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "UserCharacterRepository.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\repository\\UserCharacterRepository.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\repository\\UserCharacterRepository.cs",
@@ -181,12 +178,11 @@
               "RelativeToolTip": "LidgrenServer\\repository\\UserCharacterRepository.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAYwBAAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:19:30.47Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:19:30.47Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "CharacterRepository.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\repository\\CharacterRepository.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\repository\\CharacterRepository.cs",
@@ -194,12 +190,11 @@
               "RelativeToolTip": "LidgrenServer\\repository\\CharacterRepository.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAgwBQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:18:26.234Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:18:26.234Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "UserRelationshipModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserRelationshipModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\UserRelationshipModel.cs",
@@ -207,12 +202,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\UserRelationshipModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:16:19.798Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:16:19.798Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "UserRankModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserRankModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\UserRankModel.cs",
@@ -220,12 +214,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\UserRankModel.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAYwBAAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T02:53:12.451Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T02:53:12.451Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "UserCharacterModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserCharacterModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\UserCharacterModel.cs",
@@ -233,12 +226,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\UserCharacterModel.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:14:42.697Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:14:42.697Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 12,
               "Title": "UserCharacterEquipmentModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserCharacterEquipmentModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\UserCharacterEquipmentModel.cs",
@@ -246,25 +238,24 @@
               "RelativeToolTip": "LidgrenServer\\models\\UserCharacterEquipmentModel.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABcAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:12:05.938Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:12:05.938Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 2,
               "Title": "ShopModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\ShopModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\ShopModel.cs",
               "ToolTip": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\ShopModel.cs",
               "RelativeToolTip": "LidgrenServer\\models\\ShopModel.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBIAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-21T03:06:20.946Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 14,
               "Title": "SeasonsModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\SeasonsModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\SeasonsModel.cs",
@@ -272,12 +263,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\SeasonsModel.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:06:10.177Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:06:10.177Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 15,
               "Title": "RankModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\RankModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\RankModel.cs",
@@ -285,12 +275,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\RankModel.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:06:00.532Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:06:00.532Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 16,
               "Title": "ProductModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\ProductModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\ProductModel.cs",
@@ -298,12 +287,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\ProductModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:05:51.447Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:05:51.447Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "LoginHistoryModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\LoginHistoryModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\LoginHistoryModel.cs",
@@ -311,12 +299,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\LoginHistoryModel.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:05:39.701Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:05:39.701Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 13,
               "Title": "EquipmentModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\EquipmentModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\EquipmentModel.cs",
@@ -324,12 +311,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\EquipmentModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:04:57.407Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:04:57.407Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 20,
               "Title": "ChestModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\ChestModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\ChestModel.cs",
@@ -337,12 +323,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\ChestModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:04:51.621Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:04:51.621Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 21,
               "Title": "CharacterModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\CharacterModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\CharacterModel.cs",
@@ -350,25 +335,24 @@
               "RelativeToolTip": "LidgrenServer\\models\\CharacterModel.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAA3wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T03:04:32.13Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T03:04:32.13Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 0,
               "Title": "UserModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\UserModel.cs",
               "ToolTip": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserModel.cs",
               "RelativeToolTip": "LidgrenServer\\models\\UserModel.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAA7wDQAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAmwDQAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-21T02:49:17.348Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 19,
               "Title": "ItemsModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\ItemsModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\ItemsModel.cs",
@@ -376,12 +360,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\ItemsModel.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T02:47:46.074Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T02:47:46.074Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 1,
               "Title": "UserInventoriesModel.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\UserInventoriesModel.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\UserInventoriesModel.cs",
@@ -394,7 +377,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 17,
               "Title": "Player.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\Player.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\Player.cs",
@@ -402,12 +385,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\Player.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAQwB0AAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T16:06:42.378Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T16:06:42.378Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 24,
               "Title": "PacketProcessors.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
@@ -419,7 +401,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 27,
               "Title": "SpawnPlayerPacket.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\SpawnPlayerPacket.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Packets\\SpawnPlayerPacket.cs",
@@ -431,7 +413,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 23,
               "Title": "TurnManager.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\TurnManager.cs",
@@ -439,25 +421,24 @@
               "RelativeToolTip": "LidgrenServer\\TurnManager\\TurnManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-17T12:32:52.261Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-17T12:32:52.261Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "ApplicationDataContext.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Data\\ApplicationDataContext.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Data\\ApplicationDataContext.cs",
               "ToolTip": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Data\\ApplicationDataContext.cs",
               "RelativeToolTip": "LidgrenServer\\Data\\ApplicationDataContext.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAA9wEAAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAA0wEAAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-19T03:32:13.44Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 28,
               "Title": "RoomPacket.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\RoomPacket.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Packets\\RoomPacket.cs",
@@ -469,7 +450,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 22,
               "Title": "RoomInfo.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\RoomInfo.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\models\\RoomInfo.cs",
@@ -477,12 +458,11 @@
               "RelativeToolTip": "LidgrenServer\\models\\RoomInfo.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAjwB8AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T13:14:37.742Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T13:14:37.742Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Program.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Program.cs",
@@ -490,12 +470,11 @@
               "RelativeToolTip": "LidgrenServer\\Program.cs",
               "ViewState": "AgIAACYAAAAAAAAAAAAgwC0AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-17T12:35:03.1Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-17T12:35:03.1Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 25,
               "Title": "GameRoomManager.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\GameRoomManager.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\GameRoomManager.cs",
@@ -507,7 +486,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 26,
               "Title": "Packets.cs",
               "DocumentMoniker": "C:\\Users\\admin\\OneDrive\\M\u00E1y t\u00EDnh\\Reset commit\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Packets\\Packets.cs",
