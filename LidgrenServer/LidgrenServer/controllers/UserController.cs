@@ -99,7 +99,18 @@ namespace LidgrenServer.Controllers
                 return false;
             }
         }
-        
+        public async Task<UserModel> Changepassword(string username, string newPass)
+        {
+            var user = await getUserInfoByUserNameAsync(username);
+            if (user != null)
+            {
+                user.Password = user.HashPassword(newPass);
+            }
+           
+            return user;
+        }
+
+
         //public async Task SetUserOnlineAsync(UserModel user)
         //{
         //    user.IsOnline = true;
