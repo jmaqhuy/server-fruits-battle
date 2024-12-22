@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LidgrenServer.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-<<<<<<<< HEAD:LidgrenServer/LidgrenServer/Migrations/20241220051007_sth.Designer.cs
-    [Migration("20241220051007_sth")]
-    partial class sth
-========
-    [Migration("20241221032742_init")]
+    [Migration("20241222074933_init")]
     partial class init
->>>>>>>> upstream/main:LidgrenServer/LidgrenServer/Migrations/20241221032742_init.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

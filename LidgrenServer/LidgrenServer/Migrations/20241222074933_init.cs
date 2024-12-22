@@ -6,11 +6,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace LidgrenServer.Migrations
 {
-<<<<<<<< HEAD:LidgrenServer/LidgrenServer/Migrations/20241220051007_sth.cs
-    public partial class sth : Migration
-========
     public partial class init : Migration
->>>>>>>> upstream/main:LidgrenServer/LidgrenServer/Migrations/20241221032742_init.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
