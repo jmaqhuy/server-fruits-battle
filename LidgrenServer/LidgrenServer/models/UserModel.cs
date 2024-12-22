@@ -74,5 +74,7 @@ namespace LidgrenServer.Models
             string hashedPassword = HashPassword(password);
             return this.Password == hashedPassword;
         }
+
+
     }
 }

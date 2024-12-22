@@ -1,5 +1,6 @@
 ﻿using Lidgren.Network;
 using LidgrenServer.models;
+using static LidgrenServer.Packets.PacketTypes;
 
 namespace LidgrenServer.Packets
 {
@@ -57,6 +58,12 @@ namespace LidgrenServer.Packets
             SuggestFriendPacket,
             SearchFriendPacket,
             BlockFriendPacket,
+            AddFriendPacket,
+            DeleteFriend,
+            AcceptFriendInvite,
+            CancelFriendRequest,
+            BlockFriend,
+            UnBlockFriend
         }
 
         public enum Character : byte
@@ -388,6 +395,205 @@ namespace LidgrenServer.Packets
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
             username = message.ReadString();
+        }
+    }
+    public class SearchFriendPacket : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public List<FriendTabPacket> Friends { get; set; } = new List<FriendTabPacket>();
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.SearchFriendPacket);
+            message.Write(Friends.Count);
+            foreach (var f in Friends)
+            {
+                f.Serialize(message);
+            }
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username1 = message.ReadString();
+            username2 = message.ReadString();
+        }
+    }
+    public class AllFriendPacket : Packet
+    {
+        public string username { get; set; }
+        public List<FriendTabPacket> Friends { get; set; } = new List<FriendTabPacket>();
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.AllFriendPacket);
+            message.Write(Friends.Count);
+            foreach (var f in Friends)
+            {
+                f.Serialize(message);
+            }
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+        }
+    }
+    public class FriendRequestPacket : Packet
+    {
+        public string username { get; set; }
+        public List<FriendTabPacket> Friends { get; set; } = new List<FriendTabPacket>();
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.FriendRequestPacket);
+            message.Write(Friends.Count);
+            foreach (var f in Friends)
+            {
+                f.Serialize(message);
+            }
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+        }
+    }
+    public class SentRequestPacket : Packet
+    {
+        public string username { get; set; }
+        public List<FriendTabPacket> Friends { get; set; } = new List<FriendTabPacket>();
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.SentRequestPacket);
+            message.Write(Friends.Count);
+            foreach (var f in Friends)
+            {
+                f.Serialize(message);
+            }
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+        }
+    }
+    public class BlockFriendPacket : Packet
+    {
+        public string username { get; set; }
+        public List<FriendTabPacket> Friends { get; set; } = new List<FriendTabPacket>();
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.BlockFriendPacket);
+            message.Write(Friends.Count);
+            foreach (var f in Friends)
+            {
+                f.Serialize(message);
+            }
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+        }
+    }
+    public class AddFriendPacket : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public bool IsSuccess { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.AddFriendPacket);
+            message.Write(IsSuccess);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        { 
+            username1=message.ReadString();
+            username2=message.ReadString();
+        }
+    }
+    public class DeleteFriend : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public bool IsSuccess { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.DeleteFriend);
+            message.Write(IsSuccess);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username1 = message.ReadString();
+            username2 = message.ReadString();
+        }
+    }
+    public class AcceptFriendInvite : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public bool IsSuccess { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.AcceptFriendInvite);
+            message.Write(IsSuccess);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username1 = message.ReadString();
+            username2 = message.ReadString();
+        }
+    }
+    public class CancelFriendRequest : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public bool IsSuccess { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.CancelFriendRequest);
+            message.Write(IsSuccess);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username1 = message.ReadString();
+            username2 = message.ReadString();
+        }
+    }
+    public class BlockFriend : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public bool IsSuccess { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.BlockFriend);
+            message.Write(IsSuccess);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username1 = message.ReadString();
+            username2 = message.ReadString();
+        }
+    }
+    public class UnBlockFriend : Packet
+    {
+        public string username1 { get; set; }
+        public string username2 { get; set; }
+
+        public bool IsSuccess { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Friend.UnBlockFriend);
+            message.Write(IsSuccess);
+        }
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username1 = message.ReadString();
+            username2 = message.ReadString();
         }
     }
     public class GetCurrentCharacterPacket : Packet
