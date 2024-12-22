@@ -231,7 +231,7 @@ namespace LidgrenServer.services
                 .Select(u => u.Id)
                 .FirstOrDefaultAsync();
             var userId2 = await _dbContext.Users
-                .Where(u => u.Username == username2)
+                .Where(u => u.Display_name == username2)
                 .Select(u => u.Id)
                 .FirstOrDefaultAsync();
             var relatedUserIds = await _dbContext.UserRelationships
@@ -241,7 +241,7 @@ namespace LidgrenServer.services
                 .ToListAsync();
             // Lấy danh sách Id liên quan đến userId từ bảng user_relationship
             var Friends = await _dbContext.Users
-                .Where(u => u.Username== username2 && !relatedUserIds.Contains(u.Id) && !string.IsNullOrEmpty(u.Display_name) && username1 != username2)
+                .Where(u => u.Display_name== username2 && !relatedUserIds.Contains(u.Id) && !string.IsNullOrEmpty(u.Display_name) && username1 != username2)
                 .ToListAsync();
 
             return Friends;
