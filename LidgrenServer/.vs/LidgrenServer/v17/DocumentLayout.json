@@ -39,8 +39,7 @@
               "ViewState": "AgIAAJ0BAAAAAAAAAAAawKUBAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:19:05.119Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -82,8 +81,7 @@
               "RelativeToolTip": "LidgrenServer\\Packets\\FriendTabPacket.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-22T04:48:36.684Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-22T04:48:36.684Z"
             },
             {
               "$type": "Document",
@@ -95,8 +93,7 @@
               "RelativeToolTip": "LidgrenServer\\controllers\\UserController.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAgwCMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T16:24:29.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T16:24:29.847Z"
             }
           ]
         }
