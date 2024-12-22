@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Security.Cryptography;
@@ -48,7 +49,8 @@ namespace LidgrenServer.Models
         public ICollection<LoginHistoryModel> LoginHistory { get; set; } = new List<LoginHistoryModel>();
         public ICollection<UserCharacterModel> UserCharacters { get; set; } = new List<UserCharacterModel>();
         public ICollection<UserRelationship> Relationships { get; set; } = new List<UserRelationship>();
-        public InventoryModel Inventory { get; set; } = null!;
+        public UserInventoryModel Inventory { get; set; } = null!;
+        public List<UserRankModel> Ranks { get; set; }
 
         public string HashPassword(string password)
         {
@@ -62,11 +64,11 @@ namespace LidgrenServer.Models
                     builder.Append(b.ToString("x2"));
                 }
 
-                return builder.ToString(); // Lưu mật khẩu đã mã hóa vào thuộc tính Password
+                return builder.ToString(); // Save into Password function
             }
         }
 
-        // Kiểm tra mật khẩu có hợp lệ không
+        // Testing the correctly password form
         public bool VerifyPassword(string password)
         {
             string hashedPassword = HashPassword(password);

@@ -6,38 +6,73 @@ namespace LidgrenServer.Data
     public class ApplicationDataContext : DbContext
     {
         public DbSet<UserModel> Users { get; set; } = null!;
+        public DbSet<UserInventoryModel> UserInventories { get; set; } = null!;
+        public DbSet<ProductModel> Products { get; set; } = null!;
+        public DbSet<ItemModel> Items { get; set; } = null!;
+        public DbSet<ShopModel> Shops { get; set; } = null!;
+        public DbSet<UserRelationship> UserRelationships { get; set; } = null!;
+        public DbSet<RankModel> Ranks { get; set; } = null!;
+        public DbSet<UserRankModel> UserRanks { get; set; } = null!;
+        public DbSet<SeasonModel> Seasons { get; set; } = null!;
+        public DbSet<CharacterModel> Characters { get; set; } = null!;
+        public DbSet<UserCharacterModel> UserCharacters { get; set; } = null!;
         public DbSet<LoginHistoryModel> LoginHistories { get; set; } = null!;
-        public DbSet<CharacterModel> Characters { get; set; }
-        public DbSet<UserCharacterModel> UserCharacters { get; set; }
-
-        public DbSet<UserRelationship> UserRelationships { get; set; }
-        public DbSet<InventoryModel> Inventories { get; set; } = null!;
-        public DbSet<InventoryItemModel> InventoryItems { get; set; } = null!;
-        public DbSet<ItemConsumableModel> ItemConsumable { get; set; } = null!;
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("Server=localhost;Database=Fruits_Battle_Game;User=root;Password=Huy@123.sc");
+            optionsBuilder.UseMySQL("Server=localhost;Database=Fruits_Battle_Game2;User=root;Password=068958");
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // User Inventories
+            modelBuilder.Entity<UserInventoryModel>(entity =>
+            {
+                entity.HasKey(ui => ui.Id);
+
+                entity.HasOne(ui => ui.User)
+                      .WithOne(u => u.Inventory)
+                      .HasForeignKey<UserInventoryModel>(ui => ui.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(ui => ui.Quantity)
+                      .IsRequired();
+            });
+
+
             modelBuilder.Entity<UserModel>(entity =>
             {
                 entity.HasKey(u => u.Id);
                 entity.HasIndex(u => u.Username).IsUnique();
-                entity.HasMany(u => u.LoginHistory)
-                      .WithOne(h => h.UserModel)
-                      .HasForeignKey(h => h.UserId);
+
+                entity.HasMany(u => u.Ranks)
+                      .WithOne(ur => ur.User)
+                      .HasForeignKey(ur => ur.UserId);
 
                 entity.HasMany(u => u.Relationships)
                       .WithOne(r => r.UserFirst)
                       .HasForeignKey(r => r.UserFirstId)
                       .OnDelete(DeleteBehavior.Restrict);
-                entity.HasOne(u => u.Inventory)
-                      .WithOne(i => i.User)
-                      .HasForeignKey<InventoryModel>(i => i.UserId);
             });
+
+            modelBuilder.Entity<LoginHistoryModel>(entity =>
+            {
+                entity.HasKey(lh => lh.Id);
+                entity.HasIndex(lh => new { lh.UserId, lh.IsLoginNow })
+                      .HasDatabaseName("IX_User_LoginHistory_IsLoginNow");
+                entity.HasOne(lh => lh.UserModel)
+                      .WithMany(u => u.LoginHistory)
+                      .HasForeignKey(u => u.UserId);
+            });
+
+            modelBuilder.Entity<ProductModel>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Type).HasMaxLength(10);
+
+
+            });
+
 
             modelBuilder.Entity<UserRelationship>(entity =>
             {
@@ -47,17 +82,6 @@ namespace LidgrenServer.Data
                       .HasMaxLength(50)
                       .IsRequired();
             });
-
-            modelBuilder.Entity<LoginHistoryModel>(entity =>
-            {
-                entity.HasKey(ld => ld.Id);
-                entity.HasIndex(lh => new { lh.UserId, lh.IsLoginNow })
-                      .HasDatabaseName("IX_User_Device_IsLoginNow");
-                entity.HasOne(lh => lh.UserModel)
-                      .WithMany(u => u.LoginHistory)
-                      .HasForeignKey(lh => lh.UserId);   
-            });
-
             modelBuilder.Entity<UserCharacterModel>(entity =>
             {
                 entity.HasKey(uc => uc.Id);
@@ -72,38 +96,8 @@ namespace LidgrenServer.Data
                 entity.HasOne(uc => uc.Character)
                       .WithMany(c => c.UserCharacters)
                       .HasForeignKey(uc => uc.CharacterId);
-            }); 
-
-            modelBuilder.Entity<InventoryModel>(entity =>
-            {
-                entity.HasKey(inv => inv.Id);
-
-                entity.HasOne(inv => inv.User)
-                      .WithOne(u => u.Inventory)
-                      .HasForeignKey<InventoryModel>(inv => inv.UserId);
             });
 
-            modelBuilder.Entity<InventoryItemModel>(entity =>
-            {
-                entity.HasKey(ii => ii.Id);
-
-                entity.HasOne(ii => ii.Inventory)
-                      .WithMany(inv => inv.Items)
-                      .HasForeignKey(ii => ii.InventoryId);
-
-                entity.HasOne(ii => ii.Item)
-                      .WithMany()
-                      .HasForeignKey(ii => ii.ItemId);
-            });
-
-            modelBuilder.Entity<ItemConsumableModel>(entity =>
-            {
-                entity.HasKey(i => i.Id);
-                entity.Property(i => i.Name).IsRequired().HasMaxLength(100);
-                entity.Property(i => i.Description).HasMaxLength(500);
-                entity.Property(i => i.ImageName).HasMaxLength(200);
-            });
         }
-
     }
 }

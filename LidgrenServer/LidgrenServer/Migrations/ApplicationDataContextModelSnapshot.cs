@@ -57,76 +57,44 @@ namespace LidgrenServer.Migrations
                     b.ToTable("character");
                 });
 
-            modelBuilder.Entity("LidgrenServer.Models.InventoryItemModel", b =>
+            modelBuilder.Entity("LidgrenServer.Models.ItemModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int>("InventoryId")
+                    b.Property<int>("Duration")
                         .HasColumnType("int")
-                        .HasColumnName("inventory_id");
+                        .HasColumnName("duration");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int")
-                        .HasColumnName("item_id");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventoryId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("inventory_items");
-                });
-
-            modelBuilder.Entity("LidgrenServer.Models.InventoryModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("inventories");
-                });
-
-            modelBuilder.Entity("LidgrenServer.Models.ItemConsumableModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("description");
+                    b.Property<string>("EffectType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("effect_type");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("image_name");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("name");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("target");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int")
+                        .HasColumnName("value");
 
                     b.HasKey("Id");
 
@@ -159,9 +127,111 @@ namespace LidgrenServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId", "IsLoginNow")
-                        .HasDatabaseName("IX_User_Device_IsLoginNow");
+                        .HasDatabaseName("IX_User_LoginHistory_IsLoginNow");
 
                     b.ToTable("login_history");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.ProductModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int?>("RelatedId")
+                        .HasColumnType("int")
+                        .HasColumnName("related_id");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("products");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.RankModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AssetName")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("asset_name");
+
+                    b.Property<int>("MaxStar")
+                        .HasColumnType("int")
+                        .HasColumnName("max_star");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("rank");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.SeasonModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("end_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("start_date");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("seasons");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.ShopModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int")
+                        .HasColumnName("price");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int")
+                        .HasColumnName("stock");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("shop");
                 });
 
             modelBuilder.Entity("LidgrenServer.Models.UserCharacterModel", b =>
@@ -220,6 +290,35 @@ namespace LidgrenServer.Migrations
                     b.ToTable("user_characters");
                 });
 
+            modelBuilder.Entity("LidgrenServer.Models.UserInventoryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("quantity");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("user_inventories");
+                });
+
             modelBuilder.Entity("LidgrenServer.Models.UserModel", b =>
                 {
                     b.Property<int>("Id")
@@ -269,6 +368,40 @@ namespace LidgrenServer.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("LidgrenServer.Models.UserRankModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("CurrentStar")
+                        .HasColumnType("int")
+                        .HasColumnName("current_star");
+
+                    b.Property<int>("RankId")
+                        .HasColumnType("int")
+                        .HasColumnName("rank_id");
+
+                    b.Property<int>("SeasonId")
+                        .HasColumnType("int")
+                        .HasColumnName("season_id");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RankId");
+
+                    b.HasIndex("SeasonId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_ranks");
+                });
+
             modelBuilder.Entity("LidgrenServer.Models.UserRelationship", b =>
                 {
                     b.Property<int>("UserFirstId")
@@ -292,36 +425,6 @@ namespace LidgrenServer.Migrations
                     b.ToTable("user_relationship");
                 });
 
-            modelBuilder.Entity("LidgrenServer.Models.InventoryItemModel", b =>
-                {
-                    b.HasOne("LidgrenServer.Models.InventoryModel", "Inventory")
-                        .WithMany("Items")
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LidgrenServer.Models.ItemConsumableModel", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("LidgrenServer.Models.InventoryModel", b =>
-                {
-                    b.HasOne("LidgrenServer.Models.UserModel", "User")
-                        .WithOne("Inventory")
-                        .HasForeignKey("LidgrenServer.Models.InventoryModel", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("LidgrenServer.Models.LoginHistoryModel", b =>
                 {
                     b.HasOne("LidgrenServer.Models.UserModel", "UserModel")
@@ -331,6 +434,17 @@ namespace LidgrenServer.Migrations
                         .IsRequired();
 
                     b.Navigation("UserModel");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.ShopModel", b =>
+                {
+                    b.HasOne("LidgrenServer.Models.ProductModel", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("LidgrenServer.Models.UserCharacterModel", b =>
@@ -348,6 +462,52 @@ namespace LidgrenServer.Migrations
                         .IsRequired();
 
                     b.Navigation("Character");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.UserInventoryModel", b =>
+                {
+                    b.HasOne("LidgrenServer.Models.ProductModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LidgrenServer.Models.UserModel", "User")
+                        .WithOne("Inventory")
+                        .HasForeignKey("LidgrenServer.Models.UserInventoryModel", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LidgrenServer.Models.UserRankModel", b =>
+                {
+                    b.HasOne("LidgrenServer.Models.RankModel", "Rank")
+                        .WithMany()
+                        .HasForeignKey("RankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LidgrenServer.Models.SeasonModel", "Season")
+                        .WithMany()
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LidgrenServer.Models.UserModel", "User")
+                        .WithMany("Ranks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rank");
+
+                    b.Navigation("Season");
 
                     b.Navigation("User");
                 });
@@ -376,17 +536,14 @@ namespace LidgrenServer.Migrations
                     b.Navigation("UserCharacters");
                 });
 
-            modelBuilder.Entity("LidgrenServer.Models.InventoryModel", b =>
-                {
-                    b.Navigation("Items");
-                });
-
             modelBuilder.Entity("LidgrenServer.Models.UserModel", b =>
                 {
                     b.Navigation("Inventory")
                         .IsRequired();
 
                     b.Navigation("LoginHistory");
+
+                    b.Navigation("Ranks");
 
                     b.Navigation("Relationships");
 

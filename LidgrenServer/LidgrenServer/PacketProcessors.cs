@@ -240,6 +240,7 @@ namespace LidgrenServer
             if(NumberPlayerTeam1 == 0)
             {
                 SendEndGame(roomID,Team.Team2);
+                
             }
             if (NumberPlayerTeam2 == 0) 
             {
@@ -250,6 +251,7 @@ namespace LidgrenServer
 
         private void SendEndGame(int roomID, Team TeamWin)
         {
+            roomManager.StopTurnManagerForRoom(roomID);
             Logging.Debug("Send End Game for room " + roomID);
             List<NetConnection> players = new List<NetConnection>();
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
@@ -268,7 +270,7 @@ namespace LidgrenServer
             {
                 Logging.Error("No player in list players");
             }
-            roomManager.StopTurnManagerForRoom(roomID);
+            
         }
 
         public void SendPlayerDie(PlayerDiePacket packet, NetIncomingMessage message, List<NetConnection> players)
