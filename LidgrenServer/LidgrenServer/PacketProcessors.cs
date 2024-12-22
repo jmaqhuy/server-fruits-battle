@@ -663,12 +663,6 @@ namespace LidgrenServer
                     packet.NetIncomingMessageToPacket(message);
                     SendUnBlockFriendRequest(((UnBlockFriend)packet).username1, ((UnBlockFriend)packet).username2, message.SenderConnection);
                     break;
-                case PacketTypes.Friend.FriendUserProfilePacket:
-                    Logging.Info("Received Request FriendUserProfile");
-                    packet = new FriendUserProfilePacket();
-                    packet.NetIncomingMessageToPacket(message);
-                    SendFriendUserProfilePacket(((FriendUserProfilePacket)packet).username, message.SenderConnection);
-                    break;
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
                     break;
@@ -819,25 +813,6 @@ namespace LidgrenServer
                 Friends = suggestContent
             }.PacketToNetOutGoingMessage(outmsg);
             server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
-        }
-        private async void SendFriendUserProfilePacket(string username, NetConnection netConnection)
-        {
-            var userController = _serviceProvider.GetService<UserController>();
-            UserModel user = await userController.GetUserByUsernameAsync(username);
-
-            FriendTabPacket suggestContent = new FriendTabPacket();
-
-            suggestContent.FriendUsername = user.Username;
-            suggestContent.FriendDisplayName = user.Display_name;
-
-
-            NetOutgoingMessage outmsg = server.CreateMessage();
-            new FriendUserProfilePacket()
-            {
-                Friend = suggestContent
-            }.PacketToNetOutGoingMessage(outmsg);
-            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
-
         }
         private async void SendAllFriendPacket(string username, NetConnection netConnection)
         {

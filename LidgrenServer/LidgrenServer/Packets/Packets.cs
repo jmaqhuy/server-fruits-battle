@@ -63,8 +63,7 @@ namespace LidgrenServer.Packets
             AcceptFriendInvite,
             CancelFriendRequest,
             BlockFriend,
-            UnBlockFriend,
-            FriendUserProfilePacket,
+            UnBlockFriend
         }
 
         public enum Character : byte
@@ -417,21 +416,6 @@ namespace LidgrenServer.Packets
         {
             username1 = message.ReadString();
             username2 = message.ReadString();
-        }
-    }
-    public class FriendUserProfilePacket : Packet
-    {
-        public string username { get; set; }
-        public FriendTabPacket Friend { get; set; }
-        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
-        {
-            message.Write((byte)PacketTypes.Friend.FriendUserProfilePacket);
-            Friend.Serialize(message);
-        }
-
-        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
-        {
-            username = message.ReadString();
         }
     }
     public class AllFriendPacket : Packet
