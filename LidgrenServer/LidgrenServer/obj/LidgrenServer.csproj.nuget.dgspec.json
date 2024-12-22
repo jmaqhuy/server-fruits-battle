@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
+    "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
   },
   "projects": {
-    "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
+    "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "projectUniqueName": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
         "projectName": "LidgrenServer",
-        "projectPath": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "projectPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\obj\\",
+        "outputPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\App\\VS\\Shared\\NuGetPackages"

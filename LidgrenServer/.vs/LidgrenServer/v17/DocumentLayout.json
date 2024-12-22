@@ -1,26 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Stuff\\git Stuff\\LidgrenServer\\",
+  "WorkspaceRootPath": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\lidgrenserver\\lidgrenserver\\services\\userrelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\services\\userrelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\lidgrenserver\\lidgrenserver\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\lidgrenserver\\lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\lidgrenserver\\lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\lidgrenserver\\lidgrenserver\\controllers\\userrelationshipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\userrelationshipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packets\\friendtabpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\friendtabpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|d:\\stuff\\git stuff\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,58 +26,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 248,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Packets.cs",
-              "DocumentMoniker": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
+              "DocumentMoniker": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Packets\\Packets.cs",
-              "ToolTip": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
+              "ToolTip": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
               "RelativeToolTip": "LidgrenServer\\Packets\\Packets.cs",
-              "ViewState": "AgIAAIgBAAAAAAAAAAAiwKIBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAJ0BAAAAAAAAAAAawKUBAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:19:05.119Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PacketProcessors.cs",
-              "DocumentMoniker": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
-              "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
-              "ToolTip": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
-              "RelativeToolTip": "LidgrenServer\\PacketProcessors.cs",
-              "ViewState": "AgIAAAwDAAAAAAAAAAAiwBoDAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-17T12:23:37.454Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UserRelationshipController.cs",
-              "DocumentMoniker": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\controllers\\UserRelationshipController.cs",
-              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\UserRelationshipController.cs",
-              "ToolTip": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\controllers\\UserRelationshipController.cs",
-              "RelativeToolTip": "LidgrenServer\\controllers\\UserRelationshipController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAkwCAAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-19T07:12:47.554Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserRelationshipService.cs",
-              "DocumentMoniker": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\services\\UserRelationshipService.cs",
-              "RelativeDocumentMoniker": "LidgrenServer\\services\\UserRelationshipService.cs",
-              "ToolTip": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\services\\UserRelationshipService.cs",
-              "RelativeToolTip": "LidgrenServer\\services\\UserRelationshipService.cs",
-              "ViewState": "AgIAANkAAAAAAAAAAAAjwOEAAAAJAAAAAAAAAA==",
+              "Title": "PacketProcessors.cs",
+              "DocumentMoniker": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
+              "ToolTip": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
+              "RelativeToolTip": "LidgrenServer\\PacketProcessors.cs",
+              "ViewState": "AgIAACgDAAAAAAAAAAAWwD4DAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-19T07:12:20.216Z",
+              "WhenOpened": "2024-12-17T12:23:37.454Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
@@ -104,14 +75,28 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\UserController.cs",
-              "ToolTip": "D:\\Stuff\\git Stuff\\LidgrenServer\\LidgrenServer\\controllers\\UserController.cs",
-              "RelativeToolTip": "LidgrenServer\\controllers\\UserController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAqwB4AAAAbAAAAAAAAAA==",
+              "Title": "FriendTabPacket.cs",
+              "DocumentMoniker": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "ToolTip": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "RelativeToolTip": "LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T16:24:29.847Z"
+              "WhenOpened": "2024-12-22T04:48:36.684Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\UserController.cs",
+              "ToolTip": "D:\\Stuff\\git Stuff\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\controllers\\UserController.cs",
+              "RelativeToolTip": "LidgrenServer\\controllers\\UserController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwCMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-21T16:24:29.847Z",
+              "EditorCaption": ""
             }
           ]
         }
