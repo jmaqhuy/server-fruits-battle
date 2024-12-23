@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LidgrenServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f254ab8531ce165ab9669a23e26ed8b3516cfe7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea19517292c25105dbd464844e43cc7402a1530d")]
 [assembly: System.Reflection.AssemblyProductAttribute("LidgrenServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LidgrenServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

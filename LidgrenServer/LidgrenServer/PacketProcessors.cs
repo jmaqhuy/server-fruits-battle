@@ -1506,25 +1506,24 @@ namespace LidgrenServer
             if (newUser != null)
             {
                 changePass.isSuccess = true;
-                new ChangePassword()
-                {
-                    isSuccess = changePass.isSuccess,
-                    username = changePass.username,
-                    newPass = changePass.reason
-                }.PacketToNetOutGoingMessage(outmsg);
-                userController.Changepassword(changePass.username, changePass.newPass);
-                Logging.Info("Send ChangePassword Package to User");
-                server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
-                Logging.Info("ChangePassword Successful!");
-
             }
             else
             {
                 changePass.isSuccess = false;
                 changePass.reason = "The old password is not correct!";
             }
-            
-            
+            new ChangePassword()
+            {
+                isSuccess = changePass.isSuccess,
+                username = changePass.username,
+                newPass = changePass.reason
+            }.PacketToNetOutGoingMessage(outmsg);
+            userController.Changepassword(changePass.username, changePass.newPass);
+            Logging.Info("Send ChangePassword Package to User");
+            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
+            Logging.Info("ChangePassword Successful!");
+
+
 
         }
     }

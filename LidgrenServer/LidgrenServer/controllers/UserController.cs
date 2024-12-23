@@ -105,9 +105,14 @@ namespace LidgrenServer.Controllers
             if (user != null)
             {
                 user.Password = user.HashPassword(newPass);
+                await _userService.UpdateUserAsysn(user);
+                return user;
             }
-           
-            return user;
+           else
+            {
+                return null;
+            }    
+            
         }
 
 
