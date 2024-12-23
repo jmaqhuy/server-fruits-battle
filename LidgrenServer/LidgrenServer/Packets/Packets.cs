@@ -15,6 +15,7 @@ namespace LidgrenServer.Packets
             ChangeDisplayNamePacket,
             Logout,
             ResetPassword,
+            ChangePassword,
             VerifyRegistrationPacket,
             RequireVerifyPacket
         }
@@ -171,6 +172,38 @@ namespace LidgrenServer.Packets
             email = message.ReadString();
         }
     }
+    public class ChangePassword : Packet
+    {
+        public string username { get; set; }
+        public string oldPassword { get; set; }
+        public string newPass { get; set; }
+        public string confirmPass { get; set; }
+        public bool isSuccess { get; set; }
+        public string reason { get; set; }
+
+
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.General.ChangePassword);
+            message.Write(username);
+            message.Write(oldPassword);
+            message.Write(newPass);
+            message.Write(confirmPass);
+            message.Write(isSuccess);
+            message.Write(reason);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            username = message.ReadString();
+            oldPassword = message.ReadString();
+            newPass = message.ReadString();
+            confirmPass = message.ReadString();
+            isSuccess = message.ReadBoolean();
+            reason = message.ReadString();
+        }
+    }
+
 
     public class Logout : Packet
     {
@@ -186,6 +219,7 @@ namespace LidgrenServer.Packets
             username = message.ReadString();
         }
     }
+
 
     public class VerifyRegistrationPacket : Packet
     {

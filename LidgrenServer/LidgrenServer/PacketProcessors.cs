@@ -1251,6 +1251,13 @@ namespace LidgrenServer
 
                     break;
 
+                case PacketTypes.General.ChangePassword:
+
+                    Logging.Info("Type: ChangePassword, From: " + deviceId);
+                    var ChangePass = new ChangePassword();
+                    ChangePass.NetIncomingMessageToPacket(message);
+                    SendChangePasswordpackage(ChangePass, message.SenderConnection);
+                    break;
                 case PacketTypes.General.VerifyRegistrationPacket:
                     var verifyRegistrationPacket = new VerifyRegistrationPacket();
                     verifyRegistrationPacket.NetIncomingMessageToPacket(message);
@@ -1491,5 +1498,33 @@ namespace LidgrenServer
 
         }
 
+        private void SendChangePasswordpackage(ChangePassword changePass, NetConnection user)
+        {
+            var userController = _serviceProvider.GetRequiredService<UserController>();
+            var newUser = userController.Login(changePass.username, changePass.oldPassword).Result;
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            if (newUser != null)
+            {
+                changePass.isSuccess = true;
+            }
+            else
+            {
+                changePass.isSuccess = false;
+                changePass.reason = "The old password is not correct!";
+            }
+            new ChangePassword()
+            {
+                isSuccess = changePass.isSuccess,
+                username = changePass.username,
+                newPass = changePass.reason
+            }.PacketToNetOutGoingMessage(outmsg);
+            userController.Changepassword(changePass.username, changePass.newPass);
+            Logging.Info("Send ChangePassword Package to User");
+            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
+            Logging.Info("ChangePassword Successful!");
+
+
+
+        }
     }
 }
