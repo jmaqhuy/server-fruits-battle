@@ -42,17 +42,8 @@ namespace LidgrenServer.TurnManager
             }
         }
 
-        public void ResetTurnManagerForRoom(int roomId)
-        {
-            if (roomManagers.ContainsKey(roomId))
-            {
-                roomManagers[roomId].ResetTurnManager();
-            }
-            else
-            {
-                Logging.Info($"No turn manager running for room {roomId} to reset.");
-            }
-        }
+        
+      
         public void RemovePlayerDead(int roomId, NetConnection player)
         {
             if (roomManagers.ContainsKey(roomId))
@@ -74,9 +65,13 @@ namespace LidgrenServer.TurnManager
         }
         public void StartTurn(int roomId) 
         {
-            Logging.Debug("stop turn manage for room " + roomId);
+            Logging.Debug("start turn manage for room " + roomId);
             roomManagers[roomId].StartTurnManager();
             
+        }
+        public List<NetConnection>getPLayersAlive(int roomId)
+        {
+            return roomManagers[roomId].getPLayersAlive();
         }
     }
 }

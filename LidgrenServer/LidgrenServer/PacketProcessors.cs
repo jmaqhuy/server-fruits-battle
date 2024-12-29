@@ -198,8 +198,8 @@ namespace LidgrenServer
                 case PacketTypes.GameBattle.PlayerDiePacket:
                     packet = new PlayerDiePacket();
                     packet.NetIncomingMessageToPacket(message);
-                    SendPlayerDie((PlayerDiePacket)packet, message, players);
-                    Logging.Debug("Send Player die");
+                    UpdatePLayerDie((PlayerDiePacket)packet, message);
+                    
                     break;
                 case PacketTypes.GameBattle.Shoot:
                     packet = new Shoot();
@@ -212,10 +212,25 @@ namespace LidgrenServer
             }
 
         }
-        public void CheckWinGame(List<NetConnection> playersAlive,int roomID)
+        public void UpdatePLayerDie(PlayerDiePacket packet,NetIncomingMessage message)
+        {
+            int roomID = getRoomID(message);
+            roomManager.RemovePlayerDead(roomID, message.SenderConnection);
+        }
+        public int getRoomID(NetIncomingMessage message)
+        {
+            int roomID = RoomList
+                .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
+                .Select(room => room.Id)
+                .FirstOrDefault();
+            return roomID;
+        }
+        public bool CheckWinGame(String playerName,NetIncomingMessage message)
         {
             int NumberPlayerTeam1 = 0;
             int NumberPlayerTeam2 = 0;
+            int roomID = getRoomID(message);
+            List<NetConnection> playersAlive = roomManager.getPLayersAlive(roomID);
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
 
             if (targetRoom != null) 
@@ -240,12 +255,15 @@ namespace LidgrenServer
             if(NumberPlayerTeam1 == 0)
             {
                 SendEndGame(roomID,Team.Team2);
+                return true;
                 
             }
             if (NumberPlayerTeam2 == 0) 
             {
                 SendEndGame(roomID, Team.Team1);
+                return true;
             }
+            return false;
 
         }
 
@@ -273,7 +291,7 @@ namespace LidgrenServer
             
         }
 
-        public void SendPlayerDie(PlayerDiePacket packet, NetIncomingMessage message, List<NetConnection> players)
+        public void SendPlayerDie(HealthPointPacket packet, NetIncomingMessage message, List<NetConnection> players)
         {
             NetConnection mess = message.SenderConnection;
             // First, find the room ID that corresponds to the sender's connection
@@ -295,7 +313,7 @@ namespace LidgrenServer
 
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
-            new PlayerDiePacket() { player = packet.player }.PacketToNetOutGoingMessage(outgoingMessage);
+            new PlayerDiePacket() { player = packet.PlayerName }.PacketToNetOutGoingMessage(outgoingMessage);
             if (players.Count != 0)
             {
                 server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
@@ -304,7 +322,7 @@ namespace LidgrenServer
             {
                 Logging.Error("No player in list players");
             }
-            Logging.Debug("Send player die for" + packet.player);
+            Logging.Debug("Send player die for" + packet.PlayerName);
             roomManager.RemovePlayerDead(roomID, mess);
         }
         private void SendHPPacket(HealthPointPacket packet, NetIncomingMessage message, List<NetConnection> players)
@@ -339,9 +357,9 @@ namespace LidgrenServer
                 Logging.Error("No player in list players");
             }
             Logging.Debug("Send HP for" + packet.PlayerName + " " + packet.HP);
-            if (packet.HP > 0)
+            if(packet.HP == 0)
             {
-                roomManager.StartTurn(roomID);
+                SendPlayerDie(packet, message, players);
             }
 
         }
@@ -444,7 +462,7 @@ namespace LidgrenServer
 
         private Vector2 GetRandomVector2()
         {
-            List<int> possibleYValues = new List<int> { 241, 237 };
+            List<int> possibleYValues = new List<int> { 241, 237,241,241,241 };
 
            
             int randomYIndex = random.Next(0, possibleYValues.Count);
@@ -475,7 +493,7 @@ namespace LidgrenServer
 
         public void SendPositionPacket(List<NetConnection> players, PositionPacket packet, NetIncomingMessage message)
         {
-            Logging.Info("Sending position for " + packet.playerName);
+            
             int roomID = RoomList
                 .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
                 .Select(room => room.Id)
@@ -543,8 +561,12 @@ namespace LidgrenServer
                 .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
                 .Select(room => room.Id)
                 .FirstOrDefault();
-            Logging.Debug("End Turn for player: " + packet.playerName);
-            roomManager.StartTurn(roomID);
+            Logging.Debug("End Turn for player: " + packet.playerName+ " and reset turn");
+            if (!CheckWinGame(packet.playerName,message))
+            {
+                roomManager.StartTurn(roomID);
+            }
+            
         }
 
         private void HandleCharacterPacket(PacketTypes.Character type, NetIncomingMessage message)

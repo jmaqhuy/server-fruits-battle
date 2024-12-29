@@ -8,6 +8,7 @@ namespace LidgrenServer.TurnManager
 
     using System;
     using System.Diagnostics;
+    using System.Drawing.Printing;
     using System.Threading;
     using Lidgren.Network;
     
@@ -30,15 +31,11 @@ namespace LidgrenServer.TurnManager
 
         public void StartTurnManager()
         {
+            Logging.Warn("Start turn manager");
             turnTimer = new Timer(OnTimedEvent, null, 0, interval);
         }
 
-        public void ResetTurnManager()  
-        {
-            StopTurnManager();
-            StartTurnManager();
-            Logging.Info($"Turn manager reset for room {roomId}.");
-        }
+        
 
         private void OnTimedEvent(Object state)
         {
@@ -54,9 +51,9 @@ namespace LidgrenServer.TurnManager
                     previousPlayerIndex = currentPlayerIndex-1;
                 }
                 Program.server.SendEndTurn(Program.server.getPlayerName(playersAlive[previousPlayerIndex]), playersAlive);
-                Logging.Debug("Sending end turn for player: " + Program.server.getPlayerName(playersAlive[previousPlayerIndex]));
+                
                 Program.server.SendStartTurn(Program.server.getPlayerName(playersAlive[currentPlayerIndex]),playersAlive);
-                Logging.Debug("Sending turn for player: " + Program.server.getPlayerName(playersAlive[currentPlayerIndex]));
+                Logging.Debug("Start turn for player: " + Program.server.getPlayerName(playersAlive[currentPlayerIndex]));
                 currentPlayerIndex = (currentPlayerIndex + 1) % playersAlive.Count;
             }
             catch (Exception ex)
@@ -68,7 +65,7 @@ namespace LidgrenServer.TurnManager
 
         public void StopTurnManager()
         {
-            Logging.Debug("current player is "+Program.server.getPlayerName(playersAlive[currentPlayerIndex]));
+            
             
             turnTimer?.Dispose();
         }
@@ -88,10 +85,13 @@ namespace LidgrenServer.TurnManager
                     currentPlayerIndex = currentPlayerIndex % playersAlive.Count;
                 }
             }
-            StartTurnManager();
-            Program.server.CheckWinGame(playersAlive,roomId);
+            
            
             
+        }
+        public List<NetConnection> getPLayersAlive()
+        {
+            return playersAlive;
         }
        
         
