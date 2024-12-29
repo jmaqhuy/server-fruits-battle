@@ -62,8 +62,7 @@
               "ViewState": "AgIAAKkAAAAAAAAAAAAAwMwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:19:05.119Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -73,7 +72,7 @@
               "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
               "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
               "RelativeToolTip": "LidgrenServer\\PacketProcessors.cs",
-              "ViewState": "AgIAAOgAAAAAAAAAAAAswMgAAABGAAAAAAAAAA==",
+              "ViewState": "AgIAAEMBAAAAAAAAAADwv1gBAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:23:37.454Z",
               "IsPinned": true,
@@ -91,7 +90,7 @@
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\GameRoomManager.cs",
               "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\GameRoomManager.cs",
               "RelativeToolTip": "LidgrenServer\\TurnManager\\GameRoomManager.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAowEkAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAgwC4AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-27T13:28:49.279Z",
               "EditorCaption": ""
@@ -104,7 +103,7 @@
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\TurnManager.cs",
               "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
               "RelativeToolTip": "LidgrenServer\\TurnManager\\TurnManager.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAuwF0AAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFcAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-27T12:58:04.26Z",
               "EditorCaption": ""

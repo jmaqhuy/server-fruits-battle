@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using Lidgren.Network;
 using LidgrenServer.controllers;
 using LidgrenServer.Controllers;
@@ -271,6 +272,14 @@ namespace LidgrenServer
         {
             roomManager.StopTurnManagerForRoom(roomID);
             Logging.Debug("Send End Game for room " + roomID);
+            if (TeamWin == Team.Team1)
+            {
+                Logging.Warn(" Team 1 win");
+            }
+            else 
+            {
+                Logging.Warn(" Team 2 win");
+            }
             List<NetConnection> players = new List<NetConnection>();
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
             if (targetRoom != null)
@@ -323,8 +332,23 @@ namespace LidgrenServer
                 Logging.Error("No player in list players");
             }
             Logging.Debug("Send player die for" + packet.PlayerName);
-            roomManager.RemovePlayerDead(roomID, mess);
+            
+            roomManager.RemovePlayerDead(roomID, GetNetConnection(packet.PlayerName,roomID));
         }
+        public NetConnection GetNetConnection(string playerName, int roomID)
+        {
+            // Ensure room exists and has a valid playersList
+            var room = RoomList.FirstOrDefault(r => r.Id == roomID);
+            if (room == null || room.playersList == null)
+            {
+                return null; // Room or players list is not valid
+            }
+
+            // Use LINQ to find the player with the given username
+            var player = room.playersList.FirstOrDefault(p => p.User.Username == playerName);
+            return player?.netConnection; // Return netConnection if found, else return null
+        }
+
         private void SendHPPacket(HealthPointPacket packet, NetIncomingMessage message, List<NetConnection> players)
         {
             NetConnection mess = message.SenderConnection;

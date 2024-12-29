@@ -85,6 +85,7 @@ namespace LidgrenServer.TurnManager
                     currentPlayerIndex = currentPlayerIndex % playersAlive.Count;
                 }
             }
+            Logging.Debug(Program.server.getPlayerName(player));
             
            
             
