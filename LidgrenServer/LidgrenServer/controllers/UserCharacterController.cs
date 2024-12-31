@@ -1,5 +1,6 @@
 ﻿using LidgrenServer.Controllers;
 using LidgrenServer.Models;
+using LidgrenServer.Packets;
 using LidgrenServer.services;
 
 namespace LidgrenServer.controllers
@@ -20,12 +21,22 @@ namespace LidgrenServer.controllers
         public async Task<UserCharacterModel> GetCurrentCharacterAsync(string username)
         {
             var userId = await _userController.GetUserIdByUsernameAsync(username);
-            return await _service.GetCurrentCharacterAsync(userId);
+            return await GetCurrentCharacterAsync(userId);
         }
 
         public async Task AddCharacterToNewUser(int userId, int characterId)
         {
             await _service.AddCharacterToUser(userId, characterId, true);
+        }
+
+        public async Task<UserCharacterModel> GetCurrentCharacterAsync(int userId)
+        {
+            return await _service.GetCurrentCharacterAsync(userId);
+        }
+
+        public async Task UpdateUserCharacter(CharacterPacket cp)
+        {
+            await _service.UpdateUserCharacter(cp);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LidgrenServer.Models;
+using LidgrenServer.Packets;
 using LidgrenServer.repository;
 
 namespace LidgrenServer.services
@@ -26,6 +27,19 @@ namespace LidgrenServer.services
                     CharacterId = characterId,
                     IsSelected = isSelected
                 });
+        }
+
+        public async Task UpdateUserCharacter(CharacterPacket cp)
+        {
+            var ucm = await _repository.GetUserCharacterModel(cp.UserCharacterId);
+            if (ucm != null)
+            {
+                ucm.HpPoint = cp.HpPoint;
+                ucm.DamagePoint = cp.DamagePoint;
+                ucm.LuckPoint = cp.LuckPoint;
+                ucm.ArmorPoint = cp.ArmorPoint;
+                await _repository.UpdateUserCharacter(ucm);
+            }
         }
     }
 }

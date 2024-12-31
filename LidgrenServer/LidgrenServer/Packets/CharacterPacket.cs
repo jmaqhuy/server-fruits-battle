@@ -4,6 +4,7 @@ namespace LidgrenServer.Packets
 {
     public class CharacterPacket
     {
+        public int UserCharacterId { get; set; }
         public string CharacterName { get; set; }
         public int CharacterLevel { get; set; }
         public int CharacterXp { get; set; }
@@ -19,6 +20,7 @@ namespace LidgrenServer.Packets
 
         public void Serialize(NetOutgoingMessage message)
         {
+            message.Write(UserCharacterId);
             message.Write(CharacterName);
             message.Write(CharacterLevel);
             message.Write(CharacterXp);
@@ -37,6 +39,7 @@ namespace LidgrenServer.Packets
         {
             return new CharacterPacket()
             {
+                UserCharacterId = message.ReadInt32(),
                 CharacterName = message.ReadString(),
                 CharacterLevel = message.ReadInt32(),
                 CharacterXp = message.ReadInt32(),

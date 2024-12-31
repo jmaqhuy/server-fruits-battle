@@ -428,7 +428,6 @@ namespace LidgrenServer
             Dictionary<NetConnection, Team> PlayerTeam = new Dictionary<NetConnection, Team>();
             
             int roomID = packet.roomId;
-
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
@@ -440,40 +439,47 @@ namespace LidgrenServer
                     players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
                     foreach (var Player in targetRoom.playersList)
                     {
-                      
+                        Player.isReady = false;
                         PlayerTeam.Add(Player.netConnection, Player.team);
                     }
+                    SpawnPlayers(targetRoom);
 
                 }
             }
-            SpawnPlayers(players, roomID, PlayerTeam);
+            
             await Task.Delay(1000);
             roomManager.StartTurnManagerForRoom(roomID, players);
         }
 
-        public void SpawnPlayers(List<NetConnection> players, int roomId, Dictionary<NetConnection, Team> PlayerTeam)
+        public void SpawnPlayers(RoomInfo room)
         {
-            Logging.Debug("Spawn PLayer for room " + roomId);
-            
-            
+            Logging.Debug("Spawn PLayer for room " + room.Id);
+
+            var uccontroller = _serviceProvider.GetService<UserCharacterController>();
             List<SpawnPlayerPacket> packets = new List<SpawnPlayerPacket>();
-            foreach (var player in players)
+            List<NetConnection> netConnections = new List<NetConnection>();
+
+            foreach (var player in room.playersList)
             {
                 Vector2 spawnPosition = GetRandomVector2();
-               
+                netConnections.Add(player.netConnection);
+                var ucm = uccontroller.GetCurrentCharacterAsync(player.User.Id).Result;
                 packets.Add(
                     new SpawnPlayerPacket()
                     {
-                        playerSpawn = getPlayerName(player),
+                        playerSpawn = player.User.Username,
+                        DisplayName = player.User.Display_name,
                         X = spawnPosition.X,
                         Y = spawnPosition.Y,
-                        HP = 1000,
-                        Attack = 500,
-                        Amor = 0,
-                        Lucky = 0,
-                        Team = PlayerTeam[player]
+                        HP = ucm.HpPoint * 100 + ucm.Character.Hp,
+                        Attack = ucm.DamagePoint * 10 + ucm.Character.Damage,
+                        Amor = ucm.ArmorPoint * 10 + ucm.Character.Armor,
+                        Lucky = ucm.LuckPoint + ucm.Character.Luck,
+                        Team = player.team
                     }
                  );
+                Logging.Info($"Player {player.User.Display_name}: Dame: {ucm.DamagePoint * 10 + ucm.Character.Damage}," +
+                    $" Armor: {ucm.ArmorPoint * 10 + ucm.Character.Armor}");
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
             Logging.Info($"There is {packets.Count} Position generated");
@@ -481,7 +487,7 @@ namespace LidgrenServer
             {
                 SPPacket = packets
             }.PacketToNetOutGoingMessage( outgoingMessage );
-            server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
+            server.SendMessage(outgoingMessage, netConnections, NetDeliveryMethod.ReliableOrdered, 0);
         }
 
         private Vector2 GetRandomVector2()
@@ -596,20 +602,23 @@ namespace LidgrenServer
         private void HandleCharacterPacket(PacketTypes.Character type, NetIncomingMessage message)
         {
             Packet packet;
+            UserCharacterController ucc;
             switch (type) 
             {
                 case PacketTypes.Character.GetCurrentCharacterPacket:
                     packet = new GetCurrentCharacterPacket();
                     packet.NetIncomingMessageToPacket(message);
-                    var ucc = _serviceProvider.GetService<UserCharacterController>();
-                    Logging.Info($"{((GetCurrentCharacterPacket)packet).Username} get current character");
+                    ucc = _serviceProvider.GetService<UserCharacterController>();
+                    Logging.Info($"{((GetCurrentCharacterPacket)packet).Username} get current character packet");
                     var userCharacter = ucc.GetCurrentCharacterAsync(((GetCurrentCharacterPacket)packet).Username).Result;
+                    Logging.Info($"Character level: {userCharacter.Level}");
 
                     NetOutgoingMessage outmsg = server.CreateMessage();
                     new GetCurrentCharacterPacket()
                     {
                         Character = new CharacterPacket()
                         {
+                            UserCharacterId = userCharacter.Id,
                             CharacterName = userCharacter.Character.Name,
                             CharacterLevel = userCharacter.Level,
                             CharacterXp = userCharacter.Experience,
@@ -625,6 +634,14 @@ namespace LidgrenServer
                         }
                     }.PacketToNetOutGoingMessage(outmsg);
                     server.SendMessage(outmsg,message.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                    break;
+
+                case PacketTypes.Character.ChangeCharacterPoint:
+                    Logging.Info($"Get Change Character Point Packet");
+                    packet = new ChangeCharacterPointPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    ucc = _serviceProvider.GetService<UserCharacterController>();
+                    ucc.UpdateUserCharacter(((ChangeCharacterPointPacket)packet).Character);
                     break;
 
                 default:
