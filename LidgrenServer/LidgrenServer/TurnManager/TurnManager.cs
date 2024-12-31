@@ -90,6 +90,15 @@ namespace LidgrenServer.TurnManager
            
             
         }
+        public string GetPlayerInCurrentTurn() 
+        {
+            return Program.server.getPlayerName(playersAlive[currentPlayerIndex - 1]);
+        }
+        public void StartNewTurn()
+        {
+            StopTurnManager();
+            StartTurnManager();
+        }
         public List<NetConnection> getPLayersAlive()
         {
             return playersAlive;

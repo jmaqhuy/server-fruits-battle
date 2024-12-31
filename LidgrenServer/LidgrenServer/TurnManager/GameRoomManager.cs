@@ -55,7 +55,14 @@ namespace LidgrenServer.TurnManager
                 Logging.Error("Error to remove player" + player);
             }
         }
-        
+        public string GetPlayerInCurrentTurn(int roomId)
+        {
+            return roomManagers[roomId].GetPlayerInCurrentTurn();
+        }
+        public void StartNewTurn(int roomId)
+        {
+            roomManagers[roomId].StartNewTurn();
+        }
        
         
         public void StopTurn(int roomId)
@@ -71,7 +78,8 @@ namespace LidgrenServer.TurnManager
         }
         public List<NetConnection>getPLayersAlive(int roomId)
         {
-            return roomManagers[roomId].getPLayersAlive();
+
+            return roomManagers[roomId]?.getPLayersAlive();
         }
     }
 }

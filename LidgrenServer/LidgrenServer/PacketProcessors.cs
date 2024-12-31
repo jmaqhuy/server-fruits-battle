@@ -215,22 +215,22 @@ namespace LidgrenServer
         }
         public void UpdatePLayerDie(PlayerDiePacket packet,NetIncomingMessage message)
         {
-            int roomID = getRoomID(message);
+            int roomID = getRoomID(packet.player);
             roomManager.RemovePlayerDead(roomID, message.SenderConnection);
         }
-        public int getRoomID(NetIncomingMessage message)
+        public int getRoomID(String playerName)
         {
             int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
+                .Where(room => room.playersList.Any(player => player.User.Username == playerName))
                 .Select(room => room.Id)
                 .FirstOrDefault();
             return roomID;
         }
-        public bool CheckWinGame(String playerName,NetIncomingMessage message)
+        public bool CheckWinGame(String playerName)
         {
             int NumberPlayerTeam1 = 0;
             int NumberPlayerTeam2 = 0;
-            int roomID = getRoomID(message);
+            int roomID = getRoomID(playerName);
             List<NetConnection> playersAlive = roomManager.getPLayersAlive(roomID);
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
 
@@ -256,6 +256,7 @@ namespace LidgrenServer
             if(NumberPlayerTeam1 == 0)
             {
                 SendEndGame(roomID,Team.Team2);
+
                 return true;
                 
             }
@@ -271,6 +272,7 @@ namespace LidgrenServer
         private void SendEndGame(int roomID, Team TeamWin)
         {
             roomManager.StopTurnManagerForRoom(roomID);
+            
             Logging.Debug("Send End Game for room " + roomID);
             if (TeamWin == Team.Team1)
             {
@@ -286,6 +288,7 @@ namespace LidgrenServer
             {
                 // Add all players from the target room to the players list
                 players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                targetRoom.roomStatus = RoomStatus.InLobby;
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
             new EndGamePacket() {TeamWin = TeamWin}.PacketToNetOutGoingMessage(outgoingMessage);
@@ -300,12 +303,13 @@ namespace LidgrenServer
             
         }
 
-        public void SendPlayerDie(HealthPointPacket packet, NetIncomingMessage message, List<NetConnection> players)
+        public void SendPlayerDie(String playerName)
         {
-            NetConnection mess = message.SenderConnection;
+            
+            List<NetConnection> players = new List<NetConnection>();
             // First, find the room ID that corresponds to the sender's connection
             int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == mess))
+                .Where(room => room.playersList.Any(player => player.User.Username == playerName))
                 .Select(room => room.Id)
                 .FirstOrDefault();
 
@@ -322,7 +326,7 @@ namespace LidgrenServer
 
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
-            new PlayerDiePacket() { player = packet.PlayerName }.PacketToNetOutGoingMessage(outgoingMessage);
+            new PlayerDiePacket() { player = playerName }.PacketToNetOutGoingMessage(outgoingMessage);
             if (players.Count != 0)
             {
                 server.SendMessage(outgoingMessage, players, NetDeliveryMethod.ReliableOrdered, 0);
@@ -331,9 +335,9 @@ namespace LidgrenServer
             {
                 Logging.Error("No player in list players");
             }
-            Logging.Debug("Send player die for" + packet.PlayerName);
+            Logging.Debug("Send player die for" + playerName);
             
-            roomManager.RemovePlayerDead(roomID, GetNetConnection(packet.PlayerName,roomID));
+            roomManager.RemovePlayerDead(roomID, GetNetConnection(playerName,roomID));
         }
         public NetConnection GetNetConnection(string playerName, int roomID)
         {
@@ -383,7 +387,7 @@ namespace LidgrenServer
             Logging.Debug("Send HP for" + packet.PlayerName + " " + packet.HP);
             if(packet.HP == 0)
             {
-                SendPlayerDie(packet, message, players);
+                SendPlayerDie(packet.PlayerName);
             }
 
         }
@@ -429,6 +433,7 @@ namespace LidgrenServer
             
             int roomID = packet.roomId;
 
+
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
@@ -443,6 +448,7 @@ namespace LidgrenServer
                       
                         PlayerTeam.Add(Player.netConnection, Player.team);
                     }
+                    targetRoom.roomStatus = RoomStatus.InMatch;
 
                 }
             }
@@ -586,7 +592,7 @@ namespace LidgrenServer
                 .Select(room => room.Id)
                 .FirstOrDefault();
             Logging.Debug("End Turn for player: " + packet.playerName+ " and reset turn");
-            if (!CheckWinGame(packet.playerName,message))
+            if (!CheckWinGame(packet.playerName))
             {
                 roomManager.StartTurn(roomID);
             }
@@ -1376,6 +1382,20 @@ namespace LidgrenServer
         }
         private void RemovePlayerInRoom(Player player, RoomInfo room)
         {
+            
+            if(room.roomStatus == RoomStatus.InMatch)
+            {
+                SendPlayerDie(player.User.Username);
+                if (!CheckWinGame(player.User.Username))
+                {
+                    if (player.User.Username == roomManager.GetPlayerInCurrentTurn(room.Id))
+                    {
+                        roomManager.StartNewTurn(room.Id);
+                    }
+                }
+                
+                
+            }
             room.playersList.Remove(player);
             Logging.Warn($"Player {player.User.Display_name} Exit Room {room.Id}");
             if (room.playersList.Count == 0)
@@ -1384,6 +1404,7 @@ namespace LidgrenServer
                 RoomInfo selectroom = RoomList.FirstOrDefault(r => r == room);
                 RoomList.Remove(selectroom);
             }
+
         }
 
         private void RemovePlayerInRoom(Player player)
