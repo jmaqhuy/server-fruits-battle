@@ -8,6 +8,7 @@ namespace LidgrenServer.Packets
         public float X { get; set; }
         public float Y { get; set; }
         public string playerSpawn { get; set; }
+        public string DisplayName { get; set; }
         public int HP { get; set; }
         public int Attack { get; set; }
         public int Amor { get; set; }
@@ -19,6 +20,7 @@ namespace LidgrenServer.Packets
             message.Write(X);
             message.Write(Y);
             message.Write(playerSpawn);
+            message.Write(DisplayName);
             message.Write(HP);
             message.Write(Attack);
             message.Write(Amor);
@@ -33,6 +35,7 @@ namespace LidgrenServer.Packets
                 X = message.ReadFloat(),
                 Y = message.ReadFloat(),
                 playerSpawn = message.ReadString(),
+                DisplayName = message.ReadString(),
                 HP = message.ReadInt32(),
                 Attack = message.ReadInt32(),
                 Amor = message.ReadInt32(),

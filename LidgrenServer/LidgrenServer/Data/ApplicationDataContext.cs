@@ -20,7 +20,7 @@ namespace LidgrenServer.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("Server=localhost;Database=Fruits_Battle_Game;User=root;Password=nam171103");
+            optionsBuilder.UseMySQL("Server=localhost;Database=Fruits_Battle_Game;User=root;Password=Huy@123.sc");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

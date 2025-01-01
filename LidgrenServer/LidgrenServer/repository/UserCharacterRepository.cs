@@ -1,6 +1,7 @@
 ﻿using LidgrenServer.Data;
 using LidgrenServer.Models;
 using Microsoft.EntityFrameworkCore;
+using static LidgrenServer.Packets.PacketTypes;
 
 namespace LidgrenServer.repository
 {
@@ -20,9 +21,21 @@ namespace LidgrenServer.repository
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<UserCharacterModel?> GetUserCharacterModel(int ucId)
+        {
+            return await _context.UserCharacters
+                .FirstOrDefaultAsync(uc => uc.Id == ucId);
+        }
+
         public async Task AddCharacterToUser(UserCharacterModel uc)
         {
             await _context.AddAsync(uc);
+        }
+
+        public async Task UpdateUserCharacter(UserCharacterModel uc)
+        {
+            _context.UserCharacters.Update(uc);
+            await _context.SaveChangesAsync();
         }
     }
 }

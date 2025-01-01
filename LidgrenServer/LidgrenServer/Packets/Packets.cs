@@ -69,7 +69,8 @@ namespace LidgrenServer.Packets
 
         public enum Character : byte
         {
-            GetCurrentCharacterPacket = 60,
+            GetCurrentCharacterPacket = 70,
+            ChangeCharacterPoint
         }
 
     }
@@ -645,6 +646,21 @@ namespace LidgrenServer.Packets
             Username = message.ReadString();
         }
     }
+    public class ChangeCharacterPointPacket : Packet
+    {
+        public CharacterPacket Character { get; set; }
+        public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
+        {
+            message.Write((byte)PacketTypes.Character.ChangeCharacterPoint);
+            Character.Serialize(message);
+        }
+
+        public override void NetIncomingMessageToPacket(NetIncomingMessage message)
+        {
+            Character = CharacterPacket.Deserialize(message);
+        }
+    }
+
     public class PlayerReadyPacket : Packet
     {
         public string Username { get; set; }
