@@ -432,11 +432,8 @@ namespace LidgrenServer
             Dictionary<NetConnection, Team> PlayerTeam = new Dictionary<NetConnection, Team>();
             
             int roomID = packet.roomId;
-<<<<<<< HEAD
 
 
-=======
->>>>>>> origin/main
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
@@ -451,11 +448,11 @@ namespace LidgrenServer
                         Player.isReady = false;
                         PlayerTeam.Add(Player.netConnection, Player.team);
                     }
-<<<<<<< HEAD
+
                     targetRoom.roomStatus = RoomStatus.InMatch;
-=======
+
                     SpawnPlayers(targetRoom);
->>>>>>> origin/main
+
 
                 }
             }
