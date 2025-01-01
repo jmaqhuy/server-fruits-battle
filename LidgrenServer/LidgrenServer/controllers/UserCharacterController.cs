@@ -38,5 +38,10 @@ namespace LidgrenServer.controllers
         {
             await _service.UpdateUserCharacter(cp);
         }
+
+        public async Task UpdateUserCharacter(UserCharacterModel ucm)
+        {
+            await _service.UpdateUserCharacter(ucm);
+        }
     }
 }

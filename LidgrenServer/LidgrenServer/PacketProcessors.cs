@@ -8,6 +8,7 @@ using LidgrenServer.Models;
 using LidgrenServer.Packets;
 using LidgrenServer.TurnManager;
 using Microsoft.Extensions.DependencyInjection;
+using static LidgrenServer.Packets.PacketTypes;
 
 
 namespace LidgrenServer
@@ -269,10 +270,10 @@ namespace LidgrenServer
 
         }
 
-        private void SendEndGame(int roomID, Team TeamWin)
+        private async Task SendEndGame(int roomID, Team TeamWin)
         {
             roomManager.StopTurnManagerForRoom(roomID);
-            
+            var ucc = _serviceProvider.GetService<UserCharacterController>();
             Logging.Debug("Send End Game for room " + roomID);
             if (TeamWin == Team.Team1)
             {
@@ -284,8 +285,24 @@ namespace LidgrenServer
             }
             List<NetConnection> players = new List<NetConnection>();
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+            UserCharacterModel ucm;
             if (targetRoom != null)
             {
+                foreach (var player in targetRoom.playersList)
+                {
+                    ucm = ucc.GetCurrentCharacterAsync(player.User.Id).Result;
+                    if (TeamWin == player.team)
+                    {
+                        ucm.Experience += 45;
+                    }
+                    else 
+                    {
+                        ucm.Experience += 30;
+                    }
+                    if (ucm.Experience >= (int)Math.Pow(ucm.Level, 1.5) * 100) ucm.Level += 1;
+                    await ucc.UpdateUserCharacter(ucm);
+                    players.Add(player.netConnection);
+                }
                 // Add all players from the target room to the players list
                 players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
                 targetRoom.roomStatus = RoomStatus.InLobby;

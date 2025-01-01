@@ -38,8 +38,15 @@ namespace LidgrenServer.services
                 ucm.DamagePoint = cp.DamagePoint;
                 ucm.LuckPoint = cp.LuckPoint;
                 ucm.ArmorPoint = cp.ArmorPoint;
+                ucm.Experience = cp.CharacterXp;
+                ucm.Level = cp.CharacterLevel;
                 await _repository.UpdateUserCharacter(ucm);
             }
+        }
+
+        public async Task UpdateUserCharacter(UserCharacterModel ucm)
+        {
+            await _repository.UpdateUserCharacter(ucm);
         }
     }
 }
