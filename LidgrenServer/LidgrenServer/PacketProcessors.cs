@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 using Lidgren.Network;
 using LidgrenServer.controllers;
 using LidgrenServer.Controllers;
@@ -8,7 +7,7 @@ using LidgrenServer.Models;
 using LidgrenServer.Packets;
 using LidgrenServer.TurnManager;
 using Microsoft.Extensions.DependencyInjection;
-using static LidgrenServer.Packets.PacketTypes;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 namespace LidgrenServer
@@ -23,6 +22,7 @@ namespace LidgrenServer
 
         private List<Player> PlayerOnlineList = new List<Player>();
         private List<RoomInfo> RoomList = new List<RoomInfo> {};
+        private List<RoomInfo> MatchmakingRoom = new List<RoomInfo>();
         GameRoomManager roomManager = new GameRoomManager();
         private Random random = new Random();
         
@@ -92,7 +92,7 @@ namespace LidgrenServer
                 while ((message = server.ReadMessage()) != null)
                 {
                     Logging.Info("Message received");
-
+                    Logging.Info($"Number of player online now: {PlayerOnlineList.Count}.\nNumber of Room now: {RoomList.Count}");
                     switch (message.MessageType)
                     {
                         case NetIncomingMessageType.DiscoveryRequest:
@@ -138,6 +138,10 @@ namespace LidgrenServer
                             {
                                 HandleGameBattlePacket((PacketTypes.GameBattle)type, message);
                             }
+                            else if (Enum.IsDefined(typeof(PacketTypes.Rank), type))
+                            {
+                                HandleRankPacket((PacketTypes.Rank)type, message);
+                            }
                             else
                             {
                                 Logging.Error("Unhandled packet type");
@@ -161,6 +165,139 @@ namespace LidgrenServer
                 }
             }
         }
+        private async void HandleRankPacket(PacketTypes.Rank type, NetIncomingMessage message)
+        {
+            Packet packet;
+            switch (type)
+            {
+                case PacketTypes.Rank.CurrentRankPacket:
+                    Logging.Info($"Received CurrentRankPacket from {NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier)}");
+                    packet = new CurrentRankPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    Logging.Info($"Get CurrentRankPacket from {((CurrentRankPacket)packet).username}");
+                    SendCurrentRankPacket((CurrentRankPacket)packet, message.SenderConnection);
+                    break;
+
+                case PacketTypes.Rank.MatchmakingPacket:
+                    packet = new MatchmakingPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    if (((MatchmakingPacket)packet).start)
+                    {
+                        StartMatchMaking(((MatchmakingPacket)packet).roomId);
+                    }
+                    else
+                    {
+                        StopMatchMaking(((MatchmakingPacket)packet).roomId);
+                    }
+
+                    break;
+            }
+        }
+
+        private void StartMatchMaking(int roomId)
+        {
+            var currentRoom = RoomList.FirstOrDefault(r => r.Id == roomId);
+            if (currentRoom != null)
+            {
+                List<NetConnection> connections = currentRoom.playersList
+                                         .Where(player => player.netConnection != null)
+                                         .Select(player => player.netConnection)
+                                         .ToList();
+                NetOutgoingMessage outmsg = server.CreateMessage();
+                new MatchmakingPacket()
+                {
+                    roomId = roomId,
+                    start = true,
+                }.PacketToNetOutGoingMessage(outmsg);
+                server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
+
+                // find room
+                var copyRoom = currentRoom.Clone();
+                MatchmakingRoom.Add(copyRoom);
+
+                foreach (var targetRoom in MatchmakingRoom)
+                {
+                    if (targetRoom.Id == copyRoom.Id) continue;
+                    if (targetRoom.roomStatus == RoomStatus.InMatch) continue;
+                    if (targetRoom.RoomType == copyRoom.RoomType)
+                    {
+                        foreach (var player in targetRoom.playersList)
+                        {
+                            player.team = Team.Team1;
+                            player.isReady = true;
+                        }
+                        foreach (var player in copyRoom.playersList)
+                        {
+                            player.team = Team.Team2;
+                            player.isReady = true;
+                        }
+                        targetRoom.playersList.AddRange(copyRoom.playersList);
+                        copyRoom.playersList = targetRoom.playersList;
+                        StopMatchMaking(targetRoom.Id, true);
+                    }
+                }
+            }
+
+        }
+        private void StopMatchMaking(int roomId, bool matchFound = false)
+        {
+            RoomInfo? room;
+            if (matchFound)
+            {
+                room = MatchmakingRoom.FirstOrDefault(r => r.Id == roomId);
+                if (room != null)
+                {
+                    var rlist = MatchmakingRoom.Where(r => r.playersList == room.playersList).ToList();
+                    foreach (var roomInRlist in rlist)
+                    {
+                        roomInRlist.roomStatus = RoomStatus.InMatch;
+                    }
+                }
+            }
+            else
+            {
+                room = RoomList.FirstOrDefault(r => r.Id == roomId);
+                foreach (var pl in room.playersList)
+                {
+                    if (pl.IsHost) pl.isReady = false;
+                }
+                var removeRoom = MatchmakingRoom.FirstOrDefault(r => r.Id == roomId);
+                MatchmakingRoom.Remove(removeRoom);
+            }
+            if (room != null)
+            {
+                List<NetConnection> connections = room.playersList
+                                         .Where(player => player.netConnection != null)
+                                         .Select(player => player.netConnection)
+                                         .ToList();
+                NetOutgoingMessage outmsg = server.CreateMessage();
+                new MatchmakingPacket()
+                {
+                    roomId = roomId,
+                    start = false,
+                    matchFound = matchFound,
+                }.PacketToNetOutGoingMessage(outmsg);
+                server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
+            }
+        }
+
+        private void SendCurrentRankPacket(CurrentRankPacket packet, NetConnection senderConnection)
+        {
+            var urC = _serviceProvider.GetService<UserRankController>();
+            var ur = urC.GetUserRank(packet.username).Result;
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new CurrentRankPacket()
+            {
+                username = ((CurrentRankPacket)packet).username,
+                rankName = ur.Rank.Name,
+                rankAssetName = ur.Rank.AssetName,
+                currentStar = ur.CurrentStar,
+                seasonId = ur.SeasonId,
+                seasonName = ur.Season.Name,
+
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, senderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+        }
 
         private void HandleGameBattlePacket(PacketTypes.GameBattle type, NetIncomingMessage message)
         {
@@ -173,7 +310,7 @@ namespace LidgrenServer
                     Logging.Info("get start game signal from " + NetUtility.ToHexString(message.SenderConnection.RemoteUniqueIdentifier));
                     packet = new StartGamePacket();
                     packet.NetIncomingMessageToPacket(message);
-                    StartGame((StartGamePacket)packet, players);
+                    StartGame((StartGamePacket)packet, players, message.SenderConnection);
                     break;
                 case PacketTypes.GameBattle.PlayerOutGamePacket:
                     break;
@@ -442,7 +579,7 @@ namespace LidgrenServer
 
         }
 
-        public async void StartGame(StartGamePacket packet, List<NetConnection> players)
+        public async void StartGame(StartGamePacket packet, List<NetConnection> players, NetConnection connection)
         {
 
             /*NetConnection mess = message.SenderConnection;*/
@@ -458,6 +595,17 @@ namespace LidgrenServer
                 var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
                 if (targetRoom != null)
                 {
+                    if (targetRoom.roomMode == RoomMode.Rank)
+                    {
+                        targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+                        var pl = targetRoom.playersList.FirstOrDefault(pl => pl.netConnection == connection);
+                        pl.isReady = false;
+                        Logging.Info($"Player {pl.User.Display_name} In Game");
+                        foreach (var readyPlayer in targetRoom.playersList)
+                        {
+                            if (readyPlayer.isReady) return;
+                        }
+                    }
                     // Add all players from the target room to the players list
                     players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
                     foreach (var Player in targetRoom.playersList)
@@ -500,13 +648,12 @@ namespace LidgrenServer
                         Y = spawnPosition.Y,
                         HP = ucm.HpPoint * 100 + ucm.Character.Hp,
                         Attack = ucm.DamagePoint * 10 + ucm.Character.Damage,
-                        Amor = ucm.ArmorPoint * 10 + ucm.Character.Armor,
+                        Amor = ucm.ArmorPoint + ucm.Character.Armor,
                         Lucky = ucm.LuckPoint + ucm.Character.Luck,
                         Team = player.team
                     }
                  );
-                Logging.Info($"Player {player.User.Display_name}: Dame: {ucm.DamagePoint * 10 + ucm.Character.Damage}," +
-                    $" Armor: {ucm.ArmorPoint * 10 + ucm.Character.Armor}");
+               
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
             Logging.Info($"There is {packets.Count} Position generated");
@@ -1018,12 +1165,20 @@ namespace LidgrenServer
             Player player;
             switch (type)
             {
+                case PacketTypes.Room.CreateRoomPacket:
+                    Logging.Info("Received Create Room Packet");
+                    packet = new CreateRoomPacket();
+                    packet.NetIncomingMessageToPacket(message);
+
+                    SendJoinRoomPacketToAll(SendCreateNewRoomPacket(((CreateRoomPacket)packet).room, message.SenderConnection));
+                    break;
+
                 case PacketTypes.Room.JoinRoomPacket:
                     Logging.Info("Received Join Room Packet");
                     packet = new JoinRoomPacket();
                     packet.NetIncomingMessageToPacket(message);
-                    RoomInfo newRoom = SendJoinRoomPacket((JoinRoomPacket)packet, message.SenderConnection);
-                    SendJoinRoomPacketToAll(newRoom);
+                    room = SendJoinRoomPacket((JoinRoomPacket)packet, message.SenderConnection);
+                    SendJoinRoomPacketToAll(room);
                     break;
 
                 case PacketTypes.Room.ExitRoomPacket:
@@ -1089,13 +1244,69 @@ namespace LidgrenServer
 
                     break;
 
+                case PacketTypes.Room.ChangeRoomTypePacket:
+                    packet = new ChangeRoomTypePacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    room = RoomList.FirstOrDefault(r => r.Id == ((ChangeRoomTypePacket)packet).room.Id);
+                    if (room != null)
+                    {
+                        room.RoomType = ((ChangeRoomTypePacket)packet).room.roomType;
+                        Logging.Info($"Room {room.Id} Change Room Type: NEW {room.RoomType.ToString()}");
+                        List<NetConnection> connections = room.playersList
+                                         .Where(player => player.netConnection != null)
+                                         .Select(player => player.netConnection)
+                                         .ToList();
+                        SendRoomInfo(((ChangeRoomTypePacket)packet).room, connections);
+                    }
+                    break;
+
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
                     break;
             }
 
         }
-   
+        private RoomInfo SendCreateNewRoomPacket(RoomPacket roomPacket, NetConnection senderConnection)
+        {
+            var player = PlayerOnlineList?.FirstOrDefault(u => u.netConnection == senderConnection);
+
+            int newRoomId;
+            do
+            {
+                newRoomId = random.Next(1000, 10000);
+            } while (RoomList.Any(room => room.Id == newRoomId));
+            RoomInfo thisRoom = new RoomInfo()
+            {
+                Id = newRoomId,
+                Name = $"Room {newRoomId}",
+                roomMode = roomPacket.roomMode,
+                roomStatus = RoomStatus.InLobby,
+                RoomType = roomPacket.roomType,
+                playersList = new List<Player>()
+            };
+            RoomList.Add(thisRoom);
+            Logging.Info($"New Room Created: Id {thisRoom.Id}, PlayerInRoom {thisRoom.playersList.Count}");
+
+            player.IsHost = true;
+            player.team = Team.Team1;
+            player.Position = 1;
+            thisRoom.playersList.Add(player);
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new CreateRoomPacket()
+            {
+                room = new RoomPacket()
+                {
+                    Id = thisRoom.Id,
+                    Name = thisRoom.Name,
+                    roomMode = thisRoom.roomMode,
+                    roomStatus = thisRoom.roomStatus,
+                    roomType = thisRoom.RoomType,
+                }
+            }.PacketToNetOutGoingMessage(outmsg);
+            server.SendMessage(outmsg, senderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+            return thisRoom;
+        }
+
         private void SendChatMessagePacketToAll(SendChatMessagePacket packet)
         {
             RoomInfo? thisroom = RoomList.FirstOrDefault( room => room.Id == packet.RoomID);
@@ -1158,14 +1369,16 @@ namespace LidgrenServer
             {
                 Players = playerInRoomPackets,
             }.PacketToNetOutGoingMessage(outmsg);
-            server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
+            server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 1);
+            Logging.Info("Send Join Room Packet to all");
         }
 
         private RoomInfo SendJoinRoomPacket(JoinRoomPacket joinRoomPacket, NetConnection netConnection)
         {
-
             RoomInfo? thisRoom;
-            if (joinRoomPacket.room.Id == 0)
+
+            //Join Random Room
+            if (joinRoomPacket.room.Id == 0 && joinRoomPacket.room.roomMode != RoomMode.Rank)
             {
                 thisRoom = RoomList?.FirstOrDefault(room =>
                     room.roomMode == joinRoomPacket.room.roomMode &&
@@ -1174,101 +1387,93 @@ namespace LidgrenServer
                     room.RoomType == joinRoomPacket.room.roomType
                 );
             }
-            else
+            else //Join Room By Id
             {
                 thisRoom = RoomList?.FirstOrDefault(room => room.Id == joinRoomPacket.room.Id);
+                if (thisRoom != null && thisRoom.IsRoomFull)
+                {
+                    return null;
+                }
             }
 
             var player = PlayerOnlineList?.FirstOrDefault(u => u.netConnection == netConnection);
 
             if (thisRoom == null)
             {
-                thisRoom = CreateNewRoom(joinRoomPacket);
-                player.IsHost = true;
-                player.team = Team.Team1;
-                player.Position = 1;
-                RoomList.Add(thisRoom);
+                // Room Not Found or Not Suitable, Create New
+                return SendCreateNewRoomPacket(joinRoomPacket.room, netConnection);
             }
             else
             {
-                int maxPlayers = thisRoom.MaxPlayers;
-                var availablePositions1 = Enumerable.Range(1, 4).ToList();
-                var availablePositions2 = Enumerable.Range(5, 4).ToList();
-
-                int numberOfPlayerTeam1 = 0;
-                int numberOfPlayerTeam2 = 0;
-
-                foreach (var playerInRoom in thisRoom.playersList)
+                if (thisRoom.roomMode != RoomMode.Rank)
                 {
-                    if (playerInRoom.team == Team.Team1) 
-                    { 
-                        availablePositions1.Remove(playerInRoom.Position);
-                        numberOfPlayerTeam1++;
-                    } else
+                    // Set Position in Waiting Room
+                    int maxPlayers = thisRoom.MaxPlayers;
+                    var availablePositions1 = Enumerable.Range(1, 4).ToList();
+                    var availablePositions2 = Enumerable.Range(5, 4).ToList();
+
+                    int numberOfPlayerTeam1 = 0;
+                    int numberOfPlayerTeam2 = 0;
+
+                    foreach (var playerInRoom in thisRoom.playersList)
                     {
-                        availablePositions2.Remove(playerInRoom.Position);
-                        numberOfPlayerTeam2++;
+                        if (playerInRoom.team == Team.Team1)
+                        {
+                            availablePositions1.Remove(playerInRoom.Position);
+                            numberOfPlayerTeam1++;
+                        }
+                        else
+                        {
+                            availablePositions2.Remove(playerInRoom.Position);
+                            numberOfPlayerTeam2++;
+                        }
                     }
-                }
 
-                if (numberOfPlayerTeam1 > numberOfPlayerTeam2)
-                {
-                    player.team = Team.Team2;
-                    player.Position = availablePositions2[random.Next(availablePositions2.Count)];
+                    if (numberOfPlayerTeam1 > numberOfPlayerTeam2)
+                    {
+                        player.team = Team.Team2;
+                        player.Position = availablePositions2[random.Next(availablePositions2.Count)];
+                    }
+                    else
+                    {
+                        player.team = Team.Team1;
+                        player.Position = availablePositions1[random.Next(availablePositions1.Count)];
+                    }
+
                 }
                 else
                 {
                     player.team = Team.Team1;
-                    player.Position = availablePositions1[random.Next(availablePositions1.Count)];
                 }
                 player.IsHost = false;
-
             }
-            
-            
+
+
             thisRoom.playersList.Add(player);
             Logging.Info($"User {player.User.Username} Join Room {thisRoom.Id}");
-            
 
 
-            NetOutgoingMessage outmsg = server.CreateMessage();
-            new JoinRoomPacket()
+            SendRoomInfo(new RoomPacket()
             {
-                room = new RoomPacket()
-                {
-                    Id = thisRoom.Id,
-                    Name = thisRoom.Name,
-                    roomMode = thisRoom.roomMode,
-                    roomStatus = thisRoom.roomStatus,
-                    roomType = thisRoom.RoomType,
-                }
-            }.PacketToNetOutGoingMessage(outmsg);
+                Id = thisRoom.Id,
+                Name = thisRoom.Name,
+                roomMode = thisRoom.roomMode,
+                roomStatus = thisRoom.roomStatus,
+                roomType = thisRoom.RoomType,
+            }, new List<NetConnection> { netConnection });
 
-            server.SendMessage(outmsg, netConnection, NetDeliveryMethod.ReliableOrdered, 0);
             Logging.Info("Response Join Room Packet: Room ID: " + thisRoom.Id);
             return thisRoom;
         }
-
-
-        private RoomInfo CreateNewRoom(JoinRoomPacket joinRoomPacket)
+        private void SendRoomInfo(RoomPacket room, List<NetConnection> connections)
         {
-            int newRoomId;
-            do
+            NetOutgoingMessage outmsg = server.CreateMessage();
+            new JoinRoomPacket()
             {
-                newRoomId = random.Next(1000, 10000); 
-            } while (RoomList.Any(room => room.Id == newRoomId));
+                room = room,
+            }.PacketToNetOutGoingMessage(outmsg);
 
-            RoomInfo thisRoom = new RoomInfo()
-            {
-                Id = newRoomId,
-                Name = $"Room {newRoomId}",
-                roomMode = joinRoomPacket.room.roomMode,
-                roomStatus = RoomStatus.InLobby,
-                RoomType = joinRoomPacket.room.roomType, 
-                playersList = new List<Player>()
-            };
-            Logging.Info($"New Room Created: Id {thisRoom.Id}, PlayerInRoom {thisRoom.playersList.Count}");
-            return thisRoom;
+            server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
         }
 
         private void HandleGeneralPacket(PacketTypes.General type, NetIncomingMessage message)

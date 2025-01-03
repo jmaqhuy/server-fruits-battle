@@ -7,8 +7,60 @@
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\controllers\\charactercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\charactercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\services\\userrankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\services\\userrankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\services\\seasonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\services\\seasonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\services\\rankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\services\\rankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\repository\\userrankrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\repository\\userrankrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\repository\\seasonrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\repository\\seasonrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\repository\\rankrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\repository\\rankrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\models\\roominfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\roominfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\models\\rankmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\rankmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\controllers\\userrankcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\userrankcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\controllers\\seasoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\seasoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\controllers\\rankcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\rankcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,10 +69,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\new server\\lidgrenserver\\lidgrenserver\\turnmanager\\turnmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -49,13 +97,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Packets.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Packets\\Packets.cs",
               "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
               "RelativeToolTip": "LidgrenServer\\Packets\\Packets.cs",
-              "ViewState": "AgIAAMsCAAAAAAAAAAAAANUCAAARAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAcwFEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:19:05.119Z",
               "IsPinned": true,
@@ -69,7 +117,7 @@
               "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
               "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
               "RelativeToolTip": "LidgrenServer\\PacketProcessors.cs",
-              "ViewState": "AgIAAE4GAAAAAAAAAAAqwIYCAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAHgCAAAAAAAAAAAiwIoCAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:23:37.454Z",
               "IsPinned": true,
@@ -81,7 +129,176 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CharacterController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\CharacterController.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\CharacterController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\CharacterController.cs",
+              "RelativeToolTip": "LidgrenServer\\controllers\\CharacterController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T12:50:02.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "SeasonService.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\services\\SeasonService.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\services\\SeasonService.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\services\\SeasonService.cs",
+              "RelativeToolTip": "LidgrenServer\\services\\SeasonService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T10:01:07.911Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RankService.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\services\\RankService.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\services\\RankService.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\services\\RankService.cs",
+              "RelativeToolTip": "LidgrenServer\\services\\RankService.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAADwvz4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T10:00:51.791Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserRankRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\repository\\UserRankRepository.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\repository\\UserRankRepository.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\repository\\UserRankRepository.cs",
+              "RelativeToolTip": "LidgrenServer\\repository\\UserRankRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T10:00:34.11Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SeasonRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\repository\\SeasonRepository.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\repository\\SeasonRepository.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\repository\\SeasonRepository.cs",
+              "RelativeToolTip": "LidgrenServer\\repository\\SeasonRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T10:00:20.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RankRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\repository\\RankRepository.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\repository\\RankRepository.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\repository\\RankRepository.cs",
+              "RelativeToolTip": "LidgrenServer\\repository\\RankRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T10:00:06.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RoomInfo.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\models\\RoomInfo.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\models\\RoomInfo.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\models\\RoomInfo.cs",
+              "RelativeToolTip": "LidgrenServer\\models\\RoomInfo.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAwwC4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T09:57:36.04Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "RankModel.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\models\\RankModel.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\models\\RankModel.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\models\\RankModel.cs",
+              "RelativeToolTip": "LidgrenServer\\models\\RankModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T09:57:12.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Program.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\Program.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Program.cs",
+              "RelativeToolTip": "LidgrenServer\\Program.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAswD4AAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-22T07:39:14.309Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserRankService.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\services\\UserRankService.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\services\\UserRankService.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\services\\UserRankService.cs",
+              "RelativeToolTip": "LidgrenServer\\services\\UserRankService.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAADwvyQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T10:01:26.607Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UserRankController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\UserRankController.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\UserRankController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\UserRankController.cs",
+              "RelativeToolTip": "LidgrenServer\\controllers\\UserRankController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T09:56:43.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SeasonController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\SeasonController.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\SeasonController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\SeasonController.cs",
+              "RelativeToolTip": "LidgrenServer\\controllers\\SeasonController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T09:56:28.588Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "RankController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\RankController.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\controllers\\RankController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\RankController.cs",
+              "RelativeToolTip": "LidgrenServer\\controllers\\RankController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T09:56:11.333Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
               "Title": "TurnManager.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\TurnManager.cs",
@@ -93,7 +310,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 18,
               "Title": "Logging.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Logging.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Logging.cs",
@@ -105,7 +322,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 19,
               "Title": "VolumeSetting.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Downloads\\VolumeSetting.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\Downloads\\VolumeSetting.cs",
@@ -117,7 +334,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 20,
               "Title": "20241222074933_init.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Migrations\\20241222074933_init.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Migrations\\20241222074933_init.cs",
@@ -129,7 +346,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 15,
               "Title": "ApplicationDataContext.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Data\\ApplicationDataContext.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\Data\\ApplicationDataContext.cs",
@@ -137,24 +354,11 @@
               "RelativeToolTip": "LidgrenServer\\Data\\ApplicationDataContext.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAA1wBYAAABvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-22T07:48:09.156Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-22T07:48:09.156Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Program.cs",
-              "RelativeDocumentMoniker": "LidgrenServer\\Program.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\Program.cs",
-              "RelativeToolTip": "LidgrenServer\\Program.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAIwCwAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-22T07:39:14.309Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 16,
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\controllers\\UserController.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\controllers\\UserController.cs",
@@ -162,8 +366,7 @@
               "RelativeToolTip": "LidgrenServer\\controllers\\UserController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-21T16:24:29.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-21T16:24:29.847Z"
             }
           ]
         }

@@ -12,12 +12,12 @@ namespace LidgrenServer.Models
 
         [Required]
         [Column("name")]
-        [StringLength(10)]
+        [StringLength(20)]
         public string Name { get; set; } = null!;
 
         [Required]
         [Column("asset_name")]
-        [StringLength(10)]
+        [StringLength(20)]
         public string AssetName { get; set; } = null!;
 
         [Required]

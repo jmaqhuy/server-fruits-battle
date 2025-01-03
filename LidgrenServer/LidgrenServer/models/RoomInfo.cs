@@ -30,7 +30,20 @@
         public RoomStatus roomStatus { get; set; }
         public RoomType RoomType { get; set; }
         public List<Player> playersList { get; set; }
-        public int MaxPlayers => (int)RoomType;
+        public int MaxPlayers => roomMode != RoomMode.Rank ? (int)RoomType : (int)RoomType / 2;
         public bool IsRoomFull => playersList.Count >= MaxPlayers;
+
+        public RoomInfo Clone()
+        {
+            return new RoomInfo
+            {
+                Id = this.Id,
+                Name = this.Name,
+                roomMode = this.roomMode,
+                roomStatus = this.roomStatus,
+                RoomType = this.RoomType,
+                playersList = new List<Player>(this.playersList)
+            };
+        }
     }
 }

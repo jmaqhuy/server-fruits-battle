@@ -17,7 +17,7 @@ namespace LidgrenServer.controllers
                     Name = "Banana",
                     Hp = 1000,
                     Damage = 100,
-                    Armor = 100,
+                    Armor = 10,
                     Luck = 5,
                 });
         }
