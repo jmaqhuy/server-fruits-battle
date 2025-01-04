@@ -416,6 +416,7 @@ namespace LidgrenServer.Packets
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
+            message.Write((byte)PacketTypes.Room.ChangeTeamPacket);
             message.Write(username);
             message.Write(roomId);
             message.Write((byte)team);

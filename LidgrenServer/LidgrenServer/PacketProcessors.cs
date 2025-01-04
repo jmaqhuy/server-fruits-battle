@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography;
 using Lidgren.Network;
 using LidgrenServer.controllers;
 using LidgrenServer.Controllers;
@@ -7,7 +8,6 @@ using LidgrenServer.Models;
 using LidgrenServer.Packets;
 using LidgrenServer.TurnManager;
 using Microsoft.Extensions.DependencyInjection;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 namespace LidgrenServer
@@ -221,19 +221,51 @@ namespace LidgrenServer
                     if (targetRoom.roomStatus == RoomStatus.InMatch) continue;
                     if (targetRoom.RoomType == copyRoom.RoomType)
                     {
+                        Team currentTargetRoomTeam = Team.Team1;
+                        
+                        List<NetConnection> targetRoomConnection = new List<NetConnection>();
+                        List<NetConnection> copyRoomConnection = new List<NetConnection>();
                         foreach (var player in targetRoom.playersList)
                         {
-                            player.team = Team.Team1;
+                            currentTargetRoomTeam = player.team;
                             player.isReady = true;
+                            targetRoomConnection.Add(player.netConnection);
+                            Logging.Info($"{player.User.Display_name} in team {player.team} now");
                         }
-                        foreach (var player in copyRoom.playersList)
+                        Team CopyRoomTeam;
+                        if (currentTargetRoomTeam == Team.Team1)
                         {
-                            player.team = Team.Team2;
-                            player.isReady = true;
+                            CopyRoomTeam = Team.Team2;
+                        } else
+                        {
+                            CopyRoomTeam = Team.Team1;
                         }
+                        Team currentCopyRoomTeam = Team.Team1;
+                        for (int i = 0; i < copyRoom.playersList.Count; i++)
+                        {
+                            currentCopyRoomTeam = copyRoom.playersList[i].team;
+                            copyRoom.playersList[i].team = CopyRoomTeam;
+                            copyRoom.playersList[i].isReady = true;
+                            copyRoomConnection.Add(copyRoom.playersList[i].netConnection);
+                            currentRoom.playersList[i].team = CopyRoomTeam;
+                            Logging.Info($"{copyRoom.playersList[i].User.Display_name} in team {copyRoom.playersList[i].team} now");
+                        }
+                        
+                        if (CopyRoomTeam != currentCopyRoomTeam)
+                        {
+                            Logging.Info("Change Team vao sau to Team 2");
+                            outmsg = server.CreateMessage();
+                            new ChangeTeamPacket()
+                            {
+                                team = CopyRoomTeam,
+                            }.PacketToNetOutGoingMessage(outmsg);
+                            server.SendMessage(outmsg, copyRoomConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                        }
+
                         targetRoom.playersList.AddRange(copyRoom.playersList);
                         copyRoom.playersList = targetRoom.playersList;
                         StopMatchMaking(targetRoom.Id, true);
+                        
                     }
                 }
             }
@@ -278,6 +310,7 @@ namespace LidgrenServer
                     matchFound = matchFound,
                 }.PacketToNetOutGoingMessage(outmsg);
                 server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
+
             }
         }
 
@@ -353,25 +386,98 @@ namespace LidgrenServer
         }
         public void UpdatePLayerDie(PlayerDiePacket packet,NetIncomingMessage message)
         {
-            int roomID = getRoomID(packet.player);
-            roomManager.RemovePlayerDead(roomID, message.SenderConnection);
+
+            foreach (var rId in getRoomID(packet.player))
+
+            {
+
+                try
+                {
+                    roomManager.RemovePlayerDead(rId, message.SenderConnection);
+                    
+                }
+                catch (Exception e)
+                {
+                    continue;
+                }
+            }
         }
-        public int getRoomID(String playerName)
+        public List<int> getRoomID(String playerName)
         {
-            int roomID = RoomList
+            RoomInfo room = RoomList
                 .Where(room => room.playersList.Any(player => player.User.Username == playerName))
-                .Select(room => room.Id)
                 .FirstOrDefault();
-            return roomID;
+            List<int> roomIDs = new List<int>();
+            if (room != null)
+            {
+                if (room.roomMode == RoomMode.Rank)
+                {
+                    roomIDs.AddRange(MatchmakingRoom
+                        .Where(room => room.playersList.Any(player => player.User.Username == playerName))
+                        .Select(room => room.Id)
+                        .ToList());
+                } else
+                {
+                    roomIDs.Add(room.Id);
+                }
+            }
+           
+            return roomIDs;
         }
-        public bool CheckWinGame(String playerName)
+        public void RemoveRoomFromRankMatch(List<int> roomIDs)
+        {
+            foreach (var roomID in roomIDs)
+            {
+                // Find the room object by its ID
+                var roomToRemove = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+
+                // Check if the room exists
+                if (roomToRemove != null)
+                {
+                    // Remove the room from the list
+                    MatchmakingRoom.Remove(roomToRemove);
+                }
+            }
+        }
+        
+        public bool CheckWinGame(String playerName, ref int outRoomId)
         {
             int NumberPlayerTeam1 = 0;
             int NumberPlayerTeam2 = 0;
-            int roomID = getRoomID(playerName);
-            List<NetConnection> playersAlive = roomManager.getPLayersAlive(roomID);
-            var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+            
+            List<int> roomIDs = getRoomID(playerName);
+            List<NetConnection> playersAlive = new List<NetConnection>();
+            int roomID = roomIDs[0];
+            outRoomId = roomID;
+            foreach (var rId in roomIDs)
+            {
+                try
+                {
+                    playersAlive = roomManager.getPLayersAlive(rId);
+                    
+                    roomID = rId;
+                    outRoomId = rId;
+                    if(playersAlive != null)
+                    {
+                        Logging.Error("get player alive in roomId: " + rId +" number of player: "+playersAlive.Count);
+                        roomID = rId;
+                        outRoomId = rId;
+                        break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    continue;
+                }
+            }
+            
+            
 
+            var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+            if(targetRoom?.roomMode == RoomMode.Rank)
+            {
+                targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+            }
             if (targetRoom != null) 
             {
                 foreach (var player in targetRoom.playersList)
@@ -394,6 +500,7 @@ namespace LidgrenServer
             if(NumberPlayerTeam1 == 0)
             {
                 SendEndGame(roomID,Team.Team2);
+                RemoveRoomFromRankMatch(roomIDs);
 
                 return true;
                 
@@ -401,6 +508,7 @@ namespace LidgrenServer
             if (NumberPlayerTeam2 == 0) 
             {
                 SendEndGame(roomID, Team.Team1);
+                RemoveRoomFromRankMatch(roomIDs);
                 return true;
             }
             return false;
@@ -422,7 +530,12 @@ namespace LidgrenServer
             }
             List<NetConnection> players = new List<NetConnection>();
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+            if(targetRoom.roomMode == RoomMode.Rank)
+            {
+                targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+            }
             UserCharacterModel ucm;
+            Logging.Warn("startupdatexpforplayer");
             if (targetRoom != null)
             {
                 foreach (var player in targetRoom.playersList)
@@ -440,8 +553,9 @@ namespace LidgrenServer
                     await ucc.UpdateUserCharacter(ucm);
                     players.Add(player.netConnection);
                 }
+                Logging.Warn("updatesuccessfully");
                 // Add all players from the target room to the players list
-                players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
+                
                 targetRoom.roomStatus = RoomStatus.InLobby;
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
@@ -462,16 +576,21 @@ namespace LidgrenServer
             
             List<NetConnection> players = new List<NetConnection>();
             // First, find the room ID that corresponds to the sender's connection
-            int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.User.Username == playerName))
-                .Select(room => room.Id)
-                .FirstOrDefault();
+            int roomID = getRoomID(playerName)[0];
 
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
                 // Find the target room using the room ID
                 var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if(targetRoom.roomMode == RoomMode.Rank)
+                {
+                    targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                }
+                if(targetRoom.roomMode == RoomMode.Rank)
+                {
+                    targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+                }
                 if (targetRoom != null)
                 {
                     // Add all players from the target room to the players list
@@ -490,15 +609,43 @@ namespace LidgrenServer
                 Logging.Error("No player in list players");
             }
             Logging.Debug("Send player die for" + playerName);
-            
-            roomManager.RemovePlayerDead(roomID, GetNetConnection(playerName,roomID));
+            NetConnection playerNetconnection = null;
+
+            // Attempt to find the player's NetConnection from the available room IDs.
+            foreach (var rid in getRoomID(playerName))
+            {
+                if (playerNetconnection == null)
+                {
+                    playerNetconnection = GetNetConnection(playerName, rid);
+                    if (playerNetconnection != null)
+                    {
+                        break; // Found the connection, no need to check other rooms
+                    }
+                }
+            }
+
+            // Check if playerNetconnection was found and proceed to remove the dead status.
+            if (playerNetconnection != null)
+            {
+                foreach (var rid in getRoomID(playerName))
+                {
+                    roomManager.RemovePlayerDead(rid, playerNetconnection);
+                }
+            }
+            else
+            {
+                // Handle the case where the player's NetConnection was not found
+                Logging.Error("Player's NetConnection was not found.");
+            }
+
         }
-        public NetConnection GetNetConnection(string playerName, int roomID)
+        public NetConnection GetNetConnection(string playerName,int roomId)
         {
-            // Ensure room exists and has a valid playersList
-            var room = RoomList.FirstOrDefault(r => r.Id == roomID);
+            var room = RoomList.FirstOrDefault(r => r.Id == roomId);
             if (room == null || room.playersList == null)
             {
+                Logging.Warn($"no found room {roomId} in roomlist");
+
                 return null; // Room or players list is not valid
             }
 
@@ -511,16 +658,18 @@ namespace LidgrenServer
         {
             NetConnection mess = message.SenderConnection;
             // First, find the room ID that corresponds to the sender's connection
-            int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == mess))
-                .Select(room => room.Id)
-                .FirstOrDefault();
+            int roomID = getRoomID(getPlayerName(mess))[0];
 
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
                 // Find the target room using the room ID
                 var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if(targetRoom.roomMode == RoomMode.Rank)
+                {
+                    targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+
+                }
                 if (targetRoom != null)
                 {
                     // Add all players from the target room to the players list
@@ -549,22 +698,27 @@ namespace LidgrenServer
         {
             NetConnection mess = message.SenderConnection;
             // First, find the room ID that corresponds to the sender's connection
-            int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == mess))
-                .Select(room => room.Id)
-                .FirstOrDefault();
+            int roomID = getRoomID(getPlayerName(mess))[0];
+            
 
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
                 // Find the target room using the room ID
                 var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if(targetRoom?.roomMode == RoomMode.Rank)
+                {
+                    targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+                }
                 if (targetRoom != null)
                 {
                     // Add all players from the target room to the players list
                     players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
                 }
-                roomManager.StopTurn(roomID);
+                foreach (var rid in getRoomID(getPlayerName(mess)))
+                {
+                    roomManager.StopTurn(rid);
+                }
             }
             NetOutgoingMessage outgoingMessage = server.CreateMessage();
             new Shoot() { playerName = packet.playerName, angle = packet.angle, force = packet.force, X = packet.X, Y = packet.Y }.PacketToNetOutGoingMessage(outgoingMessage);
@@ -593,11 +747,14 @@ namespace LidgrenServer
             {
                 // Find the target room using the room ID
                 var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                
                 if (targetRoom != null)
                 {
+                    
                     if (targetRoom.roomMode == RoomMode.Rank)
                     {
                         targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+                        
                         var pl = targetRoom.playersList.FirstOrDefault(pl => pl.netConnection == connection);
                         pl.isReady = false;
                         Logging.Info($"Player {pl.User.Display_name} In Game");
@@ -697,22 +854,25 @@ namespace LidgrenServer
 
         public void SendPositionPacket(List<NetConnection> players, PositionPacket packet, NetIncomingMessage message)
         {
-            
-            int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
-                .Select(room => room.Id)
-                .FirstOrDefault();
+
+            int roomID = getRoomID(getPlayerName(message.SenderConnection))[0];
 
             // If roomID is found (not 0), proceed to the second part
             if (roomID != 0)
             {
                 // Find the target room using the room ID
                 var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
+                if (targetRoom.roomMode == RoomMode.Rank)
+                {
+                    targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+
+                }
                 if (targetRoom != null)
                 {
                     // Add all players from the target room to the players list
                     players.AddRange(targetRoom.playersList.Select(player => player.netConnection));
                 }
+
             }
             players.Remove(message.SenderConnection);
 
@@ -761,12 +921,9 @@ namespace LidgrenServer
         }
         public void ResetTurn(EndTurnPacket packet, NetIncomingMessage message)
         {
-            int roomID = RoomList
-                .Where(room => room.playersList.Any(player => player.netConnection == message.SenderConnection))
-                .Select(room => room.Id)
-                .FirstOrDefault();
+            int roomID = 0;
             Logging.Debug("End Turn for player: " + packet.playerName+ " and reset turn");
-            if (!CheckWinGame(packet.playerName))
+            if (!CheckWinGame(packet.playerName, ref roomID))
             {
                 roomManager.StartTurn(roomID);
             }
@@ -1625,15 +1782,16 @@ namespace LidgrenServer
         }
         private void RemovePlayerInRoom(Player player, RoomInfo room)
         {
-            
+            int outRoomId = room.Id;
             if(room.roomStatus == RoomStatus.InMatch)
             {
+                Logging.Warn("delete player: " + player.User.Username);
                 SendPlayerDie(player.User.Username);
-                if (!CheckWinGame(player.User.Username))
+                if (!CheckWinGame(player.User.Username, ref outRoomId))
                 {
-                    if (player.User.Username == roomManager.GetPlayerInCurrentTurn(room.Id))
+                    if (player.User.Username == roomManager.GetPlayerInCurrentTurn(outRoomId))
                     {
-                        roomManager.StartNewTurn(room.Id);
+                        roomManager.StartNewTurn(outRoomId);
                     }
                 }
                 

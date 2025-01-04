@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
+    "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
+    "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "projectUniqueName": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
         "projectName": "LidgrenServer",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\Game31122024\\new server\\LidgrenServer\\LidgrenServer\\obj\\",
+        "projectPath": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\LidgrenServer.csproj",
+        "packagesPath": "C:\\Users\\truon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\truon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

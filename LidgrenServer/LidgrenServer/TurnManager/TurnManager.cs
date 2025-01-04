@@ -72,7 +72,9 @@ namespace LidgrenServer.TurnManager
         public void RemovePlayer(NetConnection player) 
         {
             if (playersAlive.Contains(player))
+
             {
+                Logging.Debug("remove player " + Program.server.getPlayerName(player));
                 int playerIndex = playersAlive.IndexOf(player);
                 if (playerIndex < currentPlayerIndex)
                 {
@@ -85,7 +87,7 @@ namespace LidgrenServer.TurnManager
                     currentPlayerIndex = currentPlayerIndex % playersAlive.Count;
                 }
             }
-            Logging.Debug(Program.server.getPlayerName(player));
+            
             
            
             
