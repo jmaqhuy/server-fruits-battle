@@ -1,4 +1,5 @@
-﻿using Lidgren.Network;
+﻿using System.Diagnostics;
+using Lidgren.Network;
 namespace LidgrenServer.TurnManager
 {
 
@@ -20,6 +21,7 @@ namespace LidgrenServer.TurnManager
 
                 turnManager.StartTurnManager();
                 Logging.Info($"Turn manager started for room {roomId}");
+                Logging.Warn($"number of player in player alive {getPLayersAlive(roomId).Count}");
             }
             else
             {
@@ -34,7 +36,7 @@ namespace LidgrenServer.TurnManager
                 roomManagers[roomId].StopTurnManager();
                 roomManagers.Remove(roomId);
                 Logging.Info(roomManagers.Count+"");
-                Logging.Info($"Turn manager stopped for room {roomId}");
+                Logging.Info($"Turn manager stopped for room {roomId} and remove");
             }
             else
             {
@@ -46,13 +48,17 @@ namespace LidgrenServer.TurnManager
       
         public void RemovePlayerDead(int roomId, NetConnection player)
         {
+            
             if (roomManagers.ContainsKey(roomId))
             {
                 roomManagers[roomId].RemovePlayer(player);
+                Logging.Debug($"Remove {player} successfully");
+
             }
             else
             {
-                Logging.Error("Error to remove player" + player);
+                Logging.Error("Error to remove player " + player + " in room "+roomId);
+                Logging.Error("Number in roommanager "+roomManagers.Count);
             }
         }
         public string GetPlayerInCurrentTurn(int roomId)
@@ -67,8 +73,12 @@ namespace LidgrenServer.TurnManager
         
         public void StopTurn(int roomId)
         {
-            roomManagers[roomId].StopTurnManager();
-            Logging.Debug("stop turn manage for room " + roomId);
+            if (roomManagers.ContainsKey(roomId)) 
+            {
+
+                roomManagers[roomId].StopTurnManager();
+                Logging.Debug("stop turn manage for room " + roomId);
+            }
         }
         public void StartTurn(int roomId) 
         {
@@ -78,8 +88,15 @@ namespace LidgrenServer.TurnManager
         }
         public List<NetConnection>getPLayersAlive(int roomId)
         {
-
-            return roomManagers[roomId]?.getPLayersAlive();
+            if (roomManagers.ContainsKey(roomId)) 
+            {
+                return roomManagers[roomId]?.getPLayersAlive();
+            }
+            else
+            {
+                return null;
+            }
         }
+            
     }
 }
