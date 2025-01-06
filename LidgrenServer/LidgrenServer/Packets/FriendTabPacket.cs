@@ -6,11 +6,13 @@ namespace LidgrenServer.Packets
     {
         public string FriendUsername;
         public string FriendDisplayName;
+        public bool FriendIsOnline;
 
         public void Serialize(NetOutgoingMessage message)
         {
             message.Write(FriendUsername);
             message.Write(FriendDisplayName);
+            message.Write(FriendIsOnline);
         }
 
         public static FriendTabPacket Deserialize(NetIncomingMessage message)
@@ -18,7 +20,8 @@ namespace LidgrenServer.Packets
             return new FriendTabPacket()
             {
                 FriendUsername = message.ReadString(),
-                FriendDisplayName = message.ReadString()
+                FriendDisplayName = message.ReadString(),
+                FriendIsOnline = message.ReadBoolean(),
             };
         }
     }

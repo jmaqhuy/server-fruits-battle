@@ -91,8 +91,6 @@ namespace LidgrenServer
 
                 while ((message = server.ReadMessage()) != null)
                 {
-                    Logging.Info("Message received");
-                    Logging.Info($"Number of player online now: {PlayerOnlineList.Count}.\nNumber of Room now: {RoomList.Count}");
                     switch (message.MessageType)
                     {
                         case NetIncomingMessageType.DiscoveryRequest:
@@ -232,6 +230,7 @@ namespace LidgrenServer
                             targetRoomConnection.Add(player.netConnection);
                             Logging.Info($"{player.User.Display_name} in team {player.team} now");
                         }
+                        Logging.Info($"Current target room team: {currentTargetRoomTeam}");
                         Team CopyRoomTeam;
                         if (currentTargetRoomTeam == Team.Team1)
                         {
@@ -240,6 +239,7 @@ namespace LidgrenServer
                         {
                             CopyRoomTeam = Team.Team1;
                         }
+                        Logging.Info($"Copy Room Team is {CopyRoomTeam}");
                         Team currentCopyRoomTeam = Team.Team1;
                         for (int i = 0; i < copyRoom.playersList.Count; i++)
                         {
@@ -259,7 +259,8 @@ namespace LidgrenServer
                             {
                                 team = CopyRoomTeam,
                             }.PacketToNetOutGoingMessage(outmsg);
-                            server.SendMessage(outmsg, copyRoomConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                            server.SendMessage(outmsg, copyRoomConnection, NetDeliveryMethod.ReliableOrdered, 1);
+                           
                         }
 
                         targetRoom.playersList.AddRange(copyRoom.playersList);
@@ -1222,10 +1223,14 @@ namespace LidgrenServer
 
             foreach (var item in getAllFriend)
             {
+                bool isOnline = false;
+                if (PlayerOnlineList.FirstOrDefault(pl=>pl.User.Username == item.Username) != null) { isOnline = true; }
+
                 suggestContent.Add(new FriendTabPacket()
                 {
                     FriendUsername = item.Username,
-                    FriendDisplayName = item.Display_name
+                    FriendDisplayName = item.Display_name,
+                    FriendIsOnline = isOnline
                 });
             }
 

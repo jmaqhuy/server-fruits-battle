@@ -1,25 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\",
+  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\truon\\desktop\\server ld\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packetprocessors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\truon\\desktop\\server ld\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\turnmanager\\gameroommanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\turnmanager\\gameroommanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\truon\\desktop\\server ld\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\turnmanager\\turnmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\turnmanager\\turnmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\truon\\desktop\\server ld\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\packets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\truon\\desktop\\server ld\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\services\\userrelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\models\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\models\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\packets\\friendtabpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\packets\\friendtabpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\data\\applicationdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\turnmanager\\gameroommanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\turnmanager\\gameroommanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\turnmanager\\turnmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\turnmanager\\turnmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|c:\\users\\admin\\desktop\\game31122024\\server-fruits-battle\\lidgrenserver\\lidgrenserver\\services\\userrelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50FA9652-8F41-4AD3-9852-6567B3DE5294}|LidgrenServer\\LidgrenServer.csproj|solutionrelative:lidgrenserver\\services\\userrelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -36,11 +48,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "PacketProcessors.cs",
-              "DocumentMoniker": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\PacketProcessors.cs",
-              "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\PacketProcessors.cs",
               "RelativeToolTip": "LidgrenServer\\PacketProcessors.cs",
-              "ViewState": "AgIAAGACAAAAAAAAAAAEwH0CAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAALcEAAAAAAAAAAAcwNAEAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T12:23:37.454Z",
               "IsPinned": true,
@@ -48,27 +60,67 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Packets.cs",
-              "DocumentMoniker": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
-              "RelativeDocumentMoniker": "LidgrenServer\\Packets\\Packets.cs",
-              "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
-              "RelativeToolTip": "LidgrenServer\\Packets\\Packets.cs",
-              "ViewState": "AgIAAIcBAAAAAAAAAAAQwJQBAAAaAAAAAAAAAA==",
+              "Title": "FriendTabPacket.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "RelativeToolTip": "LidgrenServer\\Packets\\FriendTabPacket.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-04T02:41:14.976Z"
+              "WhenOpened": "2025-01-06T10:27:54.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Player.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\Player.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\models\\Player.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\models\\Player.cs",
+              "RelativeToolTip": "LidgrenServer\\models\\Player.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-06T08:31:46.539Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "ApplicationDataContext.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Data\\ApplicationDataContext.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\Data\\ApplicationDataContext.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Data\\ApplicationDataContext.cs",
+              "RelativeToolTip": "LidgrenServer\\Data\\ApplicationDataContext.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBYAAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-06T08:20:46.287Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Packets.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
+              "RelativeDocumentMoniker": "LidgrenServer\\Packets\\Packets.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\Packets\\Packets.cs",
+              "RelativeToolTip": "LidgrenServer\\Packets\\Packets.cs",
+              "ViewState": "AgIAAMgBAAAAAAAAAAAUwNMBAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-04T02:41:14.976Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "UserRelationshipService.cs",
-              "DocumentMoniker": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\services\\UserRelationshipService.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\services\\UserRelationshipService.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\services\\UserRelationshipService.cs",
-              "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\services\\UserRelationshipService.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\services\\UserRelationshipService.cs",
               "RelativeToolTip": "LidgrenServer\\services\\UserRelationshipService.cs",
               "ViewState": "AgIAAMgAAAAAAAAAAAAUwOEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -76,29 +128,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "TurnManager.cs",
-              "DocumentMoniker": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\TurnManager.cs",
-              "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\TurnManager.cs",
               "RelativeToolTip": "LidgrenServer\\TurnManager\\TurnManager.cs",
               "ViewState": "AgIAAEEAAAAAAAAAAAAlwFoAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-03T12:25:23.079Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-03T12:25:23.079Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "GameRoomManager.cs",
-              "DocumentMoniker": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\GameRoomManager.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\GameRoomManager.cs",
               "RelativeDocumentMoniker": "LidgrenServer\\TurnManager\\GameRoomManager.cs",
-              "ToolTip": "C:\\Users\\truon\\Desktop\\Server Ld\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\GameRoomManager.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\Game31122024\\server-fruits-battle\\LidgrenServer\\LidgrenServer\\TurnManager\\GameRoomManager.cs",
               "RelativeToolTip": "LidgrenServer\\TurnManager\\GameRoomManager.cs",
               "ViewState": "AgIAACUAAAAAAAAAAAAwwDEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-03T10:00:38.766Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-03T10:00:38.766Z"
             }
           ]
         }

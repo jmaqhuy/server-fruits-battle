@@ -409,17 +409,20 @@ namespace LidgrenServer.Packets
         public Team team { get; set; }
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
+            team = (Team)message.ReadByte();
             username = message.ReadString();
             roomId = message.ReadInt16();
-            team = (Team)message.ReadByte();
+            
         }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
         {
             message.Write((byte)PacketTypes.Room.ChangeTeamPacket);
+            message.Write((byte)team);
             message.Write(username);
             message.Write(roomId);
-            message.Write((byte)team);
+            
+            Logging.Info($"Send Change Team Packet {team}");
         }
     }
     public class SuggestFriendPacket : Packet
