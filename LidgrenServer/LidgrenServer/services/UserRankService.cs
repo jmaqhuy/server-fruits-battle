@@ -32,5 +32,9 @@ namespace LidgrenServer.services
             }
 
         }
+        public void UpdateUserRank(UserRankModel userRank)
+        {
+            _repository.UpdateUserRank(userRank);
+        }
     }
 }

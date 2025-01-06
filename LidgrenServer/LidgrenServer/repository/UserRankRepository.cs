@@ -23,5 +23,11 @@ namespace LidgrenServer.repository
             await _context.UserRanks.AddAsync(userRankModel);
             await _context.SaveChangesAsync();
         }
+
+        public void UpdateUserRank(UserRankModel userRankModel)
+        {
+            _context.UserRanks.Update(userRankModel);
+            _context.SaveChanges();
+        }
     }
 }

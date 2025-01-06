@@ -941,6 +941,7 @@ namespace LidgrenServer.Packets
     public class CurrentRankPacket : Packet
     {
         public string username { get; set; }
+        public int rankId { get; set; }
         public string rankName { get; set; }
         public string rankAssetName { get; set; }
         public int currentStar { get; set; }
@@ -955,6 +956,7 @@ namespace LidgrenServer.Packets
         {
             message.Write((byte)PacketTypes.Rank.CurrentRankPacket);
             message.Write(username);
+            message.Write(rankId);
             message.Write(rankName);
             message.Write(rankAssetName);
             message.Write(currentStar);

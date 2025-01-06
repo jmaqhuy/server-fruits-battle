@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Numerics;
-using System.Security.Cryptography;
+﻿using System.Numerics;
 using Lidgren.Network;
 using LidgrenServer.controllers;
 using LidgrenServer.Controllers;
@@ -324,6 +322,7 @@ namespace LidgrenServer
             new CurrentRankPacket()
             {
                 username = ((CurrentRankPacket)packet).username,
+                rankId = ur.RankId,
                 rankName = ur.Rank.Name,
                 rankAssetName = ur.Rank.AssetName,
                 currentStar = ur.CurrentStar,
@@ -532,9 +531,11 @@ namespace LidgrenServer
             }
             List<NetConnection> players = new List<NetConnection>();
             var targetRoom = RoomList.FirstOrDefault(room => room.Id == roomID);
-            if(targetRoom.roomMode == RoomMode.Rank)
+            UserRankController? urc = null;
+            if (targetRoom.roomMode == RoomMode.Rank)
             {
                 targetRoom = MatchmakingRoom.FirstOrDefault(room => room.Id == roomID);
+                urc = _serviceProvider.GetService<UserRankController>();
             }
             UserCharacterModel ucm;
             Logging.Warn("startupdatexpforplayer");
@@ -546,10 +547,18 @@ namespace LidgrenServer
                     if (TeamWin == player.team)
                     {
                         ucm.Experience += 45;
+                        if (urc != null)
+                        {
+                            urc.ChangeUserRankStar(player.User.Username, 1);
+                        }
                     }
                     else 
                     {
                         ucm.Experience += 30;
+                        if (urc != null)
+                        {
+                            urc.ChangeUserRankStar(player.User.Username, -1);
+                        }
                     }
                     if (ucm.Experience >= (int)Math.Pow(ucm.Level, 1.5) * 100) ucm.Level += 1;
                     await ucc.UpdateUserCharacter(ucm);
@@ -1980,6 +1989,7 @@ namespace LidgrenServer
             if (newUser != null)
             {
                 changePass.isSuccess = true;
+                userController.Changepassword(changePass.username, changePass.newPass);
             }
             else
             {
@@ -1992,18 +2002,7 @@ namespace LidgrenServer
                 username = changePass.username,
                 newPass = changePass.reason
             }.PacketToNetOutGoingMessage(outmsg);
-            if (changePass.isSuccess == false)
-            {
-                server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
-                Logging.Info("ChangePassword Fail!");
-            }
-            else
-            {
-                userController.Changepassword(changePass.username, changePass.newPass);
-                Logging.Info("Send ChangePassword Package to User");
-                server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
-                Logging.Info("ChangePassword Successful!");
-            }
+            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
         }
     }
 }
