@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Numerics;
 using System.Security.Cryptography;
 using Lidgren.Network;
 using LidgrenServer.controllers;
@@ -1991,13 +1992,18 @@ namespace LidgrenServer
                 username = changePass.username,
                 newPass = changePass.reason
             }.PacketToNetOutGoingMessage(outmsg);
-            userController.Changepassword(changePass.username, changePass.newPass);
-            Logging.Info("Send ChangePassword Package to User");
-            server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
-            Logging.Info("ChangePassword Successful!");
-
-
-
+            if (changePass.isSuccess == false)
+            {
+                server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
+                Logging.Info("ChangePassword Fail!");
+            }
+            else
+            {
+                userController.Changepassword(changePass.username, changePass.newPass);
+                Logging.Info("Send ChangePassword Package to User");
+                server.SendMessage(outmsg, user, NetDeliveryMethod.ReliableOrdered, 0);
+                Logging.Info("ChangePassword Successful!");
+            }
         }
     }
 }
