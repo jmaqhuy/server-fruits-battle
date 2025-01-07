@@ -1937,6 +1937,7 @@ namespace LidgrenServer
             // Login return a UserModel if username and password are correct
             var currentUser = userController.Login(packet.username, packet.password).Result;
             NetOutgoingMessage outmsg = server.CreateMessage();
+            string reason = string.Empty;
             if ( currentUser != null)
             {
                 if (!currentUser.isVerify)
@@ -1959,7 +1960,7 @@ namespace LidgrenServer
                     {
                         isUserOnline = true;
                         packet.isSuccess = false;
-                        Logging.Error("Account Login in another Device");
+                        reason = "Account Login in another Device";
                         break;
                     }
                 }
@@ -1972,26 +1973,23 @@ namespace LidgrenServer
                     };
                     PlayerOnlineList.Add(player);
                     packet.isSuccess = true;
-                    
-                    // Save in LoginHistory
-                    //await loginHistoryController.NewUserLoginAsync(currentUser.Id);
-                    Logging.Info("UserLogin Successful, Save User Login History");
+                  
                 }
 
             }
             else
             {
                 packet.isSuccess = false;
-                Logging.Error("Incorrect Username or Password");
+                reason = "Incorrect Username or Password";
             }
             
             new Login()
             {
                 isSuccess = packet.isSuccess,
                 username = packet.username,
-                password = packet.password
+                password = packet.password,
+                reason = reason
             }.PacketToNetOutGoingMessage(outmsg);
-            Logging.Info("Send Login Package to User");
             server.SendMessage(outmsg, userNetConnection, NetDeliveryMethod.ReliableOrdered, 0);
 
         }

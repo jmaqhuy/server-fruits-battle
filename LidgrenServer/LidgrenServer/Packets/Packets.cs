@@ -143,11 +143,13 @@ namespace LidgrenServer.Packets
         public string username { get; set; }
         public string password { get; set; }
         public bool isSuccess { get; set; }
+        public string reason { get; set; }
         public override void NetIncomingMessageToPacket(NetIncomingMessage message)
         {
             username = message.ReadString();
             password = message.ReadString();
             isSuccess = message.ReadBoolean();
+            reason = message.ReadString();
             Logging.Debug($"NetIncomingMessageToPacket: username: {username}, password: {password}, isSuccess: {isSuccess}");
         }
 
@@ -157,6 +159,7 @@ namespace LidgrenServer.Packets
             message.Write(username);
             message.Write(password);
             message.Write(isSuccess);
+            message.Write(reason);
             Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}");
         }
     }
