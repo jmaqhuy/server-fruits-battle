@@ -1431,6 +1431,11 @@ namespace LidgrenServer
                         SendRoomInfo(((ChangeRoomTypePacket)packet).room, connections);
                     }
                     break;
+                case PacketTypes.Room.ChangeTeamPacket:
+                    packet = new ChangeTeamPacket();
+                    packet.NetIncomingMessageToPacket(message);
+                    SendChangeTeamPacket((ChangeTeamPacket)packet);
+                    break;
 
                 default:
                     Logging.Error("Unhandle Data / Package type, typeof Room");
@@ -1438,6 +1443,48 @@ namespace LidgrenServer
             }
 
         }
+
+        private void SendChangeTeamPacket(ChangeTeamPacket packet)
+        {
+            var thisRoom = RoomList.FirstOrDefault(r => r.Id == packet.roomId);
+            int maxPlayers = thisRoom.MaxPlayers;
+            Player currentPlayer = thisRoom.playersList[0];
+            
+            if(packet.team == Team.Team1)
+            {
+                var availablePositions2 = Enumerable.Range(5, 4).ToList();
+                foreach (var playerInRoom in thisRoom.playersList)
+                {
+                    if (playerInRoom.User.Username == packet.username)
+                    {
+                        currentPlayer = playerInRoom;
+                    }
+                    if (playerInRoom.team == Team.Team2)
+                    {
+                        availablePositions2.Remove(playerInRoom.Position);
+                    }
+                }
+                currentPlayer.Position = availablePositions2[random.Next(availablePositions2.Count)];
+            }
+            else
+            {
+                var availablePositions1 = Enumerable.Range(1, 4).ToList();
+                foreach (var playerInRoom in thisRoom.playersList)
+                {
+                    if (playerInRoom.team == Team.Team1)
+                    {
+                        availablePositions1.Remove(playerInRoom.Position);
+                    }
+                    if (playerInRoom.User.Username == packet.username)
+                    {
+                        currentPlayer = playerInRoom;
+                    }
+                }
+                currentPlayer.Position = availablePositions1[random.Next(availablePositions1.Count)];
+            }
+            SendJoinRoomPacketToAll(thisRoom);
+        }
+
         private RoomInfo SendCreateNewRoomPacket(RoomPacket roomPacket, NetConnection senderConnection)
         {
             var player = PlayerOnlineList?.FirstOrDefault(u => u.netConnection == senderConnection);
