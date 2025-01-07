@@ -150,7 +150,6 @@ namespace LidgrenServer.Packets
             password = message.ReadString();
             isSuccess = message.ReadBoolean();
             reason = message.ReadString();
-            Logging.Debug($"NetIncomingMessageToPacket: username: {username}, password: {password}, isSuccess: {isSuccess}");
         }
 
         public override void PacketToNetOutGoingMessage(NetOutgoingMessage message)
@@ -160,7 +159,7 @@ namespace LidgrenServer.Packets
             message.Write(password);
             message.Write(isSuccess);
             message.Write(reason);
-            Logging.Debug($"PacketToNetOutGoingMessage: username: {username}, password: {password}, isSuccess: {isSuccess}");
+           
         }
     }
     public class ResetPassword : Packet

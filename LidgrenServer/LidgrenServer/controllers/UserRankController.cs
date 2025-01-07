@@ -31,10 +31,14 @@ namespace LidgrenServer.controllers
         public void ChangeUserRankStar(string username, int star)
         {
             var userRankModel = this.GetUserRank(username).Result;
-            var rank = _rankController.GetRankModelAsync(userRankModel.Id).Result;
+            var rank = _rankController.GetRankModelAsync(userRankModel.RankId).Result;
+            Logging.Info($"User {username}, current star {userRankModel.CurrentStar}");
             userRankModel.CurrentStar += star;
+            Logging.Info($"User {username}, Sau khi cong sao {userRankModel.CurrentStar}");
+            Logging.Info($"User Star = {userRankModel.CurrentStar}, rank {rank.Name}, rank.MaxStar ={rank.MaxStar} ");
             while (userRankModel.CurrentStar > rank.MaxStar || userRankModel.CurrentStar < 0)
             {
+                
                 if (userRankModel.CurrentStar < 0)
                 {
                     if (userRankModel.RankId == 1)
@@ -48,6 +52,7 @@ namespace LidgrenServer.controllers
                 }
                 else
                 {
+                    Logging.Info($"User Star = {userRankModel.CurrentStar} > rank.MaxStar ={rank.MaxStar} ");
                     if (rank.MaxStar == 0) 
                     {
                         userRankModel.CurrentStar++;
@@ -56,6 +61,7 @@ namespace LidgrenServer.controllers
                     userRankModel.CurrentStar -= rank.MaxStar;
                     userRankModel.RankId++;
                     rank = _rankController.GetRankModelAsync(userRankModel.Id).Result;
+                    Logging.Info($"User {username}, rank cuoi {userRankModel.RankId} {userRankModel.CurrentStar}");
                 }
             }
             _service.UpdateUserRank(userRankModel);

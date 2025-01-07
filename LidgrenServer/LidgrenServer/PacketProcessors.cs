@@ -208,7 +208,11 @@ namespace LidgrenServer
                 }.PacketToNetOutGoingMessage(outmsg);
                 server.SendMessage(outmsg, connections, NetDeliveryMethod.ReliableOrdered, 0);
 
-                // find room
+                var checkRoom = MatchmakingRoom.FirstOrDefault(r => r.Id == roomId);
+                if (checkRoom != null) 
+                {
+                    return;
+                }
                 var copyRoom = currentRoom.Clone();
                 MatchmakingRoom.Add(copyRoom);
 
